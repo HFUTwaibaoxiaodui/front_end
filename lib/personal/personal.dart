@@ -217,84 +217,86 @@ class PersonSliverAppBar extends StatelessWidget{
 class PersonInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: Colors.white,
-          child: Image.asset('assets/images/1.png'),
-        ),
-        Expanded(
-          child: Padding(
-              padding: EdgeInsets.only(left: 10.0),
+    return Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.white,
+              child: Image.asset('assets/images/1.png'),
+            ),
+            Expanded(
               child: Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(bottom: 10.0),
-                      child: Text(
-                        '顶针',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.white
-                        ),
-                      ),
-                    ),
-                    Row(
+                  padding: EdgeInsets.only(left: 10.0),
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(child: Text(
-                          '关注 10',
-                          style: TextStyle(
-                            fontSize: 12,
-                              color: Colors.white
-                          ),
-                        )),
                         Container(
-                            margin: EdgeInsets.only(left: 10),
-                            child: Text(
-                              '被关注 12',
+                          padding: EdgeInsets.only(bottom: 10.0),
+                          child: Text(
+                            '顶针',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.white
+                            ),
+                          ),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Container(child: Text(
+                              '关注 10',
                               style: TextStyle(
-                                fontSize: 12,
+                                  fontSize: 12,
                                   color: Colors.white
                               ),
+                            )),
+                            Container(
+                                margin: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  '被关注 12',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white
+                                  ),
+                                )
                             )
-                        )
+                          ],
+                        ),
                       ],
-                    ),
-                  ],
-                ),
-              )
-          ),
-        ),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Container(
-                  child: Text('主页',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      fontSize: 12,
-                        color: Colors.white
                     ),
                   )
               ),
-              IconButton(
-                  icon: Icon(
-                    Icons.chevron_right,
-                    color: Colors.white,
+            ),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                      child: Text('主页',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white
+                        ),
+                      )
                   ),
-                  alignment: AlignmentDirectional.centerStart,
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonInfo()));
-                  })
-            ],
-          ),
-        )
-      ],
+                  IconButton(
+                      icon: Icon(
+                        Icons.chevron_right,
+                        color: Colors.white,
+                      ),
+                      alignment: AlignmentDirectional.centerStart,
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonInfo()));
+                      })
+                ],
+              ),
+            )
+          ],
+        ),
     );
   }
 }

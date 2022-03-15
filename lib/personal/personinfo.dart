@@ -34,7 +34,7 @@ class SettingHead extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: Container(
-                          margin: const EdgeInsets.only(left: 20.0),
+                          margin: const EdgeInsets.only(left: 15.0),
                           child: const Text('头像管理',
                               style:
                               TextStyle(fontSize: 14, color: Colors.black)),
@@ -48,16 +48,11 @@ class SettingHead extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(left: 5.0, right: 15),
-                        child: InkWell(
-                          child: Image.asset(
-                            Constant.ASSETS_IMG + "icon_right_arrow.png",
-                            width: 15,
-                            height: 15,
-                          ),
-                          onTap: () {
-                            // TODO(implement)
-                          },
+                        margin: const EdgeInsets.only(left: 15.0, right: 15),
+                        child: Image.asset(
+                          Constant.ASSETS_IMG + "ic_arrow_right.png",
+                          width: 15,
+                          height: 15,
                         ),
                       ),
                     ],
@@ -101,7 +96,7 @@ class SettingCommon extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: Container(
-                          margin: const EdgeInsets.only(left: 20.0),
+                          margin: const EdgeInsets.only(left: 10.0),
                           child: Text(title,
                               style:
                               TextStyle(fontSize: 14, color: Colors.black)),
@@ -116,7 +111,7 @@ class SettingCommon extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(left: 5.0, right: 15),
                         child: Image.asset(
-                          Constant.ASSETS_IMG + "icon_right_arrow.png",
+                          Constant.ASSETS_IMG + "ic_arrow_right.png",
                           width: 15,
                           height: 15,
                         ),
@@ -150,13 +145,10 @@ class _PersoninfoState extends State<Personinfo> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      //  color: Colors.white,
-      child: Material(
-          child: Scaffold(
+    return Scaffold(
             appBar: AppBar(
-                title: Text(
-                  '设置',
+                title: const Text(
+                  '个人主页',
                   style: TextStyle(fontSize: 16),
                 ),
                 elevation: 0.5),
@@ -193,8 +185,10 @@ class _PersoninfoState extends State<Personinfo> {
                   }),
                   SettingCommon(
                       title: "用户昵称",
+                      content: "",
                       // content: UserUtil.getUserInfo().nick,
                       onPressed: () {
+
                         // Routes.navigateTo(context, '${Routes.changeNickNamePage}');
                       }),
                   SettingCommon(
@@ -286,7 +280,6 @@ class _PersoninfoState extends State<Personinfo> {
                 ],
               ),
             ),
-          )),
-    );
+          );
   }
 }
