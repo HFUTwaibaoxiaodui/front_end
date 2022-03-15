@@ -19,7 +19,7 @@ class _WelcomePageState extends State<WelcomePage> {
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },
       child: Container(
-        width: (MediaQuery.of(context).size.width)/2.5,
+        width: (MediaQuery.of(context).size.width),
         padding: EdgeInsets.symmetric(vertical: 13),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -32,40 +32,11 @@ class _WelcomePageState extends State<WelcomePage> {
                   spreadRadius: 2)
             ],
             color: Colors.white),
-        child: Text(
-          '巡检人员登录',
-          style: TextStyle(fontSize: 20, color: Color(0xfff7892b)),
-        ),
+        child: Text('登录', style: TextStyle(fontSize: 20, color: const Color(0xfff7892b))),
       ),
     );
   }
-  Widget _adminsubmitButton() {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-      child: Container(
-        width: (MediaQuery.of(context).size.width)/2.5,
-        padding: EdgeInsets.symmetric(vertical: 13),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Color(0xffdf8e33).withAlpha(100),
-                  offset: Offset(2, 4),
-                  blurRadius: 8,
-                  spreadRadius: 2)
-            ],
-            color: Colors.white),
-        child: Text(
-          '管理人员登录',
-          style: TextStyle(fontSize: 20, color: Color(0xfff7892b)),
-        ),
-      ),
-    );
-  }
+
   Widget _signUpButton() {
     return InkWell(
       onTap: () {
@@ -91,7 +62,7 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget _title() {
     return RichText(
       textAlign: TextAlign.center,
-      text: TextSpan(
+      text: const TextSpan(
           children: [
             TextSpan(
               text: '智慧巡检系统''\n',
@@ -133,10 +104,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 SizedBox(
                   height: 80,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [_submitButton(),_adminsubmitButton()]
-                ),
+                _submitButton(),
                 SizedBox(
                   height: 20,
                 ),
