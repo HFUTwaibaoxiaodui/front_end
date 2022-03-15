@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/homepage/list_view.dart';
 
 class HomePage extends StatelessWidget {
+  String? today_work='0' ;
+  String? yest_work='0' ;
+  String? month_work='0' ;
+  String? wait_work='0' ;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +25,7 @@ class HomePage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('0',
+                  Text('$today_work',
                     style: TextStyle(fontSize: 18,color: Colors.white),),
                   Text('今日处理工单',
                     style: TextStyle(fontSize: 18,color: Colors.white),),
@@ -36,7 +41,7 @@ class HomePage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                Text('0',
+                Text('$yest_work',
                   style: TextStyle(fontSize: 18,color: Colors.white),
                 ),
                 Text('昨日处理工单',
@@ -52,7 +57,7 @@ class HomePage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                Text('0',
+                Text('$month_work',
                   style: TextStyle(fontSize: 18,color: Colors.white),),
                 Text('本月处理工单',
                   style: TextStyle(fontSize: 18,color: Colors.white),),
@@ -68,7 +73,7 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
-                Text('待处理工单',style: TextStyle(fontSize: 16,color: Colors.black),),
+                Text('待处理工单($wait_work)',style: TextStyle(fontSize: 16,color: Colors.black),),
                 IconButton(
                   icon: (new Icon(Icons.place)),
                   color: Colors.lightBlue,
@@ -80,8 +85,8 @@ class HomePage extends StatelessWidget {
 
           Container(
             height: 440,
-            color: Colors.white38,
-
+            color: Colors.grey,
+            child: ListViewPage(),
           ),
 
 

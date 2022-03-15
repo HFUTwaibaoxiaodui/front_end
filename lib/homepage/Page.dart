@@ -13,24 +13,52 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexState extends State<IndexPage> {
-  final List<BottomNavigationBarItem> bottomNavItems = [
+  late String counter;
+
+  late final List<BottomNavigationBarItem> bottomNavItems = [
     BottomNavigationBarItem(
-      backgroundColor: Colors.blue,
-      icon: Icon(Icons.home),
+      icon: new Stack(
+        children: <Widget>[
+          new Icon(Icons.home),
+          new Positioned(
+            right: 0,
+            child: new Container(
+              padding: EdgeInsets.all(1),
+              decoration: new BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              constraints: BoxConstraints(
+                minHeight: 12,
+                minWidth: 12,
+              ),
+              child: new Text(
+                counter,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 8,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      ),
+      // icon: Icon(Icons.home),
       label: "首页",
     ),
     BottomNavigationBarItem(
-      backgroundColor: Colors.green,
+      // backgroundColor: Colors.green,
       icon: Icon(Icons.message),
       label: "工单",
     ),
     BottomNavigationBarItem(
-      backgroundColor: Colors.amber,
+      // backgroundColor: Colors.amber,
       icon: Icon(Icons.settings),
       label: "应用",
     ),
     BottomNavigationBarItem(
-      backgroundColor: Colors.red,
+      // backgroundColor: Colors.red,
       icon: Icon(Icons.person),
       label: "我的",
     ),
@@ -44,6 +72,7 @@ class _IndexState extends State<IndexPage> {
   void initState() {
     super.initState();
     currentIndex = 0;
+    counter='9';
   }
 
   @override
@@ -53,6 +82,8 @@ class _IndexState extends State<IndexPage> {
         title: Text("机房巡检"),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: Colors.grey,
+        fixedColor: Colors.blue,
         items: bottomNavItems,
         currentIndex: currentIndex,
         type: BottomNavigationBarType.shifting,
