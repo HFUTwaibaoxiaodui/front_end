@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/order_detail.dart';
+import 'package:frontend/widgets/order.dart';
+import 'package:frontend/widgets/order_card.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  // This widgets is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: OrderDetail(),
+      home: const MyHomePage(title: '123')
     );
   }
 }
@@ -34,12 +36,12 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
+  // This widgets is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
 
   // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
+  // case the title) provided by the parent (in this case the App widgets) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
@@ -78,34 +80,36 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
+        // Center is a layout widgets. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+        child: Container(
+          child: ListView(
+            children: [
+              OrderCard (
+                order: Order(
+                  orderTitle: '修理煤气灶',
+                  creatorName: '李四',
+                  orderAddress: '安徽省合肥市蜀山区合肥工业大学翡翠湖校区科教楼B301的804机房',
+                  createTime: '2022-03-12',
+                  orderCode: 'O202203120001',
+                  orderState: '待抢单',
+                  phoneNum: '13956190211'
+                ),
+              ),
+              OrderCard (
+                order: Order(
+                    orderTitle: '修理的电饭煲',
+                    creatorName: '李物',
+                    orderAddress: '安徽省合肥市蜀山区合肥工业大学翡翠湖校区科教楼B301的802机房',
+                    createTime: '2022-03-11',
+                    orderCode: 'O202203120002',
+                    orderState: '待服务',
+                    phoneNum: '13956190212'
+                ),
+              ),
+            ],
+          )
+        )
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,

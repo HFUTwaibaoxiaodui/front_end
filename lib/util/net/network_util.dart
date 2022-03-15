@@ -24,7 +24,7 @@ class HttpManager {
     try {
       myResponse = response;
     } on DioError catch (e) {
-      debugPrint(e);
+      printWithDebug(e);
     }
 
     if (myResponse!.data is DioError) {

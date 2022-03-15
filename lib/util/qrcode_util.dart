@@ -15,19 +15,19 @@ class QRCodeUtil {
   /// 扫码获取二维码
   Future _scan() async {
     try {
-      debugPrint('开始请求权限');
+      printWithDebug('开始请求权限');
       await Permission.camera.request();
-      debugPrint('获取摄像头权限成功，开始获得二维码');
+      printWithDebug('获取摄像头权限成功，开始获得二维码');
       String? qrcode = await scanner.scan();
       if (qrcode == null) {
-        debugPrint('nothing print');
+        printWithDebug('nothing print');
       } else {
-        debugPrint('获取二维码成功');
+        printWithDebug('获取二维码成功');
         return qrcode;
       }
     } on Exception catch(e) {
-      debugPrint('获取二维码失败');
-      debugPrint(e);
+      printWithDebug('获取二维码失败');
+      printWithDebug(e);
     }
   }
 
