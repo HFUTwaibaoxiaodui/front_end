@@ -5,7 +5,7 @@ import 'package:frontend/src/signup.dart';
 import 'Widget/bezierContainer.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key, this.title}) : super(key: key);
+  const LoginPage({Key? key, this.title}) : super(key: key);
 
   final String? title;
 
@@ -14,6 +14,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late bool pswdvisible;
+  @override
+  void initState() {
+    pswdvisible=false;
+  }
+
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -35,7 +41,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _entryField(String title, {bool isPassword = false}) {
+  Widget _pswdEntryField(String title) {
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -49,7 +56,44 @@ class _LoginPageState extends State<LoginPage> {
             height: 10,
           ),
           TextField(
-              obscureText: isPassword,
+              obscureText: pswdvisible,
+              decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      pswdvisible ? Icons.visibility : Icons.visibility_off,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    onPressed: () {
+                        setState(() {
+                          pswdvisible=!pswdvisible;
+                          print(pswdvisible);
+                        });
+                    },
+                  ),
+                  border: InputBorder.none,
+                  fillColor: Color(0xfff3f3f4),
+                  filled: true))
+        ],
+      ),
+    );
+  }
+
+  Widget _entryField(String title) {
+
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const TextField(
+              obscureText: false,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
@@ -198,11 +242,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _emailPasswordWidget() {
+  Widget _accountPasswordWidget() {
     return Column(
       children: <Widget>[
         _entryField("账号"),
-        _entryField("密码", isPassword: true),
+        _pswdEntryField("密码"),
       ],
     );
   }
@@ -229,7 +273,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: height * .2),
                   _title(),
                   SizedBox(height: 50),
-                  _emailPasswordWidget(),
+                  _accountPasswordWidget(),
                   SizedBox(height: 20),
                   _submitButton(),
                   Container(
