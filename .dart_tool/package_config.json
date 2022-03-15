@@ -80,8 +80,20 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_verification_box",
+      "rootUri": "file:///D:/flutter_windows_2.10.2-stable/flutter/.pub-cache/hosted/pub.flutter-io.cn/flutter_verification_box-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
       "name": "flutter_web_plugins",
       "rootUri": "file:///D:/flutter_windows_2.10.2-stable/flutter/packages/flutter_web_plugins",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "fluttertoast",
+      "rootUri": "file:///D:/flutter_windows_2.10.2-stable/flutter/.pub-cache/hosted/pub.flutter-io.cn/fluttertoast-8.0.9",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -278,7 +290,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2022-03-14T08:53:46.670893Z",
+  "generated": "2022-03-15T09:08:46.427168Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }
