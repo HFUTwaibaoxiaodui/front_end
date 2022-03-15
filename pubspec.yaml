@@ -45,8 +45,16 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
-  shared_preferences:
-  qrscan:
+  glassmorphism:
+  simple_animations:
+  fluttertoast: ^8.0.9
+  url_launcher:
+  get_it:
+  shared_preferences: ^2.0.0
+  flutter_swiper: ^1.0.6
+  flutter_screenutil: ^5.3.1
+  date_format: ^2.0.5
+  random_string: ^1.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -60,9 +68,11 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+#  assets:
+#     - assets/register.jpeg
+#     - images/a_dot_burr.jpeg
+#     - images/a_dot_ham.jpeg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
