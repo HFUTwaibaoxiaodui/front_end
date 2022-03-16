@@ -50,6 +50,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "dio",
+      "rootUri": "file:///H:/flutter_windows_2.10.2-stable/2.10.2/.pub-cache/hosted/pub.flutter-io.cn/dio-4.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "fake_async",
       "rootUri": "file:///H:/flutter_windows_2.10.2-stable/2.10.2/.pub-cache/hosted/pub.flutter-io.cn/fake_async-1.2.0",
       "packageUri": "lib/",
@@ -326,7 +332,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-15T02:50:53.741489Z",
+  "generated": "2022-03-16T02:59:44.977421Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

@@ -3,9 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:frontend/src/welcomePage.dart';
 import 'Widget/bezierContainer.dart';
 import 'loginPage.dart';
+import 'package:dio/dio.dart';
 
 class SignUpPage extends StatefulWidget {
-  SignUpPage({Key ?key, this.title}) : super(key: key);
+  const SignUpPage({Key? key, this.title}) : super(key: key);
 
   final String? title;
 
@@ -13,29 +14,38 @@ class SignUpPage extends StatefulWidget {
   _SignUpPageState createState() => _SignUpPageState();
 }
 
+Dio dio = Dio();
+
 class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late TextEditingController _usercontroller;
-  late TextEditingController _phonecontroller;
-  late TextEditingController _pswdcontroller;
-  late String username;
-  late String phone;
-  late String password;
-  late bool _validate=false;
-  
+  late final TextEditingController _userController = TextEditingController();
+  late final TextEditingController _phoneController = TextEditingController();
+  late final TextEditingController _pswdController = TextEditingController();
+  late String _username = '';
+  late String _phone = '';
+  late String _password = '';
+  late bool _validate = false;
+
   @override
   void initState() {
-    _usercontroller = TextEditingController()
-      ..addListener(() {
-      });
-    _phonecontroller = TextEditingController()
-      ..addListener(() {
-      });
-    _pswdcontroller = TextEditingController()
-      ..addListener(() {
-      });
+    _userController.addListener(() {
+      _username = _userController.text;
+    });
+    _phoneController.addListener(() {
+      _phone = _phoneController.text;
+    });
+    _pswdController.addListener(() {
+      _password = _pswdController.text;
+    });
   }
-  List<TextInputFormatter> format=[];
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  List<TextInputFormatter> format = [];
+
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -57,7 +67,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _userentryField(String title, {bool isPassword = false}) {
+  Widget _userentryField(String title) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -71,17 +81,17 @@ class _SignUpPageState extends State<SignUpPage> {
             height: 10,
           ),
           TextFormField(
-            validator: (value) {
-              if (value!.length > 20) {
-                return '账号名称长度不能超过20个字符';
-              }
-              if (value == "" || value == null) {
-                return '账号不能为空';
-              } else {
-                return null;
-              }
-            },
-              obscureText: isPassword,
+              controller: _userController,
+              validator: (value) {
+                if (value!.length > 20) {
+                  return '账号名称长度不能超过20个字符';
+                }
+                if (value == "" || value == null) {
+                  return '账号不能为空';
+                } else {
+                  return null;
+                }
+              },
               decoration: InputDecoration(
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
@@ -90,7 +100,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
-  Widget _phoneentryField(String title, {bool isPassword = false}) {
+
+  Widget _phoneentryField(String title) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -104,19 +115,18 @@ class _SignUpPageState extends State<SignUpPage> {
             height: 10,
           ),
           TextFormField(
-              controller: _phonecontroller,
+              controller: _phoneController,
               validator: (value) {
                 if (value == "" || value == null) {
                   return '手机号码不能为空';
                 } else if (!RegExp(
-                    '^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[8-9])|(147,145))\\d{8}\$')
+                        '^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[8-9])|(147,145))\\d{8}\$')
                     .hasMatch(value)) {
                   return '手机号码格式错误';
                 } else {
                   return null;
                 }
               },
-              obscureText: isPassword,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
@@ -125,6 +135,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
+
   Widget _pswdentryField(String title, {bool isPassword = false}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -139,19 +150,18 @@ class _SignUpPageState extends State<SignUpPage> {
             height: 10,
           ),
           TextFormField(
-              controller: _pswdcontroller,
+              controller: _pswdController,
               obscureText: isPassword,
               validator: (value) {
-                String pattern =
-                    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-                if (value!.length < 8 ){
+                String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
+                if (value!.length < 8) {
                   return '密码至少需要8位';
                 }
                 if (!_matchPattern(pattern, value)) {
                   return "必须包含大写字母，小写字母，数字和特殊字符";
-                } else if (value == ""){
+                } else if (value == "") {
                   return "密码不能为空";
-                } else  {
+                } else {
                   return null;
                 }
               },
@@ -212,18 +222,20 @@ class _SignUpPageState extends State<SignUpPage> {
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
             TextButton(
-                onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (_) => LoginPage()),
-                          (Route<dynamic> route) {
-                        return route.isFirst;
-                      });
-                },
-                child:Text('登录',
-                  style: TextStyle(
-                      color: Color(0xfff79c4f),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600),),
+              onPressed: () {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => LoginPage()),
+                    (Route<dynamic> route) {
+                  return route.isFirst;
+                });
+              },
+              child: Text(
+                '登录',
+                style: TextStyle(
+                    color: Color(0xfff79c4f),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600),
+              ),
             ),
           ],
         ),
@@ -235,12 +247,11 @@ class _SignUpPageState extends State<SignUpPage> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-          text: '账号注册',
-          style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w700,
-              color: Color(0xffe46b10)
-          ),
+        text: '账号注册',
+        style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.w700,
+            color: Color(0xffe46b10)),
       ),
     );
   }
@@ -300,18 +311,28 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
+
   bool _matchPattern(String pattern, String src) {
     RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(src);
   }
-  void _checkForReturn(context) {
+
+  Future<void> _checkForReturn(context) async {
+    print(_username);
     if (_formKey.currentState!.validate()) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => LoginPage()),
-              (Route<dynamic> route) {
-            return route.isFirst;
+      Response response = await dio.post(
+          'https://ad29e1bb-17af-4504-9045-9d468fb9c7f1.mock.pstmn.io/signup',
+          queryParameters: {
+            'username': _username,
+            'phone': _phone,
+            'password': _password
           });
+      print(response.data);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginPage()),
+          (Route<dynamic> route) {
+        return route.isFirst;
+      });
     }
   }
-
 }
