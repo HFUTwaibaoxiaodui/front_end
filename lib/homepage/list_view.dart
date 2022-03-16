@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 class ListViewPage extends StatefulWidget {
   @override
-  createState() => new ListViewState();
+  createState() => ListViewState();
 }
 
 class ListViewState extends State<ListViewPage> {
@@ -10,13 +11,28 @@ class ListViewState extends State<ListViewPage> {
   List<Widget> _list = [];
   bool testData = true;
 
+  late ScrollController _scrollController;
+  bool isLoading = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    //初始化ScrollController
+    _scrollController = ScrollController();
+    //监听是否到底部
+    _scrollController.addListener(() {
+      if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent)
+        {
+          print('滑动到了底部');
+          _loadMore();
+        }
+    });
+
     for (int i = 0; i < titleItems.length-2; i++) {
       _list.add(buildListData(context, titleItems[i], imagesItems[i], subTitleItems[i]));
     }
+
   }
   @override
   Widget build(BuildContext context) {
@@ -26,41 +42,25 @@ class ListViewState extends State<ListViewPage> {
         new RefreshIndicator(
           child:new Scrollbar(
             child: new ListView.builder(
-              // reverse: true,
+              reverse: false,
               itemBuilder: (context, item) {
-                final test = _list[item].toString();
-                return new Dismissible(
-                  key: Key(test),
-                  onDismissed: (direction) {
-                    _list.removeAt(item);
-                  },
-
-                  secondaryBackground: Container(
-                    child: Text('左滑删除',style: TextStyle(color: Colors.white),),
-                    color: Colors.red,
-                    padding: EdgeInsets.only(right: 30),
-                    alignment: Alignment.centerRight,
-                  ),
-
-                  background: Container(
-                    child: Text('右滑删除',style: TextStyle(color: Colors.white),),
-                    color: Colors.yellow,
-                    padding: EdgeInsets.only(right: 30),
-                    alignment: Alignment.centerLeft,
-                  ),
-
-
-                  child:new Container(
+                if(item < _list.length){
+                  return new Container(
                     child: new Column(
                       children: <Widget>[
                         buildListData(context, titleItems[item], imagesItems[item], subTitleItems[item]),
                         new Divider()
                       ],
                     ),
-                  ),
-                );
+                  );
+                }
+                else{
+                  return _buildLoadMoreItem();
+                }
+
               },
               itemCount:_list.length,
+              controller: _scrollController,
             ),
 
           ),
@@ -156,11 +156,11 @@ class ListViewState extends State<ListViewPage> {
         if(testData == true){
           _list = [];
           // List<Widget> newlist = [];
-          for (int i = 0; i < _list.length ; i++) {
+          for (int i = imagesItems.length-1; i >=0  ; i--) {
             _list.add(buildListData(context, titleItems[i], imagesItems[i], subTitleItems[i]));
           //  newList.add(buildListData(context, titleItems[i], imagesItems[i], subTitleItems[i]));
           }
-          // print("**************${_list.length}==="+_list.length.toString());
+          print("**************${_list.length}==="+_list.length.toString());
           // testData = false;
         }
 
@@ -168,5 +168,39 @@ class ListViewState extends State<ListViewPage> {
     });
   }
 
+  Future<Null> _loadMore() async {
+    if(!isLoading) {
+      setState(() {
+        isLoading = true;
+      });
+      await Future.delayed(Duration(seconds: 2),(){
+        setState(() {
+          isLoading = false;
+          _list = [];
+          // List<Widget> newlist = [];
+          for (int i = imagesItems.length-1; i >=0  ; i--) {
+            _list.add(buildListData(context, titleItems[i], imagesItems[i], subTitleItems[i]));
+            //  newList.add(buildListData(context, titleItems[i], imagesItems[i], subTitleItems[i]));
+          }
+        });
+      });
+
+    }
+  }
+
+  Widget _buildLoadMoreItem(){
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Text("加载中..."),
+      ),
+    );
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    _scrollController.dispose();
+  }
 
 }

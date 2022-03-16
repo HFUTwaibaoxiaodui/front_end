@@ -17,14 +17,14 @@ class _IndexState extends State<IndexPage> {
 
   late final List<BottomNavigationBarItem> bottomNavItems = [
     BottomNavigationBarItem(
-      icon: new Stack(
+      icon: Stack(
         children: <Widget>[
-          new Icon(Icons.home),
-          new Positioned(
+          Icon(Icons.home),
+          Positioned(
             right: 0,
-            child: new Container(
+            child: Container(
               padding: EdgeInsets.all(1),
-              decoration: new BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(6),
               ),
@@ -32,7 +32,7 @@ class _IndexState extends State<IndexPage> {
                 minHeight: 12,
                 minWidth: 12,
               ),
-              child: new Text(
+              child: Text(
                 counter,
                 style: TextStyle(
                   color: Colors.white,
@@ -54,7 +54,7 @@ class _IndexState extends State<IndexPage> {
     ),
     BottomNavigationBarItem(
       // backgroundColor: Colors.amber,
-      icon: Icon(Icons.settings),
+      icon: Icon(Icons.apps),
       label: "应用",
     ),
     BottomNavigationBarItem(
@@ -91,68 +91,10 @@ class _IndexState extends State<IndexPage> {
           _changePage(index);
         },
       ),
-      body: pages[currentIndex],
-      //左边抽屉
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                "赵某人",
-                style: TextStyle(
-                  fontSize: 25 ,
-                ),
-
-              ),
-              accountEmail: Text("9658****253@qq.com"),
-              otherAccountsPictures: [
-                Icon(Icons.camera,
-                  color: Colors.white,)
-              ],
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("images/girl.jpg") ,
-                    fit: BoxFit.fill
-                ),
-
-              ),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage("images/girl2.jpeg"),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.account_balance_wallet),
-              title: Text("开通会员"),
-              // subtitle: Text("必须要充钱"),
-            ),
-            ListTile(
-              leading: Icon(Icons.share),
-              title: Text("分享"),
-            ),
-            ListTile(
-              leading: Icon(Icons.star),
-              title: Text("我的收藏"),
-            ),
-            ListTile(
-              leading: Icon(Icons.error),
-              title: Text("关于"),
-            )
-          ],
-        ),
-      ),
-      //右边抽屉
-      endDrawer: Drawer(
-        child: MediaQuery.removePadding(
-          context: context, // removeTop: true,//移除抽屉菜单顶部默认留白
-          child: ListView(
-            children: <Widget>[
-              ListTile(leading: const Icon(Icons.add), title: const Text('Add account0')),
-              ListTile(leading: const Icon(Icons.add), title: const Text('Add account1')),
-              ListTile(leading: const Icon(Icons.add), title: const Text('Add account2')),
-              ListTile(leading: const Icon(Icons.add), title: const Text('Add account3')),
-            ],
-          ),
-        ),
+      // body: pages[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: pages,
       ),
     );
   }
