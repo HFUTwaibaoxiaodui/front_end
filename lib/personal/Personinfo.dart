@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/personal/personal.dart';
+import 'package:frontend/personal/Personal.dart';
 import 'package:frontend/constant/constant.dart';
 import 'package:path/path.dart';
 
@@ -96,17 +96,17 @@ class SettingCommon extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: Container(
-                          margin: const EdgeInsets.only(left: 10.0),
+                          margin: const EdgeInsets.only(left: 15.0),
                           child: Text(title,
                               style:
-                              TextStyle(fontSize: 14, color: Colors.black)),
+                              TextStyle(fontSize: 13, color: Colors.black)),
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 5.0),
                         child: Text(content,
                             style:
-                            TextStyle(fontSize: 14, color: Colors.black)),
+                            TextStyle(fontSize: 13, color: Colors.black)),
                       ),
                       Container(
                         margin: const EdgeInsets.only(left: 5.0, right: 15),
@@ -149,7 +149,7 @@ class _PersoninfoState extends State<Personinfo> {
             appBar: AppBar(
                 title: const Text(
                   '个人主页',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 15),
                 ),
                 elevation: 0.5),
             body: Container(
@@ -214,69 +214,69 @@ class _PersoninfoState extends State<Personinfo> {
                     color: Color(0xffF2F2F2),
                     //  margin: EdgeInsets.only(left: 60),
                   ),
-                  SettingCommon(
-                    title: "意见反馈",
-                    content: "",
-                    onPressed: () {
-                      // Routes.navigateTo(context, '${Routes.feedbackPage}');
-                    },
-                  ),
-                  SettingCommon(title: "关于微博", content: ""),
-                  SettingCommon(title: "清理缓存", content: ""),
+                  // SettingCommon(
+                  //   title: "意见反馈",
+                  //   content: "",
+                  //   onPressed: () {
+                  //     // Routes.navigateTo(context, '${Routes.feedbackPage}');
+                  //   },
+                  // ),
+                  // SettingCommon(title: "关于微博", content: ""),
+                  // SettingCommon(title: "清理缓存", content: ""),
                   Container(
                     height: 30,
                     color: Color(0xffF2F2F2),
                     //  margin: EdgeInsets.only(left: 60),
                   ),
-                  Material(
-                    color: Colors.white,
-                    child: InkWell(
-                        onTap: () {
-                          //Routes  .navigateTo(context, '${Routes.settingPage}');
-                          showDialog(
-                            context: context,
-                            barrierDismissible: true, // user must tap button!
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: Text('退出登录?'),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: Text('确定'),
-                                    onPressed: () {
-                                      // UserUtil.loginout();
-                                      // Navigator.of(context).pop();
-                                      // Routes.navigateTo(
-                                      //     context, '${Routes.loginPage}',
-                                      //     clearStack: true,
-                                      //     transition: TransitionType.fadeIn);
-                                    },
-                                  ),
-                                  FlatButton(
-                                    child: Text('取消'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                                backgroundColor: Colors.white,
-                                elevation: 20,
-                                // 设置成 圆角
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                              );
-                            },
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 15.0,
-                          ),
-                          child: const Center(
-                            child: Text('退出',
-                                style: TextStyle(fontSize: 14, color: Colors.red)),
-                          ),
-                        )),
-                  ),
+                  // Material(
+                  //   color: Colors.white,
+                  //   child: InkWell(
+                  //       onTap: () {
+                  //         //Routes  .navigateTo(context, '${Routes.settingPage}');
+                  //         showDialog(
+                  //           context: context,
+                  //           barrierDismissible: true, // user must tap button!
+                  //           builder: (BuildContext context) {
+                  //             return AlertDialog(
+                  //               content: Text('退出登录?'),
+                  //               actions: <Widget>[
+                  //                 FlatButton(
+                  //                   child: Text('确定'),
+                  //                   onPressed: () {
+                  //                     // UserUtil.loginout();
+                  //                     // Navigator.of(context).pop();
+                  //                     // Routes.navigateTo(
+                  //                     //     context, '${Routes.loginPage}',
+                  //                     //     clearStack: true,
+                  //                     //     transition: TransitionType.fadeIn);
+                  //                   },
+                  //                 ),
+                  //                 FlatButton(
+                  //                   child: Text('取消'),
+                  //                   onPressed: () {
+                  //                     Navigator.of(context).pop();
+                  //                   },
+                  //                 ),
+                  //               ],
+                  //               backgroundColor: Colors.white,
+                  //               elevation: 20,
+                  //               // 设置成 圆角
+                  //               shape: RoundedRectangleBorder(
+                  //                   borderRadius: BorderRadius.circular(10)),
+                  //             );
+                  //           },
+                  //         );
+                  //       },
+                  //       child: Container(
+                  //         padding: const EdgeInsets.symmetric(
+                  //           vertical: 15.0,
+                  //         ),
+                  //         child: const Center(
+                  //           child: Text('退出',
+                  //               style: TextStyle(fontSize: 14, color: Colors.red)),
+                  //         ),
+                  //       )),
+                  // ),
                 ],
               ),
             ),

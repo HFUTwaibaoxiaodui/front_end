@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/personal/personal.dart';
+import 'package:frontend/personal/Personal.dart';
 
 import 'MissingKey/FixKey.dart';
 
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FixKey()
+      home: PersonCenterPage()
     );
   }
 }

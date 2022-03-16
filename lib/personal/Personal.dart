@@ -1,5 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/personal/Personinfo.dart';
+import '../constant/ContainerRepository.dart';
 import '../constant/constant.dart';
+import 'PersonData.dart';
+import 'Setting.dart';
 
 class PersonCenterPage extends StatelessWidget{
   @override
@@ -29,7 +34,11 @@ class PersonCenterPage extends StatelessWidget{
                   _personItem('ic_me_photo_album.png', '关于我们'),
                   // _personItem('ic_me_doulist.png', '豆列 / 收藏'),
                   _divider(),
-                  _personItem('ic_me_wallet.png', '设置'),
+                  _personItem('ic_me_wallet.png', '设置',onTab: (){
+                    Navigator.of(context).push(
+                        CupertinoPageRoute(builder: (BuildContext context){return Setting();})
+                    );
+                  }),
                 ]
             ),
           ),
@@ -49,6 +58,7 @@ class PersonCenterPage extends StatelessWidget{
 }
 
 class Records extends StatelessWidget{
+
   @override
   Widget build(BuildContext context) {
 
@@ -73,13 +83,15 @@ class Records extends StatelessWidget{
                       children: <Widget>[
                         Container(
                           padding: EdgeInsets.all(10.0),
-                          child:Text(
+                          child: Text(
                             '我的工单数据',
-                            style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold,fontSize: 16),
+                            style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold,fontSize: 14),
                           ),
                         ),
                         IconButton(icon: Icon(Icons.chevron_right,color: Colors.white,), onPressed: (){
-                          print('工单数据');
+                          Navigator.of(context).push(
+                              CupertinoPageRoute(builder: (BuildContext context){return PersonData();})
+                          );
                         }),
                       ],
                     ),
@@ -149,12 +161,14 @@ SliverToBoxAdapter _personItem(String imgAsset, String title, {VoidCallback onTa
             Expanded(
               child: Text(
                   title,
-                  style: TextStyle(fontSize: 15.0)
+                  style: TextStyle(fontSize: 13.0)
               ),
             ),
-            _rightArrow()
+            _rightArrow(),
           ],
+
         ),
+
       )
   );
 }
@@ -162,8 +176,12 @@ _rightArrow() {
   return Icon(
     Icons.chevron_right,
     color: const Color.fromARGB(255, 204, 204, 204),
+
   );
+
 }
+
+
 ///这个用来改变书影音数据来自网络还是本地模拟
 // class UseNetDataWidget extends StatefulWidget{
 //   @override
@@ -195,9 +213,6 @@ class PersonSliverAppBar extends StatelessWidget{
       // 是否固定在顶部
       pinned: true,
       expandedHeight: 150.0,
-      leading: IconButton(iconSize: 24, icon: Icon(Icons.settings), onPressed: (){
-        print('设置');
-      }),
       actions: <Widget>[
         IconButton(iconSize: 23, icon: Icon(Icons.message), onPressed: (){
           print('查看消息');
@@ -207,17 +222,17 @@ class PersonSliverAppBar extends StatelessWidget{
         centerTitle: true,
         background: Container(
           padding: EdgeInsets.only(top:50.0,left:20,right:10,bottom:10),
-          child: PersonInfo(),
+          child: Personpage(),
         ),
       ),
     );
   }
 
 }
-class PersonInfo extends StatelessWidget {
+class Personpage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -236,7 +251,7 @@ class PersonInfo extends StatelessWidget {
                       children: <Widget>[
                         Container(
                           padding: EdgeInsets.only(bottom: 10.0),
-                          child: Text(
+                          child: const Text(
                             '顶针',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -290,7 +305,9 @@ class PersonInfo extends StatelessWidget {
                       ),
                       alignment: AlignmentDirectional.centerStart,
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonInfo()));
+                        Navigator.of(context).push(
+                            CupertinoPageRoute(builder: (BuildContext context){return Personinfo();})
+                        );
                       })
                 ],
               ),
