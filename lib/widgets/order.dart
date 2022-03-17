@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:frontend/widgets/operation.dart';
 
 class Order {
   /// 工单标题
@@ -20,6 +21,8 @@ class Order {
   /// 工单描述
   String? description;
 
+  List<Operation>? operationList;
+
   Order({
     this.orderTitle,
     this.creatorName,
@@ -29,6 +32,7 @@ class Order {
     required this.orderState,
     this.phoneNum,
     this.area,
-    this.description
+    this.description,
+    this.operationList
   });
 }

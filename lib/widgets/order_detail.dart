@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/exception_handle.dart';
 import 'package:frontend/pages/exception_report.dart';
 import 'package:frontend/util/debug_print.dart';
+import 'package:frontend/widgets/operation.dart';
 import '../global/state_label_colors.dart';
 import '../main.dart';
 import 'order.dart';
@@ -122,9 +123,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
   void _generatorQRCode() async {
     Uint8List? code = await QRCodeUtil.generateQRCode(widget.order.orderAddress!);
     _qrcodeBytes = code;
-    setState(() {
-
-    });
+    setState(() {});
     print(code);
   }
 
@@ -207,6 +206,27 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
     );
   }
 
+  Widget _buildOperationProgress() {
+
+    Widget redDivider = const Divider(color: Colors.red);
+    Widget blueDivider = const Divider(color: Colors.blue);
+    List<Operation>? list = widget.order.operationList;
+    
+    return ListView.separated(
+      itemCount: list!.length,
+      separatorBuilder: (BuildContext context, int index){
+        return index % 2 == 0 ? redDivider:blueDivider;
+      },
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          title: Text(list[index].operationName ?? 'null'),
+          subtitle: Text(list[index].description ?? 'null'),
+          trailing: Text(list[index].operationTime ?? 'null'),
+        );
+      },
+    );
+  }
+
   Widget _buildBottom() {
     switch(widget.order.orderState) {
       // case '待服务': return Container(
@@ -243,26 +263,38 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
           child: Padding(
               padding: const EdgeInsets.all(5),
               child: GestureDetector(
-                onTap: (){
-
+                onTap: () async {
                   /// 进行扫码验证
                   printWithDebug('扫码验证');
-                  /// TODO
-                  printWithDebug('验证成功');
 
-                  /// 状态由待抢单转为待服务
-                  setState(() {
-                    widget.order.orderState = '服务中';
-                  });
-                  /// 提示用户抢单成功
-                  Fluttertoast.showToast(
-                      msg: "验证成功，开始巡检",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Colors.green,
-                      textColor: Colors.white,
-                      fontSize: 16.0
-                  );
+                  String? qrCode = await QRCodeUtil.scanCamera();
+                  if (qrCode == widget.order.orderAddress) {
+                    printWithDebug('验证成功');
+                    /// 状态由待抢单转为待服务
+                    setState(() {
+                      widget.order.orderState = '服务中';
+                    });
+                    /// 提示用户抢单成功
+                    Fluttertoast.showToast(
+                        msg: "验证成功，开始巡检",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                  } else {
+                    printWithDebug('验证失败');
+                    /// 提示用户抢单成功
+                    Fluttertoast.showToast(
+                        msg: "验证失败",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                  }
                 },
                 child: Container(
                   color: Colors.cyanAccent.shade700,
@@ -370,7 +402,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
   @override
   Widget build(BuildContext context) {
     _pages.add(_buildOrderAttributes());
-    _pages.add(Container(color: Colors.red));
+    _pages.add(_buildOperationProgress());
     _pages.add(Container(color: Colors.green));
 
     return Scaffold(

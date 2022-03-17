@@ -13,7 +13,7 @@ class QRCodeUtil {
   static final ImagePicker _imagePicker = ImagePicker();
 
   /// 扫码获取二维码
-  static Future _scan() async {
+  static Future scanCamera() async {
     try {
       printWithDebug('开始请求权限');
       await Permission.camera.request();

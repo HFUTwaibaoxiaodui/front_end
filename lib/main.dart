@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/operation.dart';
 import 'package:frontend/widgets/order.dart';
 import 'package:frontend/widgets/order_card.dart';
 import 'global/routers.dart';
@@ -97,7 +98,34 @@ class _MyHomePageState extends State<MyHomePage> {
                   createTime: '2022-03-12',
                   orderCode: 'O202203120001',
                   orderState: '待抢单',
-                  phoneNum: '13956190211'
+                  phoneNum: '13956190211',
+                  operationList: [
+                    Operation(
+                        operationName: '服务',
+                        description: '123131231321',
+                        operationTime: '2022-01-11 09:30:01'
+                    ),
+                    Operation(
+                        operationName: '服务',
+                        description: '123131231321',
+                        operationTime: '2022-01-11 09:30:01'
+                    ),
+                    Operation(
+                      operationName: '服务',
+                      description: '123131231321',
+                      operationTime: '2022-01-11 09:30:01'
+                    ),
+                    Operation(
+                      operationName: '抢单',
+                      description: '123131231321',
+                      operationTime: '2022-01-11 09:30:01'
+                    ),
+                    Operation(
+                      operationName: '新建',
+                      description: '123131231321',
+                      operationTime: '2022-01-11 09:30:01'
+                    )
+                  ]
                 ),
               ),
               OrderCard (
