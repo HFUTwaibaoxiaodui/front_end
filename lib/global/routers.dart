@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:frontend/pages/order_evaluate.dart';
 import '../main.dart';
 import '../widgets/order_detail.dart';
 
 final _routes = {
   '/': (context) => MyHomePage(title: '123123',),
-  // '/register': (context) => RegisterPage(),
+  '/order_evaluate': (context) => OrderEvaluate(),
   '/order_detail': (context, {arguments}) => OrderDetail(order: arguments)
 };
 

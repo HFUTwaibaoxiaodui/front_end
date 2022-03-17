@@ -141,6 +141,17 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               OrderCard (
                 order: Order(
+                    orderTitle: '修理的电饭煲',
+                    creatorName: '李物',
+                    orderAddress: '安徽省合肥市蜀山区合肥工业大学翡翠湖校区科教楼B301的802机房',
+                    createTime: '2022-03-11',
+                    orderCode: 'O202203120002',
+                    orderState: '待评价',
+                    phoneNum: '13956190212'
+                ),
+              ),
+              OrderCard (
+                order: Order(
                     orderTitle: '修理的高压煲',
                     creatorName: '王物',
                     orderAddress: '安徽省合肥市蜀山区合肥工业大学翡翠湖校区科教楼B301的802机房',
@@ -154,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         )
       ),
-      // body: ExceptionReport(),
+      // body: ExceptionHandle(),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',

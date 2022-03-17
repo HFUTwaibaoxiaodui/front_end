@@ -201,7 +201,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
         ListTile(title: const Text('工单创建时间'), subtitle: Text(widget.order.createTime ?? 'null')),
         ListTile(title: const Text('工单创建时间'), subtitle: Text(widget.order.createTime ?? 'null')),
         ListTile(title: const Text('工单创建时间'), subtitle: Text(widget.order.createTime ?? 'null')),
-        Container(height: 200, decoration: BoxDecoration(image: DecorationImage(image: MemoryImage(_qrcodeBytes!)))),
+        // Container(height: 200, decoration: BoxDecoration(image: DecorationImage(image: MemoryImage(_qrcodeBytes!)))),
       ],
     );
   }
@@ -213,13 +213,13 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
     List<Operation>? list = widget.order.operationList;
     
     return ListView.separated(
-      itemCount: list!.length,
+      itemCount: list == null ? 0 : list.length,
       separatorBuilder: (BuildContext context, int index){
         return index % 2 == 0 ? redDivider:blueDivider;
       },
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
-          title: Text(list[index].operationName ?? 'null'),
+          title: Text(list![index].operationName ?? 'null'),
           subtitle: Text(list[index].description ?? 'null'),
           trailing: Text(list[index].operationTime ?? 'null'),
         );
@@ -388,6 +388,24 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                   color: Colors.cyanAccent.shade700,
                   child: const Center(
                     child: Text('处理异常', style: TextStyle(color: Colors.white)
+                    ),
+                  ),
+                ),
+              )
+          )
+      );
+      case '待评价': return Container(
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+          child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.of(context).pushNamed('/order_evaluate');
+                },
+                child: Container(
+                  color: Colors.cyanAccent.shade700,
+                  child: const Center(
+                    child: Text('评价工单', style: TextStyle(color: Colors.white)
                     ),
                   ),
                 ),
