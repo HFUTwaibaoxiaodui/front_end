@@ -46,6 +46,8 @@ dependencies:
 
   provider:
 
+  fluttertoast: ^8.0.9
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

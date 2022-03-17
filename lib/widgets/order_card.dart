@@ -75,11 +75,7 @@ class OrderCardState extends State<OrderCard> {
     return GestureDetector(
       onTap: () {
         debugPrint(widget.order.orderState);
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) {
-            return OrderDetail(widget.order);
-          })
-        );
+        Navigator.of(context).pushNamed('/order_detail', arguments: widget.order);
       },
       child: widget.createCard(context)
     );

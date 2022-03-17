@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/order.dart';
 import 'package:frontend/widgets/order_card.dart';
-import 'package:provider/provider.dart';
+import 'global/routers.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
   runApp( MyApp());
@@ -14,7 +16,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateRoute: generateRoute,
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -107,10 +111,22 @@ class _MyHomePageState extends State<MyHomePage> {
                     phoneNum: '13956190212'
                 ),
               ),
+              OrderCard (
+                order: Order(
+                    orderTitle: '修理的高压煲',
+                    creatorName: '王物',
+                    orderAddress: '安徽省合肥市蜀山区合肥工业大学翡翠湖校区科教楼B301的802机房',
+                    createTime: '2022-03-11',
+                    orderCode: 'O202203120003',
+                    orderState: '异常',
+                    phoneNum: '13956190212'
+                ),
+              ),
             ],
           )
         )
       ),
+      // body: ExceptionReport(),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',

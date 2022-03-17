@@ -1,14 +1,21 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/exception_handle.dart';
+import 'package:frontend/pages/exception_report.dart';
 import 'package:frontend/util/debug_print.dart';
 import '../global/state_label_colors.dart';
+import '../main.dart';
 import 'order.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/util/qrcode_util.dart';
 
 class OrderDetail extends StatefulWidget {
 
   Order order;
   final double detailFontSize = 14;
 
-  OrderDetail(this.order, {Key? key}) : super(key: key);
+  OrderDetail({Key? key, required this.order}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => OrderDetailState();
@@ -71,31 +78,73 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
   ];
 
   final List<Widget> _pages = [];
+  Uint8List? _qrcodeBytes;
 
   int _currentIndex = 0;
   late TabController tabController;
   late PageController pageController;
 
+  final PopupMenuItem<String> reassignment = PopupMenuItem<String>(
+    value: '转派工单',
+    child: GestureDetector(
+      onTap: () {
+        printWithDebug('转派工单');
+      },
+      child: const Text('转派工单'),
+    ),
+  );
+  final PopupMenuItem<String> exception = PopupMenuItem<String>(
+    value: '异常上报',
+    child: GestureDetector(
+      onTap: () {
+        Navigator.push(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) {
+            return ExceptionReport();
+          }
+        ));
+      },
+      child: const Text('异常上报'),
+    ),
+  );
+
   @override
   void initState() {
+    super.initState();
     tabController = TabController(length: _tabValues.length, vsync: this, initialIndex: 0);
     pageController = PageController(initialPage: _currentIndex);
-    _pages.add(_buildOrderAttributes());
-    _pages.add(Container(color: Colors.red));
-    _pages.add(Container(color: Colors.green));
+    _generatorQRCode();
+
+
+
+
+    print(123123);
+  }
+
+  void _generatorQRCode() async {
+    Uint8List? code = await QRCodeUtil.generateQRCode(widget.order.orderAddress!);
+    _qrcodeBytes = code;
+    setState(() {
+
+    });
+    print(code);
   }
 
   Widget _buildPopUpList() {
-    return PopupMenuButton<String>(
-        itemBuilder: (context) => <PopupMenuEntry<String>>[
-          PopupMenuItem<String>(
-            value: '语文',
-            child: GestureDetector(
-
-            ),
-          ),
-        ]
-    );
+    switch (widget.order.orderState) {
+      case '待服务':
+        return PopupMenuButton<String>(
+          itemBuilder: (context) => <PopupMenuEntry<String>>[
+            reassignment
+          ],
+        );
+      case '服务中':
+        return PopupMenuButton<String>(
+          itemBuilder: (context) => <PopupMenuEntry<String>>[
+            reassignment,
+            exception
+          ]
+        );
+    }
+    return Container();
   }
 
   Widget _buildMiddle() {
@@ -153,6 +202,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
         ListTile(title: const Text('工单创建时间'), subtitle: Text(widget.order.createTime ?? 'null')),
         ListTile(title: const Text('工单创建时间'), subtitle: Text(widget.order.createTime ?? 'null')),
         ListTile(title: const Text('工单创建时间'), subtitle: Text(widget.order.createTime ?? 'null')),
+        Container(height: 200, decoration: BoxDecoration(image: DecorationImage(image: MemoryImage(_qrcodeBytes!)))),
       ],
     );
   }
@@ -194,9 +244,25 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
               padding: const EdgeInsets.all(5),
               child: GestureDetector(
                 onTap: (){
+
+                  /// 进行扫码验证
+                  printWithDebug('扫码验证');
+                  /// TODO
+                  printWithDebug('验证成功');
+
+                  /// 状态由待抢单转为待服务
                   setState(() {
                     widget.order.orderState = '服务中';
                   });
+                  /// 提示用户抢单成功
+                  Fluttertoast.showToast(
+                      msg: "验证成功，开始巡检",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
                 },
                 child: Container(
                   color: Colors.cyanAccent.shade700,
@@ -233,7 +299,37 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
           child: GestureDetector(
             onTap: (){
               setState(() {
-                widget.order.orderState = '待服务';
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('提示'),
+                        content: const Text('确认接单吗？'),
+                        actions: <Widget>[
+                          TextButton(child: const Text('取消'),onPressed: (){
+                            printWithDebug('已取消接单');
+                            Navigator.of(context).pop();
+                          }),
+                          TextButton(child: const Text('确认'),onPressed: () async {
+                            /// 状态由待抢单转为待服务
+                            setState(() {
+                              widget.order.orderState = '待服务';
+                            });
+                            /// 提示用户抢单成功
+                            Fluttertoast.showToast(
+                                msg: "抢单成功",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                backgroundColor: Colors.green,
+                                textColor: Colors.white,
+                                fontSize: 16.0
+                            );
+                            /// 返回上一个界面
+                            Navigator.of(context).pop();
+                          },),
+                        ],
+                      );
+                    });
               });
             },
             child: Container(
@@ -246,6 +342,26 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
           )
         )
       );
+      case '异常': return Container(
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+          child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                    return ExceptionHandle();
+                  }));
+                },
+                child: Container(
+                  color: Colors.cyanAccent.shade700,
+                  child: const Center(
+                    child: Text('处理异常', style: TextStyle(color: Colors.white)
+                    ),
+                  ),
+                ),
+              )
+          )
+      );
     }
 
     return Container();
@@ -253,6 +369,10 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
 
   @override
   Widget build(BuildContext context) {
+    _pages.add(_buildOrderAttributes());
+    _pages.add(Container(color: Colors.red));
+    _pages.add(Container(color: Colors.green));
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('工单详情', style: TextStyle(color: Colors.white, fontSize: 20)),
@@ -297,4 +417,5 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
       )
     );
   }
+
 }

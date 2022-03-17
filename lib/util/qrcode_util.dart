@@ -13,7 +13,7 @@ class QRCodeUtil {
   static final ImagePicker _imagePicker = ImagePicker();
 
   /// 扫码获取二维码
-  Future _scan() async {
+  static Future _scan() async {
     try {
       printWithDebug('开始请求权限');
       await Permission.camera.request();
@@ -31,19 +31,19 @@ class QRCodeUtil {
     }
   }
 
-  Future _scanPhoto() async {
+  static Future scanPhoto() async {
     await Permission.storage.request();
     String barcode = await scanner.scanPhoto();
     return barcode;
   }
 
-  Future _scanPath(String path) async {
+  static Future scanPath(String path) async {
     await Permission.storage.request();
     String barcode = await scanner.scanPath(path);
     return barcode;
   }
 
-  Future _scanBytes() async {
+  static Future scanBytes() async {
     XFile? file = await _imagePicker.pickImage(source: ImageSource.camera);
     if (file == null) return;
     Uint8List bytes = await file.readAsBytes();
@@ -52,7 +52,7 @@ class QRCodeUtil {
   }
 
   /// 生成二维码
-  Future _generateQRCode(String inputCode) async {
+  static Future<Uint8List> generateQRCode(String inputCode) async {
     Uint8List result = await scanner.generateBarCode(inputCode);
     return result;
   }
