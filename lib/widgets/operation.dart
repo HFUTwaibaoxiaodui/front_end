@@ -7,4 +7,17 @@ class Operation {
   String? operationTime;
 
   Operation({this.operationName, this.description, this.operationTime});
+
+  static Operation fromJson(Map<String, dynamic> json) {
+    return Operation(
+      operationName: json['operationName'],
+      operationTime: json['operationTime'],
+      description: json['description']
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Operation{operationName: $operationName, description: $description, operationTime: $operationTime}';
+  }
 }

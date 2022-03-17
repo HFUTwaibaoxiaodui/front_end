@@ -5,15 +5,14 @@ import 'package:frontend/util/net/result_data.dart';
 
 class HttpManager {
   static final HttpManager _instance = HttpManager._internal();
-  late Dio? _dio;
+  Dio? _dio;
 
   HttpManager._internal() {
     if (_dio == null) {
-      _dio = Dio(
-          BaseOptions(connectTimeout: 15000)
+      _dio = Dio(BaseOptions(connectTimeout: 15000)
       );
       // _dio!.interceptors.add(DioLogInterceptor());
-      _dio!.interceptors.add(ResponseInterceptors());
+      // _dio!.interceptors.add(ResponseInterceptors());
     }
   }
 

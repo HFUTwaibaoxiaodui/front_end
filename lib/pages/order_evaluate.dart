@@ -1,33 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:frontend/util/debug_print.dart';
 
 import '../main.dart';
 
-
 class OrderEvaluate extends StatefulWidget {
   @override
-  State<StatefulWidget> createState()  => OrderEvaluateState();
+  State<StatefulWidget> createState() => OrderEvaluateState();
 }
 
 class OrderEvaluateState extends State<OrderEvaluate> {
-
-  late TextEditingController _handleOption;
+  late TextEditingController _handleResult;
   late TextEditingController _handleSuggest;
   late FocusNode _focusNode;
-  String _selecting = "";
+  late int _score;
+  final Map<int, String> _scoreMap = {
+    2 : '非常不满',
+    4 : '不满',
+    6 : '一般',
+    8 : '满意',
+    10 : '非常满意'
+  };
+
 
   @override
   void initState() {
     super.initState();
 
-    _handleOption = TextEditingController();
+    _handleResult = TextEditingController();
     _handleSuggest = TextEditingController();
     _focusNode = FocusNode();
-    _handleOption.text = "";
+    _handleResult.text = "";
+    _score = 2;
 
-    _focusNode.addListener((){
+    _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
-      }else{
+      } else {
         print('失去焦点');
       }
     });
@@ -35,7 +44,7 @@ class OrderEvaluateState extends State<OrderEvaluate> {
 
   @override
   void dispose() {
-    _handleOption.dispose();
+    _handleResult.dispose();
     _handleSuggest.dispose();
     _focusNode.dispose();
     super.dispose();
@@ -45,7 +54,8 @@ class OrderEvaluateState extends State<OrderEvaluate> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('工单评价', style: TextStyle(color: Colors.white, fontSize: 20)),
+        title: const Text('工单评价',
+            style: TextStyle(color: Colors.white, fontSize: 20)),
         centerTitle: true,
         backgroundColor: Colors.cyanAccent.shade700,
         // 底部阴影
@@ -58,97 +68,94 @@ class OrderEvaluateState extends State<OrderEvaluate> {
             child: Column(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.39,
                   color: Colors.white,
                   child: ListView(
                     children: [
                       Row(
                         children: [
-                          const Expanded(child: ListTile(title: Text('问题解决情况')),flex: 2),
-                          Expanded(child: TextField(
-                            controller: _handleOption,
-                            enabled: false,
-                            decoration: const InputDecoration.collapsed(
-                              hintText: "请选择问题解决情况（必填）",
-                              border: InputBorder.none,
-                            ),
-                          ),flex: 3),
-                          Expanded(child: ListTile(
-                            title: const Icon(Icons.keyboard_arrow_right),
-                            onTap: () {
-                              showDialog(
-                                  context: navigatorKey.currentContext!,
-                                  builder: (BuildContext context) {
-                                    return StatefulBuilder(
-                                      builder: (BuildContext context, void Function(void Function()) setState) {
-                                        return AlertDialog(
-                                          title: const Text('问题解决情况'),
-                                          content: Container(
-                                            height: MediaQuery.of(context).size.height * 0.23,
-                                            child:  Column(
-                                              children: [
-                                                RadioListTile<String>(
-                                                    value: "已解决",
-                                                    title: const Text("已解决"),
-                                                    groupValue: _selecting,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        _selecting = value!;
-                                                      });
-                                                    }
-                                                ),
-                                                RadioListTile<String>(
-                                                    value: "未解决",
-                                                    title: const Text("未解决"),
-                                                    groupValue: _selecting,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        _selecting = value!;
-                                                      });
-                                                    }
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(child: const Text('取消'),onPressed: (){
-                                              Navigator.of(context).pop();
-                                            }),
-                                            TextButton(child: const Text('确认'),onPressed: (){
-                                              _handleOption.text = _selecting;
-                                              Navigator.of(context).pop();
-                                            },),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }
-                              );
-                            },
-                          )
-                              ,flex: 1),
+                          const Expanded(child: ListTile(title: Text('问题解决情况', style: TextStyle(fontSize: 16))), flex: 4),
+                          Expanded(
+                            child: RadioListTile<String>(
+                              contentPadding: const EdgeInsets.all(0),
+                              value: "已解决",
+                              title: const Text("已解决", style: TextStyle(fontSize: 14)),
+                              groupValue: _handleResult.text,
+                              onChanged: (value) {
+                                setState(() {
+                                  _handleResult.text = value!;
+                                });
+                              }),
+                            flex: 3,
+                          ),
+                          Expanded(
+                            child: RadioListTile<String>(
+                              contentPadding: const EdgeInsets.all(0),
+                              value: "未解决",
+                              title: const Text("未解决", style: TextStyle(fontSize: 14)),
+                              groupValue: _handleResult.text,
+                              onChanged: (value) {
+                                setState(() {
+                                  _handleResult.text = value!;
+                                });
+                              }),
+                            flex: 3
+                          ),
                         ],
                       ),
                       Divider(thickness: 0.5, color: Colors.grey.shade400),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Expanded(child: ListTile(title: Text('处理意见')),flex: 2),
-                          Expanded(child: ListTile(
-                            contentPadding: const EdgeInsets.only(top: 14),
-                            title: TextField(
-                              focusNode: _focusNode,
-                              controller: _handleSuggest,
-                              decoration: const InputDecoration.collapsed(
-                                hintStyle: TextStyle(color: CupertinoColors.inactiveGray),
-                                hintText: "处理意见",
-                                border: InputBorder.none,
+                          const Expanded(
+                              child: ListTile(title: Text('处理意见')), flex: 2),
+                          Expanded(
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.only(top: 14),
+                                title: TextField(
+                                  focusNode: _focusNode,
+                                  controller: _handleSuggest,
+                                  decoration: const InputDecoration.collapsed(
+                                    hintStyle: TextStyle(
+                                        color: CupertinoColors.inactiveGray),
+                                    hintText: "处理意见",
+                                    border: InputBorder.none,
+                                  ),
+                                  maxLines: 5,
+                                  maxLength: 300,
+                                ),
                               ),
-                              maxLines: 5,
-                              maxLength: 300,
-                            ),
-                          ),flex: 3),
-                          Expanded(child: Container(),flex: 1),
+                              flex: 3),
+                          Expanded(child: Container(), flex: 1),
+                        ],
+                      ),
+                      Divider(thickness: 0.5, color: Colors.grey.shade400),
+                      Row(
+                        children: [
+                          const Expanded(flex: 2,
+                            child: ListTile(title: Text('评分', style: TextStyle(fontSize: 16))),
+                          ),
+                          Expanded(flex: 6,
+                            child: RatingBar.builder(
+                              initialRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: false,
+                              minRating: 1,
+                              itemCount: 5,
+                              itemSize: 25.0,
+                              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {
+                                setState(() {
+                                  _score = (rating * 2).toInt();
+                                });
+                              },
+                            )
+                          ),
+                          Expanded(flex: 3, child: ListTile(title: Text(_scoreMap[_score]!, style: const TextStyle(fontSize: 14))))
                         ],
                       )
                     ],
@@ -161,7 +168,7 @@ class OrderEvaluateState extends State<OrderEvaluate> {
                     child: GestureDetector(
                         onTap: () {
                           SnackBar snackBar;
-                          if (_handleOption.text == "") {
+                          if (_handleResult.text == "") {
                             snackBar = const SnackBar(
                               duration: Duration(seconds: 1),
                               backgroundColor: Colors.red,
@@ -176,30 +183,36 @@ class OrderEvaluateState extends State<OrderEvaluate> {
                             );
                             Scaffold.of(context).showSnackBar(snackBar);
                           } else {
-                            switch (_handleOption.text) {
-                              case "取消工单":
-                              /// 取消订单 TODO
-                                Navigator.of(context).pop();
-                                break;
-                              case "驳回请求":
-                              /// 驳回请求 TODO
-                                Navigator.of(context).pop();
-                                break;
-                              case "重新分配":
-                              /// 重新分配 TODO
-                                Navigator.of(context).pop();
-                                break;
-                            }
+                            // switch (_handleOption.text) {
+                            //   case "取消工单":
+                            //
+                            //     /// 取消订单 TODO
+                            //     Navigator.of(context).pop();
+                            //     break;
+                            //   case "驳回请求":
+                            //
+                            //     /// 驳回请求 TODO
+                            //     Navigator.of(context).pop();
+                            //     break;
+                            //   case "重新分配":
+                            //
+                            //     /// 重新分配 TODO
+                            //     Navigator.of(context).pop();
+                            //     break;
+                            // }
+                            printWithDebug(_handleResult.text + ' ' + _score.toString());
                           }
                         },
                         child: Container(
                           color: Colors.cyanAccent.shade700,
                           child: const Center(
-                            child: Text('提交', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 18)
-                            ),
+                            child: Text('提交',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 18)),
                           ),
-                        )
-                    ),
+                        )),
                   ),
                 )
               ],

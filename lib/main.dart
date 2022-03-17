@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/global/back_end_interface_url.dart';
+import 'package:frontend/util/debug_print.dart';
+import 'package:frontend/util/net/network_util.dart';
 import 'package:frontend/widgets/operation.dart';
 import 'package:frontend/widgets/order.dart';
 import 'package:frontend/widgets/order_card.dart';
+import 'global/future_build.dart';
 import 'global/routers.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -70,107 +74,48 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  late Future _orderList;
+
+  @override
+  void initState() {
+    super.initState();
+    _orderList = _getOrderList();
+  }
+
+  Future _getOrderList() async {
+    printWithDebug(getAllOrders);
+    List<Order> _orderList = [];
+    List orders = await HttpManager().get(getAllOrders);
+    for (var element in orders) {
+      setState(() {
+        _orderList.add(Order.fromJson(element));
+      });
+    }
+
+    return _orderList;
+  }
+
+  Widget _buildOrderList(List<Order> list) {
+    return ListView.builder(
+      itemCount: list.length,
+      itemBuilder: (BuildContext context, int index) {
+        return OrderCard(order: list[index]);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widgets. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Container(
-          child: ListView(
-            children: [
-              OrderCard (
-                order: Order(
-                  orderTitle: '修理煤气灶',
-                  creatorName: '李四',
-                  orderAddress: '安徽省合肥市蜀山区合肥工业大学翡翠湖校区科教楼B301的804机房',
-                  createTime: '2022-03-12',
-                  orderCode: 'O202203120001',
-                  orderState: '待抢单',
-                  phoneNum: '13956190211',
-                  operationList: [
-                    Operation(
-                        operationName: '服务',
-                        description: '123131231321',
-                        operationTime: '2022-01-11 09:30:01'
-                    ),
-                    Operation(
-                        operationName: '服务',
-                        description: '123131231321',
-                        operationTime: '2022-01-11 09:30:01'
-                    ),
-                    Operation(
-                      operationName: '服务',
-                      description: '123131231321',
-                      operationTime: '2022-01-11 09:30:01'
-                    ),
-                    Operation(
-                      operationName: '抢单',
-                      description: '123131231321',
-                      operationTime: '2022-01-11 09:30:01'
-                    ),
-                    Operation(
-                      operationName: '新建',
-                      description: '123131231321',
-                      operationTime: '2022-01-11 09:30:01'
-                    )
-                  ]
-                ),
-              ),
-              OrderCard (
-                order: Order(
-                    orderTitle: '修理的电饭煲',
-                    creatorName: '李物',
-                    orderAddress: '安徽省合肥市蜀山区合肥工业大学翡翠湖校区科教楼B301的802机房',
-                    createTime: '2022-03-11',
-                    orderCode: 'O202203120002',
-                    orderState: '待服务',
-                    phoneNum: '13956190212'
-                ),
-              ),
-              OrderCard (
-                order: Order(
-                    orderTitle: '修理的电饭煲',
-                    creatorName: '李物',
-                    orderAddress: '安徽省合肥市蜀山区合肥工业大学翡翠湖校区科教楼B301的802机房',
-                    createTime: '2022-03-11',
-                    orderCode: 'O202203120002',
-                    orderState: '待评价',
-                    phoneNum: '13956190212'
-                ),
-              ),
-              OrderCard (
-                order: Order(
-                    orderTitle: '修理的高压煲',
-                    creatorName: '王物',
-                    orderAddress: '安徽省合肥市蜀山区合肥工业大学翡翠湖校区科教楼B301的802机房',
-                    createTime: '2022-03-11',
-                    orderCode: 'O202203120003',
-                    orderState: '异常',
-                    phoneNum: '13956190212'
-                ),
-              ),
-            ],
-          )
-        )
+        child: buildFutureBuilder(
+          buildWidgetBody: _buildOrderList,
+          future: _orderList
+        ),
       ),
-      // body: ExceptionHandle(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

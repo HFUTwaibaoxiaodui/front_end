@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/order_detail.dart';
 import '../global/state_label_colors.dart';
 import 'order.dart';
 
@@ -75,7 +74,7 @@ class OrderCardState extends State<OrderCard> {
     return GestureDetector(
       onTap: () {
         debugPrint(widget.order.orderState);
-        Navigator.of(context).pushNamed('/order_detail', arguments: widget.order);
+        Navigator.of(context).pushNamed('/order_detail', arguments: widget.order.id);
       },
       child: widget.createCard(context)
     );

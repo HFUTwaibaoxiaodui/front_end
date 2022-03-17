@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:frontend/widgets/operation.dart';
 
 class Order {
+  /// 工单id
+  int id;
   /// 工单标题
   String? orderTitle;
   /// 工单创建者名称
@@ -23,6 +26,7 @@ class Order {
   List<Operation>? operationList;
 
   Order({
+    required this.id,
     this.orderTitle,
     this.creatorName,
     this.orderAddress,
@@ -34,4 +38,31 @@ class Order {
     this.description,
     this.operationList
   });
+
+  static Order fromJson(Map<String, dynamic> json) {
+
+    List<Operation> operationLogList = [];
+    json['operationLogList'].forEach((element) {
+      operationLogList.add(Operation.fromJson(element));
+    });
+
+    return Order(
+      id: json['orderId'],
+      orderTitle: json['orderTitle'],
+      creatorName: json['creatorName'],
+      orderAddress: json['orderAddress'],
+      createTime: json['gmtCreate'],
+      orderCode: json['orderNumber'],
+      orderState: json['orderState'],
+      phoneNum: json['phone'],
+      area: json['area'],
+      description: json['orderDescription'],
+      operationList: operationLogList
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Order{orderTitle: $orderTitle, creatorName: $creatorName, orderAddress: $orderAddress, createTime: $createTime, orderCode: $orderCode, orderState: $orderState, phoneNum: $phoneNum, area: $area, description: $description, operationList: $operationList}';
+  }
 }

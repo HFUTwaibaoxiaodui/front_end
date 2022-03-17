@@ -50,6 +50,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "date_format",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/date_format-2.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "dio",
       "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/dio-4.0.4",
       "packageUri": "lib/",
@@ -88,6 +94,12 @@
     {
       "name": "flutter_plugin_android_lifecycle",
       "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/flutter_plugin_android_lifecycle-2.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_rating_bar",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/flutter_rating_bar-4.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -380,7 +392,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-16T01:41:17.172228Z",
+  "generated": "2022-03-17T14:08:20.566208Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

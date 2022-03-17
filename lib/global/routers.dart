@@ -6,7 +6,7 @@ import '../widgets/order_detail.dart';
 final _routes = {
   '/': (context) => MyHomePage(title: '123123',),
   '/order_evaluate': (context) => OrderEvaluate(),
-  '/order_detail': (context, {arguments}) => OrderDetail(order: arguments)
+  '/order_detail': (context, {arguments}) => OrderDetail(id: arguments)
 };
 
 Route createRoute(Widget widget) {

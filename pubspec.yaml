@@ -48,6 +48,11 @@ dependencies:
 
   fluttertoast: ^8.0.9
 
+  # 打星评分
+  flutter_rating_bar:
+  # 时间格式化
+  date_format:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

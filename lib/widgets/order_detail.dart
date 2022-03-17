@@ -1,73 +1,28 @@
 import 'dart:typed_data';
 
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/global/future_build.dart';
 import 'package:frontend/pages/exception_handle.dart';
 import 'package:frontend/pages/exception_report.dart';
 import 'package:frontend/util/debug_print.dart';
 import 'package:frontend/widgets/operation.dart';
+import '../global/back_end_interface_url.dart';
 import '../global/state_label_colors.dart';
 import '../main.dart';
+import '../util/net/network_util.dart';
 import 'order.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/util/qrcode_util.dart';
 
 class OrderDetail extends StatefulWidget {
 
-  Order order;
-  final double detailFontSize = 14;
+  int id;
 
-  OrderDetail({Key? key, required this.order}) : super(key: key);
+  OrderDetail({Key? key, required this.id}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => OrderDetailState();
-
-  String _creatorLine() {
-    if (order.creatorName == null || order.phoneNum == null) {
-      return 'null';
-    } else {
-      return order.creatorName! + '    ' + order.phoneNum!;
-    }
-  }
-
-  Widget buildTop() {
-    return Container(
-      // width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            title: Text(order.orderCode ?? 'null', style: TextStyle(color: Colors.grey.shade800, fontSize: detailFontSize)),
-            trailing: RawChip(
-              label: Text(order.orderState),
-              backgroundColor: labelColorMap[order.orderState]!,
-              labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
-            ),
-          ),
-          Divider(thickness: 0.5, color: Colors.grey.shade300),
-          ListTile(
-            title: Text(order.orderTitle ?? 'null', style: const TextStyle(fontSize: 18)),
-          ),
-          ListTile(
-            title: Text(_creatorLine(), style: TextStyle(color: Colors.grey, fontSize: detailFontSize)),
-            trailing: const Icon(Icons.phone, color: Colors.blue)
-          ),
-          ListTile(
-            title: Text(
-                  order.orderAddress ?? 'null',
-                  maxLines: 2,
-                  style: const TextStyle (
-                      color: Colors.grey,
-                      overflow: TextOverflow.ellipsis,
-                      fontSize: 12
-                  )
-              ),
-            trailing: const Icon(Icons.where_to_vote, color: Colors.blue),
-          ),
-        ],
-      ),
-    );
-  }
-
 }
 
 class OrderDetailState extends State<OrderDetail> with SingleTickerProviderStateMixin{
@@ -81,9 +36,12 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
   final List<Widget> _pages = [];
   Uint8List? _qrcodeBytes;
 
+  final double detailFontSize = 14;
+
   int _currentIndex = 0;
   late TabController tabController;
   late PageController pageController;
+  late Future<Order> _future;
 
   final PopupMenuItem<String> reassignment = PopupMenuItem<String>(
     value: '转派工单',
@@ -110,25 +68,80 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
   @override
   void initState() {
     super.initState();
+    _future = _getOrder();
     tabController = TabController(length: _tabValues.length, vsync: this, initialIndex: 0);
     pageController = PageController(initialPage: _currentIndex);
-    _generatorQRCode();
-
-
-
-
-    print(123123);
+    // _generatorQRCode();
   }
 
-  void _generatorQRCode() async {
-    Uint8List? code = await QRCodeUtil.generateQRCode(widget.order.orderAddress!);
+  void _refresh() {
+    printWithDebug('开始refresh');
+    setState(() {
+      _future = _getOrder();
+    });
+    printWithDebug('结束refresh');
+  }
+
+  Future<Order> _getOrder() async {
+    Map<String, dynamic> gotOrder = await HttpManager().get(getOrderById, args: {'orderId': widget.id});
+    return Order.fromJson(gotOrder);
+  }
+
+  String _creatorLine(Order order) {
+    if (order.creatorName == null || order.phoneNum == null) {
+      return 'null';
+    } else {
+      return order.creatorName! + '    ' + order.phoneNum!;
+    }
+  }
+
+  void _generatorQRCode(Order order) async {
+    Uint8List? code = await QRCodeUtil.generateQRCode(order.orderAddress!);
     _qrcodeBytes = code;
     setState(() {});
-    print(code);
   }
 
-  Widget _buildPopUpList() {
-    switch (widget.order.orderState) {
+  Widget _buildTop(Order order) {
+    return Container(
+      // width: MediaQuery.of(context).size.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListTile(
+            title: Text(order.orderCode ?? 'null', style: TextStyle(color: Colors.grey.shade800, fontSize: detailFontSize)),
+            trailing: RawChip(
+              label: Text(order.orderState),
+              backgroundColor: labelColorMap[order.orderState]!,
+              labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ),
+          Divider(thickness: 0.5, color: Colors.grey.shade300),
+          ListTile(
+            title: Text(order.orderTitle ?? 'null', style: const TextStyle(fontSize: 18)),
+          ),
+          ListTile(
+              title: Text(_creatorLine(order), style: TextStyle(color: Colors.grey, fontSize: detailFontSize)),
+              trailing: const Icon(Icons.phone, color: Colors.blue)
+          ),
+          ListTile(
+            title: Text(
+                order.orderAddress ?? 'null',
+                maxLines: 2,
+                style: const TextStyle (
+                    color: Colors.grey,
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 12
+                )
+            ),
+            trailing: const Icon(Icons.where_to_vote, color: Colors.blue),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPopUpList(Order order) {
+    switch (order.orderState) {
       case '待服务':
         return PopupMenuButton<String>(
           itemBuilder: (context) => <PopupMenuEntry<String>>[
@@ -191,44 +204,47 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
     );
   }
 
-  Widget _buildOrderAttributes() {
+  Widget _buildOrderAttributes(Order order) {
     return ListView(
       children: [
-        ListTile(title: const Text('工单创建人'), subtitle: Text(widget.order.creatorName ?? 'null')),
-        ListTile(title: const Text('创建练习电话'), subtitle: Text(widget.order.phoneNum ?? 'null')),
-        ListTile(title: const Text('工单详细地址'), subtitle: Text(widget.order.orderAddress ?? 'null')),
-        ListTile(title: const Text('工单创建时间'), subtitle: Text(widget.order.createTime ?? 'null')),
-        ListTile(title: const Text('工单创建时间'), subtitle: Text(widget.order.createTime ?? 'null')),
-        ListTile(title: const Text('工单创建时间'), subtitle: Text(widget.order.createTime ?? 'null')),
-        ListTile(title: const Text('工单创建时间'), subtitle: Text(widget.order.createTime ?? 'null')),
+        ListTile(title: const Text('工单创建人'), subtitle: Text(order.creatorName ?? 'null')),
+        ListTile(title: const Text('创建练习电话'), subtitle: Text(order.phoneNum ?? 'null')),
+        ListTile(title: const Text('工单详细地址'), subtitle: Text(order.orderAddress ?? 'null')),
+        ListTile(title: const Text('工单创建时间'), subtitle: Text(order.createTime ?? 'null')),
+        ListTile(title: const Text('工单创建时间'), subtitle: Text(order.createTime ?? 'null')),
+        ListTile(title: const Text('工单创建时间'), subtitle: Text(order.createTime ?? 'null')),
+        ListTile(title: const Text('工单创建时间'), subtitle: Text(order.createTime ?? 'null')),
         // Container(height: 200, decoration: BoxDecoration(image: DecorationImage(image: MemoryImage(_qrcodeBytes!)))),
       ],
     );
   }
 
-  Widget _buildOperationProgress() {
+  Widget _buildOperationProgress(Order order) {
 
-    Widget redDivider = const Divider(color: Colors.red);
-    Widget blueDivider = const Divider(color: Colors.blue);
-    List<Operation>? list = widget.order.operationList;
-    
-    return ListView.separated(
-      itemCount: list == null ? 0 : list.length,
-      separatorBuilder: (BuildContext context, int index){
-        return index % 2 == 0 ? redDivider:blueDivider;
-      },
-      itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          title: Text(list![index].operationName ?? 'null'),
-          subtitle: Text(list[index].description ?? 'null'),
-          trailing: Text(list[index].operationTime ?? 'null'),
-        );
-      },
-    );
+    return StatefulBuilder(builder: (BuildContext context, void Function(void Function()) setState) {
+      Widget redDivider = const Divider(color: Colors.red);
+      Widget blueDivider = const Divider(color: Colors.blue);
+      List<Operation>? list = order.operationList;
+      setState((){});
+
+      return ListView.separated(
+        itemCount: list == null ? 0 : list.length,
+        separatorBuilder: (BuildContext context, int index){
+          return index % 2 == 0 ? redDivider:blueDivider;
+        },
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            title: Text(list![index].operationName ?? 'null'),
+            subtitle: Text(list[index].description ?? 'null'),
+            trailing: Text(list[index].operationTime ?? 'null'),
+          );
+        },
+      );
+    });
   }
 
-  Widget _buildBottom() {
-    switch(widget.order.orderState) {
+  Widget _buildBottom(Order order) {
+    switch(order.orderState) {
       // case '待服务': return Container(
       //   padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       //   child: Padding(
@@ -268,11 +284,11 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                   printWithDebug('扫码验证');
 
                   String? qrCode = await QRCodeUtil.scanCamera();
-                  if (qrCode == widget.order.orderAddress) {
+                  if (qrCode == order.orderAddress) {
                     printWithDebug('验证成功');
                     /// 状态由待抢单转为待服务
                     setState(() {
-                      widget.order.orderState = '服务中';
+                      order.orderState = '服务中';
                     });
                     /// 提示用户抢单成功
                     Fluttertoast.showToast(
@@ -345,8 +361,19 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                           TextButton(child: const Text('确认'),onPressed: () async {
                             /// 状态由待抢单转为待服务
                             setState(() {
-                              widget.order.orderState = '待服务';
+                              HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '待服务'});
+                              String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                              HttpManager().post(
+                                addOperationLog,
+                                args: {
+                                  'orderId': order.id,
+                                  'operationTime': formattedDate,
+                                  'operationName': '抢单',
+                                  'description': '大笨蛋已抢得' + order.creatorName! + '创建的工单'
+                                }
+                              );
                             });
+
                             /// 提示用户抢单成功
                             Fluttertoast.showToast(
                                 msg: "抢单成功",
@@ -356,6 +383,9 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                                 textColor: Colors.white,
                                 fontSize: 16.0
                             );
+
+                            _refresh();
+
                             /// 返回上一个界面
                             Navigator.of(context).pop();
                           },),
@@ -417,11 +447,51 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
     return Container();
   }
 
+  Widget _buildOrderDetail(Order order) {
+    print(' 当前order  ' + order.toString());
+    _pages.add(_buildOrderAttributes(order));
+    _pages.add(_buildOperationProgress(order));
+    _pages.add(Container(color: Colors.green));
+
+    return Container (
+      // height: MediaQuery.of(context).size.height,
+      // width: MediaQuery.of(context).size.width,
+        color: Colors.grey.shade300,
+        // margin: EdgeInsets.all(5),
+        child: Container(
+          child: Column(
+            children: [
+              Expanded(
+                flex: 4,
+                child: Container(
+                  color: Colors.white,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: _buildTop(order),
+                ),
+              ),
+              Expanded(
+                flex: 5,
+                child: Container(
+                  color: Colors.white,
+                  child: _buildMiddle(),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: _buildBottom(order),
+                ),
+              ),
+            ],
+          ),
+        )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    _pages.add(_buildOrderAttributes());
-    _pages.add(_buildOperationProgress());
-    _pages.add(Container(color: Colors.green));
+
+    printWithDebug('触发build');
 
     return Scaffold(
       appBar: AppBar(
@@ -430,42 +500,17 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
         backgroundColor: Colors.cyanAccent.shade700,
         // 底部阴影
         elevation: 0.5,
-        actions:[_buildPopUpList()],
-      ),
-      body:  Container (
-          // height: MediaQuery.of(context).size.height,
-          // width: MediaQuery.of(context).size.width,
-          color: Colors.grey.shade300,
-          // margin: EdgeInsets.all(5),
-          child: Container(
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: Container(
-                    color: Colors.white,
-                    margin: const EdgeInsets.only(bottom: 10),
-                    child: widget.buildTop(),
-                  ),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Container(
-                    color: Colors.white,
-                    child: _buildMiddle(),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    child: _buildBottom(),
-                  ),
-                ),
-              ],
-            ),
+        actions:[
+          buildFutureBuilder(
+            buildWidgetBody: _buildPopUpList,
+            future: _future
           )
+        ],
+      ),
+      body: buildFutureBuilder(
+        buildWidgetBody: _buildOrderDetail,
+        future: _future
       )
     );
   }
-
 }
