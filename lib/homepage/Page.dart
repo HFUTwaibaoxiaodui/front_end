@@ -72,15 +72,15 @@ class _IndexState extends State<IndexPage> {
   void initState() {
     super.initState();
     currentIndex = 0;
-    counter='9';
+    counter='12';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("机房巡检"),
-      ),
+      // appBar: AppBar(
+      //   title: Text("机房巡检"),
+      // ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.grey,
         fixedColor: Colors.blue,

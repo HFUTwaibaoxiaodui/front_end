@@ -7,17 +7,20 @@ import 'package:frontend/routes/yest_work.dart';
 import 'package:frontend/routes/month_work.dart';
 
 class HomePage extends StatelessWidget {
-  String? today_work = '0';
+  String? today_work = '12';
 
   String? yest_work = '0';
 
   String? month_work = '0';
 
-  String? wait_work = '0';
+  String? wait_work = '12';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("机房巡检"),
+      ),
       body: Column(
         children: [
           Container(
