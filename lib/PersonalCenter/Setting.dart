@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/personal/Personal.dart';
+import 'package:frontend/PersonalCenter/Personinfo.dart';
 import 'package:frontend/constant/constant.dart';
 import 'package:path/path.dart';
 
@@ -111,7 +111,7 @@ class _SettingState extends State<Setting> {
                   //  ToastUtil.show('暂未开发!');
                 }),
             SettingCommon(
-                title: "关于我们",
+                title: "安全与隐私",
                 content: "",
                 onPressed: () {
                   // ToastUtil.show('暂未开发!');

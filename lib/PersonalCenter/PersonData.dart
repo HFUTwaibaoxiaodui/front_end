@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/personal/Personal.dart';
+import 'package:frontend/PersonalCenter/Personinfo.dart';
 import 'package:frontend/constant/constant.dart';
 import 'package:path/path.dart';
 

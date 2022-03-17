@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/personal/Personal.dart';
 
 import 'MissingKey/FixKey.dart';
+import 'PersonManager/People.dart';
+import 'PersonalCenter/Personal.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PersonCenterPage()
+      home: PeoplesPage()
     );
   }
 }

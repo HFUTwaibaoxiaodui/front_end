@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/personal/Personal.dart';
+import 'package:frontend/PersonalCenter/Personinfo.dart';
 import 'package:frontend/constant/constant.dart';
 import 'package:path/path.dart';
 
@@ -184,7 +184,7 @@ class _PersoninfoState extends State<Personinfo> {
                         });
                   }),
                   SettingCommon(
-                      title: "用户昵称",
+                      title: "账户名",
                       content: "",
                       // content: UserUtil.getUserInfo().nick,
                       onPressed: () {
@@ -192,19 +192,39 @@ class _PersoninfoState extends State<Personinfo> {
                         // Routes.navigateTo(context, '${Routes.changeNickNamePage}');
                       }),
                   SettingCommon(
-                      title: "个性签名",
+                      title: "用户名称",
+                      content: "",
+                      // content: UserUtil.getUserInfo().nick,
+                      onPressed: () {
+
+                        // Routes.navigateTo(context, '${Routes.changeNickNamePage}');
+                      }),
+                  SettingCommon(
+                      title: "性别",
                       content: "",
                       onPressed: () {
                         // Routes.navigateTo(context, '${Routes.changeDescPage}');
                       }),
                   SettingCommon(
-                      title: "生日",
+                      title: "工号",
                       content: "",
                       onPressed: () {
                         //  ToastUtil.show('暂未开发!');
                       }),
                   SettingCommon(
-                      title: "所在区域",
+                      title: "手机号",
+                      content: "",
+                      onPressed: () {
+                        // ToastUtil.show('暂未开发!');
+                      }),
+                  SettingCommon(
+                      title: "邮箱",
+                      content: "",
+                      onPressed: () {
+                        // ToastUtil.show('暂未开发!');
+                      }),
+                  SettingCommon(
+                      title: "状态",
                       content: "",
                       onPressed: () {
                         // ToastUtil.show('暂未开发!');
