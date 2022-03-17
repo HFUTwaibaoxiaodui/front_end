@@ -1,3 +1,6 @@
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/src/welcomePage.dart';
@@ -21,10 +24,15 @@ class _SignUpPageState extends State<SignUpPage> {
   late final TextEditingController _userController = TextEditingController();
   late final TextEditingController _phoneController = TextEditingController();
   late final TextEditingController _pswdController = TextEditingController();
+  late final TextEditingController _nameController = TextEditingController();
+  late final TextEditingController _addressController = TextEditingController();
+  late final TextEditingController _areaController = TextEditingController();
   late String _username = '';
   late String _phone = '';
   late String _password = '';
-  late bool _validate = false;
+  late String _name = '';
+  late String _address = '';
+  late String _area = '';
 
   @override
   void initState() {
@@ -36,6 +44,15 @@ class _SignUpPageState extends State<SignUpPage> {
     });
     _pswdController.addListener(() {
       _password = _pswdController.text;
+    });
+    _areaController.addListener(() {
+      _area = _areaController.text;
+    });
+    _nameController.addListener(() {
+      _name = _nameController.text;
+    });
+    _addressController.addListener(() {
+      _address = _addressController.text;
     });
   }
 
@@ -174,6 +191,99 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  Widget _nameentryField(String title) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+              controller: _nameController,
+              validator: (value) {
+                if (value == "") {
+                  return "姓名不能为空";
+                } else {
+                  return null;
+                }
+              },
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  fillColor: Color(0xfff3f3f4),
+                  filled: true))
+        ],
+      ),
+    );
+  }
+
+  Widget _addressentryField(String title) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+              controller: _addressController,
+              validator: (value) {
+                if (value == "") {
+                  return "地址不能为空";
+                } else {
+                  return null;
+                }
+              },
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  fillColor: Color(0xfff3f3f4),
+                  filled: true))
+        ],
+      ),
+    );
+  }
+
+  Widget _areaentryField(String title) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            controller: _areaController,
+              validator: (value) {
+                if (value == "") {
+                  return "地区不能为空";
+                } else {
+                  return null;
+                }
+              },
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  fillColor: Color(0xfff3f3f4),
+                  filled: true))
+        ],
+      ),
+    );
+  }
+
   Widget _submitButton() {
     return InkWell(
       onTap: () {
@@ -257,12 +367,18 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _emailPasswordWidget() {
-    return Column(
-      children: <Widget>[
-        _userentryField("用户名"),
-        _phoneentryField("手机号"),
-        _pswdentryField("密码"),
-      ],
+    return Container(
+      height: MediaQuery.of(context).size.height/2,
+      child: ListView(
+        children: <Widget>[
+          _userentryField("用户名"),
+          _phoneentryField("手机号"),
+          _pswdentryField("密码"),
+          _nameentryField('姓名'),
+          _addressentryField('地址'),
+          _areaentryField('地区')
+        ],
+      )
     );
   }
 
@@ -281,15 +397,14 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
+              child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: height * .2),
+                    SizedBox(height: height * 0.15),
                     _title(),
                     SizedBox(
-                      height: 50,
+                      height: 30,
                     ),
                     Form(
                       child: _emailPasswordWidget(),
@@ -299,12 +414,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       height: 20,
                     ),
                     _submitButton(),
-                    SizedBox(height: height * .14),
                     _loginAccountLabel(),
                   ],
                 ),
               ),
-            ),
             Positioned(top: 40, left: 0, child: _backButton()),
           ],
         ),
@@ -318,15 +431,25 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> _checkForReturn(context) async {
-    print(_username);
     if (_formKey.currentState!.validate()) {
+      infomodel account=infomodel(_username, _phone, _password, _name, _address, _area);
+
+      Map<String, dynamic> maptest= {
+        "accountName": _username,
+        "password": _password,
+        "realName": _name,
+        "phone":_phone,
+        "area":_area,
+        "address":_address
+      };
+      var jsonVar = json.encode(account.toJson());
+      print(jsonVar);
+   //   ContentType contentType = ContentType.parse("application/x-www-form-urlencoded");
+      dio.options.contentType = "application/json";
       Response response = await dio.post(
-          'https://ad29e1bb-17af-4504-9045-9d468fb9c7f1.mock.pstmn.io/signup',
-          queryParameters: {
-            'username': _username,
-            'phone': _phone,
-            'password': _password
-          });
+          'http://192.168.114.151:9090/account/usersignin',
+          data: jsonVar
+      );
       print(response.data);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const LoginPage()),
@@ -335,4 +458,28 @@ class _SignUpPageState extends State<SignUpPage> {
       });
     }
   }
+}
+class infomodel{
+  late String accountName;
+  late String phone;
+  late String password;
+  late String realName;
+  late String address;
+  late String area;
+  infomodel(String a,String p,String ps,String r,String ad,String ar){
+    this.accountName=a;
+    this.phone=p;
+    this.password=ps;
+    this.realName=r;
+    this.address=ad;
+    this.area=ar;
+  }
+  Map<String, String> toJson() => {
+    "accountName": accountName,
+    "password": password,
+    "realName": realName,
+    "phone":phone,
+    "area":area,
+    "address":address
+  };
 }

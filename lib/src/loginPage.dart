@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/src/signup.dart';
-
+import 'package:dio/dio.dart';
 import 'Widget/bezierContainer.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,11 +15,25 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+Dio dio = Dio();
+
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late bool pswdvisible;
+  late final TextEditingController _passwordController = TextEditingController();
+  late final TextEditingController _usernameController = TextEditingController();
+  late String _username = '';
+  late String _password = '';
+
   @override
   void initState() {
     pswdvisible=false;
+    _usernameController.addListener(() {
+      _username = _usernameController.text;
+    });
+    _passwordController.addListener(() {
+      _password = _passwordController.text;
+    });
   }
 
   Widget _backButton() {
@@ -42,7 +58,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _pswdEntryField(String title) {
-
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -55,7 +70,15 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             height: 10,
           ),
-          TextField(
+          TextFormField(
+              controller: _passwordController,
+              validator: (value) {
+                if (value == "") {
+                  return "密码不能为空";
+                } else {
+                  return null;
+                }
+              },
               obscureText: pswdvisible,
               decoration: InputDecoration(
                   suffixIcon: IconButton(
@@ -78,8 +101,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _entryField(String title) {
-
+  Widget _usernameentryField(String title) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -92,8 +114,15 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(
             height: 10,
           ),
-          const TextField(
-              obscureText: false,
+          TextFormField(
+              controller: _usernameController,
+              validator: (value) {
+                if (value == "") {
+                  return "用户名不能为空";
+                } else {
+                  return null;
+                }
+              },
               decoration: InputDecoration(
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
@@ -106,11 +135,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _submitButton() {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => LoginPage()),
-                (Route<dynamic> route) {
-              return route.isFirst;
-            });
+        _checkForReturn(context);
       },
       child: Container(
         width: (MediaQuery.of(context).size.width),
@@ -245,7 +270,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _accountPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("账号"),
+        _usernameentryField("账号"),
         _pswdEntryField("密码"),
       ],
     );
@@ -273,7 +298,10 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: height * .2),
                   _title(),
                   SizedBox(height: 50),
-                  _accountPasswordWidget(),
+                  Form(
+                    child: _accountPasswordWidget(),
+                    key: _formKey,
+                  ),
                   SizedBox(height: 20),
                   _submitButton(),
                   Container(
@@ -296,4 +324,37 @@ class _LoginPageState extends State<LoginPage> {
       ),
     ));
   }
+  Future<void> _checkForReturn(context) async {
+    if (_formKey.currentState!.validate()) {
+      infomodel account=infomodel(_username,_password);
+      // dio.options.contentType = "application/json";
+      Response response = await dio.post(
+          'http://192.168.114.151:9090/account/userlogin',
+          queryParameters: {
+            'username':account.accountName,
+            'password':account.password
+          }
+      );
+      print(response.data);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginPage()),
+              (Route<dynamic> route) {
+            return route.isFirst;
+          });
+    }
+  }
+}
+class infomodel{
+  late String accountName;
+  late String password;
+
+  infomodel(String a,String p){
+    this.accountName=a;
+    this.password=p;
+
+  }
+  Map<String, String> toJson() => {
+    "accountName": accountName,
+    "password": password,
+  };
 }
