@@ -147,10 +147,9 @@ class _PersoninfoState extends State<Personinfo> {
   Widget build(BuildContext context) {
     return Scaffold(
             appBar: AppBar(
-                backgroundColor: Colors.cyan,
                 title: const Text(
                   '个人主页',
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 15,color: Colors.white),
                 ),
                 elevation: 0.5),
             body: Container(

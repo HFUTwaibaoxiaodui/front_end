@@ -29,7 +29,7 @@ class _PersonDataState extends State<PersonData> {
           backgroundColor: Colors.cyan,
           title: const Text(
             '我的工单数据',
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 15,color:Colors.white),
           ),
           elevation: 0.5),
       body: Container(),

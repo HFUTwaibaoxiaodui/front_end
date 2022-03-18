@@ -214,7 +214,7 @@ class PersonSliverAppBar extends StatelessWidget{
       pinned: true,
       expandedHeight: 150.0,
       actions: <Widget>[
-        IconButton(iconSize: 23, icon: Icon(Icons.message), onPressed: (){
+        IconButton(iconSize: 23, icon: Icon(Icons.message,color: Colors.white,), onPressed: (){
           print('查看消息');
         })
       ],

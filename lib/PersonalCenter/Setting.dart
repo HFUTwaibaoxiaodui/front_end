@@ -92,7 +92,7 @@ class _SettingState extends State<Setting> {
           backgroundColor: Colors.cyan,
           title: const Text(
             '设置',
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 15,color: Colors.white),
           ),
           elevation: 0.5),
       body: Container(
