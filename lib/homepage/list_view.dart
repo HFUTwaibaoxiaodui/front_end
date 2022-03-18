@@ -148,6 +148,7 @@ class ListViewState extends State<ListViewPage> {
     'player: skier', 'player: skier',
     'player: skier', 'player: skier',
   ];
+
   Future<Null>  _handleRefresh() async {
 
     // 延迟3秒后添加新数据， 模拟网络加载

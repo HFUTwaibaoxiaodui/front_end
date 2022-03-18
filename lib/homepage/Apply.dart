@@ -1,5 +1,7 @@
-import 'package:frontend/routes/order_detail.dart';
 import 'package:flutter/material.dart';
+
+import '../global/theme.dart';
+import '../pages/order_detail.dart';
 
 class ApplyPage extends StatelessWidget {
   @override
@@ -11,6 +13,8 @@ class ApplyPage extends StatelessWidget {
             return DetailPage();
           }));
         },),
+        backgroundColor: mainColor,
+        elevation: 0.5,
         centerTitle: true,
         title: Text("应用"),
       ),

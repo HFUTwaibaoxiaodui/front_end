@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/util/debug_print.dart';
 
-import '../he_main.dart';
+import '../widgets/order_list.dart';
 
 
 class ExceptionHandle extends StatefulWidget {
@@ -76,7 +76,7 @@ class ExceptionHandleState extends State<ExceptionHandle> {
                               title: const Icon(Icons.keyboard_arrow_right),
                               onTap: () {
                                 showDialog(
-                                    context: navigatorKey.currentContext!,
+                                    context: context,
                                     builder: (BuildContext context) {
                                       return StatefulBuilder(
                                         builder: (BuildContext context, void Function(void Function()) setState) {

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'global/routers.dart';
 import 'homepage/Page.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -12,11 +15,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '机房',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      onGenerateRoute: generateRoute,
+      debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       home:IndexPage(),
     );
   }
 }
-

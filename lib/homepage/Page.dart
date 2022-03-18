@@ -78,9 +78,6 @@ class _IndexState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("机房巡检"),
-      // ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.grey,
         fixedColor: Colors.blue,

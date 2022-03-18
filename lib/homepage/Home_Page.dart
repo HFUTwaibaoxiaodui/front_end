@@ -2,19 +2,41 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/homepage/list_view.dart';
-import 'package:frontend/routes/today_work.dart';
-import 'package:frontend/routes/yest_work.dart';
-import 'package:frontend/routes/month_work.dart';
-import 'package:frontend/routes/message.dart';
+import 'package:frontend/pages/today_work.dart';
+import 'package:frontend/pages/yest_work.dart';
+import 'package:frontend/pages/message.dart';
 
-class HomePage extends StatelessWidget {
-  String? today_work = '12';
+import '../global/my_event_bus.dart';
+import '../global/theme.dart';
+import '../pages/month_work.dart';
+import '../widgets/order_list.dart';
+
+class HomePage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => HomePageState();
+}
+
+
+class HomePageState extends State<HomePage> {
 
   String? yest_work = '0';
 
   String? month_work = '0';
 
-  String? wait_work = '12';
+  String? today_work = '12';
+
+  int wait_work = 0;
+
+
+  @override
+  void initState() {
+    print('123123');
+    eventBus.on<UpdateOrderNum>().listen((event) {
+      setState(() {
+        wait_work = event.num;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +49,8 @@ class HomePage extends StatelessWidget {
         },),
         centerTitle: true,
         title: Text("机房巡检"),
+        elevation: 0.5,
+        backgroundColor: mainColor,
         actions: <Widget>[
           GestureDetector(
             child: Container(
@@ -48,14 +72,14 @@ class HomePage extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            height: 120,
-            color: Colors.blue,
+            height: MediaQuery.of(context).size.height * 0.14,
+            color: mainColor,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               mainAxisSize: MainAxisSize.max,
               children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
                       child: GestureDetector(
@@ -74,7 +98,7 @@ class HomePage extends StatelessWidget {
                       child: GestureDetector(
                         child: Text(
                           '今日处理工单',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
+                          style: TextStyle(fontSize: 14, color: Colors.white),
                         ),
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (_) {
@@ -87,19 +111,19 @@ class HomePage extends StatelessWidget {
                 ),
                 SizedBox(
                   width: 1,
-                  height: 50,
+                  height: MediaQuery.of(context).size.height * 0.08,
                   child: DecoratedBox(
-                    decoration: BoxDecoration(color: Colors.grey),
+                    decoration: BoxDecoration(color: Colors.grey.shade200),
                   ),
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
                       child: GestureDetector(
                         child: Text(
                           '$yest_work',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
+                          style: const TextStyle(fontSize: 18, color: Colors.white),
                         ),
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (_) {
@@ -110,9 +134,9 @@ class HomePage extends StatelessWidget {
                     ),
                     Container(
                       child: GestureDetector(
-                        child: Text(
+                        child: const Text(
                           '昨日处理工单',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
+                          style: TextStyle(fontSize: 14, color: Colors.white),
                         ),
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (_) {
@@ -125,19 +149,19 @@ class HomePage extends StatelessWidget {
                 ),
                 SizedBox(
                   width: 1,
-                  height: 50,
+                  height: MediaQuery.of(context).size.height * 0.08,
                   child: DecoratedBox(
-                    decoration: BoxDecoration(color: Colors.grey),
+                    decoration: BoxDecoration(color: Colors.grey.shade200),
                   ),
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
                       child: GestureDetector(
                         child: Text(
                           '$month_work',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
+                          style: const TextStyle(fontSize: 18, color: Colors.white),
                         ),
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (_) {
@@ -148,9 +172,9 @@ class HomePage extends StatelessWidget {
                     ),
                     Container(
                       child: GestureDetector(
-                        child: Text(
+                        child: const Text(
                           '本月处理工单',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
+                          style: TextStyle(fontSize: 14, color: Colors.white),
                         ),
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (_) {
@@ -164,29 +188,37 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            height: 40,
-            padding: EdgeInsets.all(5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  '待处理工单($wait_work)',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-                IconButton(
-                  icon: (new Icon(Icons.place)),
-                  color: Colors.lightBlue,
-                  onPressed: () {},
-                ),
-              ],
+          ListTile(
+            title: Text(
+              '待处理工单($wait_work)',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+            ),
+            trailing: IconButton(
+              icon: (new Icon(Icons.place)),
+              color: Colors.lightBlue,
+              onPressed: () {},
             ),
           ),
+          // Container(
+          //   height: 40,
+          //   padding: EdgeInsets.all(5),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     mainAxisSize: MainAxisSize.max,
+          //     children: [
+          //
+          //       IconButton(
+          //         icon: (new Icon(Icons.place)),
+          //         color: Colors.lightBlue,
+          //         onPressed: () {},
+          //       ),
+          //     ],
+          //   ),
+          // ),
           Container(
-            height: 440,
+            height: MediaQuery.of(context).size.height * 0.58,
             color: Colors.grey,
-            child: ListViewPage(),
+            child: OrderListWidget(),
           ),
         ],
       ),

@@ -9,7 +9,7 @@ import 'package:frontend/util/debug_print.dart';
 import '../global/back_end_interface_url.dart';
 import '../global/my_event_bus.dart';
 import '../global/state_label_colors.dart';
-import '../he_main.dart';
+import 'order_list.dart';
 import '../model/operation.dart';
 import '../pages/exception_report.dart';
 import '../util/net/network_util.dart';

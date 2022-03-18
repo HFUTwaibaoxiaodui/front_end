@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../global/theme.dart';
+
 class MinePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -11,6 +13,8 @@ class MinePage extends StatelessWidget {
           // }));
         },),
         centerTitle: true,
+        backgroundColor: mainColor,
+        elevation: 0.5,
         title: Text("我的"),
       ),
       body: Center(
