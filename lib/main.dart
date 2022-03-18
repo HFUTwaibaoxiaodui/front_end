@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/PersonManager/friends_data.dart';
 import 'package:frontend/personal/Personal.dart';
 
 import 'MissingKey/FixKey.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PeoplesPage()
+      home:PeoplesPage()
     );
   }
 }

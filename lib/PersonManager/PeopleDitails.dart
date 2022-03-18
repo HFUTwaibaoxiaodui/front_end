@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constant/constant.dart';
 
 class PeopleDitails extends StatefulWidget {
-  final String imageUrl;
-  final String name;
-  final String groupTitle;
-  final String imageAssets;
-  const PeopleDitails(Type friendsCell, {Key key, this.imageUrl, this.name, this.groupTitle, this.imageAssets}) : super(key: key);
+  // final String imageUrl;
+  // final String name;
+  // final String groupTitle;
+  // final String imageAssets;
+  // const PeopleDitails(Type friendsCell, {Key key, this.imageUrl, this.name, this.groupTitle, this.imageAssets}) : super(key: key);
 
   @override
   _PeopleDitailsState createState() => _PeopleDitailsState();
@@ -157,6 +157,7 @@ class _PeopleDitailsState extends State<PeopleDitails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          backgroundColor: Colors.cyan,
           title: const Text(
             '人员信息编辑',
             style: TextStyle(fontSize: 15),
@@ -166,33 +167,33 @@ class _PeopleDitailsState extends State<PeopleDitails> {
         color: Color(0xffF2F2F2),
         child: ListView(
           children: <Widget>[
-            SettingHead(onPressed: () {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    // return HeadChooseWidget(
-                    //     chooseImgCallBack: (File mHeadFile) {
-                    //       FormData formData = FormData.fromMap({
-                    //         "userId": UserUtil.getUserInfo().id,
-                    //         "headFile": MultipartFile.fromFileSync(mHeadFile.path)
-                    //       });
-                    //       request(ServiceUrl.updateHead, formData: formData)
-                    //           .then((val) {
-                    //         int code = val['status'];
-                    //         if (code == 200) {
-                    //           String mUrl = val['data'];
-                    //           print("返回的头像的url:${mUrl}");
-                    //           UserUtil.saveUserHeadUrl(mUrl);
-                    //           ToastUtil.show('提交成功!');
-                    //           setState(() {});
-                    //         } else {
-                    //           String msg = val['msg'];
-                    //           ToastUtil.show(msg);
-                    //         }
-                    //       });
-                    //     });
-                  });
-            }),
+            // SettingHead(onPressed: () {
+            //   showModalBottomSheet(
+            //       context: context,
+            //       builder: (context) {
+            //         // return HeadChooseWidget(
+            //         //     chooseImgCallBack: (File mHeadFile) {
+            //         //       FormData formData = FormData.fromMap({
+            //         //         "userId": UserUtil.getUserInfo().id,
+            //         //         "headFile": MultipartFile.fromFileSync(mHeadFile.path)
+            //         //       });
+            //         //       request(ServiceUrl.updateHead, formData: formData)
+            //         //           .then((val) {
+            //         //         int code = val['status'];
+            //         //         if (code == 200) {
+            //         //           String mUrl = val['data'];
+            //         //           print("返回的头像的url:${mUrl}");
+            //         //           UserUtil.saveUserHeadUrl(mUrl);
+            //         //           ToastUtil.show('提交成功!');
+            //         //           setState(() {});
+            //         //         } else {
+            //         //           String msg = val['msg'];
+            //         //           ToastUtil.show(msg);
+            //         //         }
+            //         //       });
+            //         //     });
+            //       });
+            // }),
             SettingCommon(
                 title: "账户名",
                 content: "",
@@ -232,6 +233,14 @@ class _PeopleDitailsState extends State<PeopleDitails> {
                 content: "",
                 onPressed: () {
                   // ToastUtil.show('暂未开发!');
+                }),
+            SettingCommon(
+                title: "用户密码",
+                content: "",
+                // content: UserUtil.getUserInfo().nick,
+                onPressed: () {
+
+                  // Routes.navigateTo(context, '${Routes.changeNickNamePage}');
                 }),
             SettingCommon(
                 title: "状态",

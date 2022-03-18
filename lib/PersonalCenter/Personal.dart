@@ -11,7 +11,7 @@ class PersonCenterPage extends StatelessWidget{
   Widget build(BuildContext context) {
     // Scaffold 实现了基本的 material 布局
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.cyan,
       // SafeArea 解决异形屏的问题
       body: SafeArea(
         child: NestedScrollView(
@@ -66,7 +66,7 @@ class Records extends StatelessWidget{
       child: Container(
         decoration: BoxDecoration(
           //背景
-          color: Colors.blue,
+          color: Colors.cyan,
           //设置四周圆角 角度
           borderRadius: BorderRadius.all(Radius.circular(7.0)),
           //设置四周边框
@@ -206,7 +206,7 @@ class PersonSliverAppBar extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.cyan,
       //是否随着滑动隐藏标题
       snap: false,
       floating: false,

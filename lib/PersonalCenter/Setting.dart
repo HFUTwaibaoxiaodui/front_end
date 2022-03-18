@@ -89,6 +89,7 @@ class _SettingState extends State<Setting> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          backgroundColor: Colors.cyan,
           title: const Text(
             '设置',
             style: TextStyle(fontSize: 15),

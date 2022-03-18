@@ -26,6 +26,7 @@ class _PersonDataState extends State<PersonData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          backgroundColor: Colors.cyan,
           title: const Text(
             '我的工单数据',
             style: TextStyle(fontSize: 15),

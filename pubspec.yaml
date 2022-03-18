@@ -36,6 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_verification_box: ^1.0.4
   fluttertoast: ^8.0.9
+  http: ^0.13.4
+  dio: ^4.0.4
+  provider: ^6.0.2
 
 dev_dependencies:
   flutter_test:
@@ -47,7 +50,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
-  shared_preferences:
 
 
 # For information on the generic Dart part of this file, see the

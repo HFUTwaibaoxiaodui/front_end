@@ -1,6 +1,8 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/const.dart';
-
 import 'friends_data.dart';
 
 class IndexBar extends StatefulWidget {
@@ -26,8 +28,9 @@ int getIdex(BuildContext context, Offset globalPosition, List index_word) {
   print('现在选中的是${index_word[index]}');
   return index;
 }
+  final List<String> _index_word = [];
 
-final List<String> _index_word = [];
+  Dio dio =Dio();
 
 class _IndexBarState extends State<IndexBar> {
   Color _bkColor = Color.fromRGBO(1, 1, 1, 0.0);
@@ -38,16 +41,22 @@ class _IndexBarState extends State<IndexBar> {
 
 //  排序后的数组
   final List<Friends> _listDatas = [];
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-//----------------------- 1 -------------------------------
-//    1、根据实际数据显示右侧bar
+
+  List<dynamic> list;
+
+  getinfo() async {
+    Response response = await dio.get('http://192.168.114.151:9090/account/selectAllInformation');
+    list=response.data;
+
+    for (var element in list) {
+      _listDatas.add(Friends(
+          imageUrl:'https://randomuser.me/api/portraits/women/17.jpg' ,
+          name: element['realName'],
+          indexLetter:element['firstLetter']
+      ));
+    }
     _index_word.add('🔍');
     _index_word.add('☆');
-    _listDatas.addAll(datas);
-    //排序!
     _listDatas.sort((Friends a, Friends b) {
       return a.indexLetter.compareTo(b.indexLetter);
     });
@@ -58,6 +67,19 @@ class _IndexBarState extends State<IndexBar> {
         _index_word.add(_listDatas[i].indexLetter);
       }
     }
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getinfo();
+//----------------------- 1 -------------------------------
+//    1、根据实际数据显示右侧bar
+
+
+    //排序!
 
     //----------------------- 2 -------------------------------
 //    2、右侧bar显示全部字母

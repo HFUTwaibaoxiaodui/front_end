@@ -1,17 +1,21 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/PersonManager/PeopleDitails.dart';
 import 'package:frontend/const.dart';
 import 'package:frontend/PersonManager/IndexBar.dart';
 
+import 'PeopleDitails.dart';
 import 'SearchPage.dart';
 import 'friends_data.dart';
 
 class PeoplesPage extends StatefulWidget {
-  @override
+
+
+
   _PeoplesPageState createState() => _PeoplesPageState();
 }
-
+Dio dio =Dio();
 class _PeoplesPageState extends State<PeoplesPage> {
 //  字典里面放item和高度的对应数据
   final Map _groupOffsetMap = {
@@ -24,21 +28,21 @@ class _PeoplesPageState extends State<PeoplesPage> {
 
   final List<Friends> _listDatas = [];
 
-  @override
-  void initState() {
-    //初始化，只调用一次
-    // TODO: implement initState
-    super.initState();
-//    _listDatas.addAll(datas);
-//    _listDatas.addAll(datas);
-    //链式编程，等同于上面的两个
-    _listDatas..addAll(datas)..addAll(datas);
+  List<dynamic> list;
 
-    //排序!
+  getinfo() async {
+  Response response = await dio.get('http://192.168.114.151:9090/account/selectAllInformation');
+  // print(response.data);
+  list=response.data;
+  for (var element in list) {
+    _listDatas.add(Friends(
+      imageUrl:'https://randomuser.me/api/portraits/women/17.jpg' ,
+      name: element['realName'],
+      indexLetter:element['firstLetter']
+    ));
     _listDatas.sort((Friends a, Friends b) {
       return a.indexLetter.compareTo(b.indexLetter);
     });
-
     var _groupOffset = 54.5 * 4;
 //经过循环计算，将每一个头的位置算出来，放入字典
     for (int i = 0; i < _listDatas.length; i++) {
@@ -53,9 +57,27 @@ class _PeoplesPageState extends State<PeoplesPage> {
         _groupOffset += 54.5;
       }
     }
+  }
+  print(_listDatas);
+}
+  @override
+  void initState(){
+    getinfo();
+    super.initState();
+
+    //排序!
 
     _scrollController = ScrollController();
   }
+  // _getData() async{
+  //   Response response;
+  //   var apiUrl="";
+  //   Response result=await Dio().get(apiUrl);
+  //   // print(json.decode(result.data)["result"]);
+  //   setState(() {
+  //     this._list=json.decode(result.data)["result"];
+  //   });
+  // }
 
   final List<Friends> _headerData = [
     Friends(imageUrl: 'assets/images/新的朋友.png', name: '添加人员'),
@@ -87,7 +109,7 @@ class _PeoplesPageState extends State<PeoplesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.cyan,
         title: Text('人员管理',style: TextStyle(fontSize: 14),),
         actions: <Widget>[
           GestureDetector(
@@ -160,15 +182,12 @@ class _FriendsCell extends StatelessWidget {
         Material(
           color: Colors.white,
           child: InkWell(
-            splashColor:Colors.grey,
+            splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onLongPress:(){
-              print('长按了');
-            },
             onTap: (){
               print('点击了');
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (BuildContext context){return const PeopleDitails();})
+                  CupertinoPageRoute(builder: (BuildContext context){return PeopleDitails();})
               );
             },
             child: Row(
