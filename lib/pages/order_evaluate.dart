@@ -31,7 +31,7 @@ class OrderEvaluateState extends State<OrderEvaluate> {
     _handleResult = TextEditingController();
     _handleSuggest = TextEditingController();
     _focusNode = FocusNode();
-    _handleResult.text = "";
+    _handleResult.text = "已解决";
     _score = 2;
 
     _focusNode.addListener(() {
@@ -68,9 +68,8 @@ class OrderEvaluateState extends State<OrderEvaluate> {
             child: Column(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.39,
                   color: Colors.white,
-                  child: ListView(
+                  child: Column(
                     children: [
                       Row(
                         children: [
@@ -103,32 +102,38 @@ class OrderEvaluateState extends State<OrderEvaluate> {
                           ),
                         ],
                       ),
-                      Divider(thickness: 0.5, color: Colors.grey.shade400),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Expanded(
-                              child: ListTile(title: Text('处理意见')), flex: 2),
-                          Expanded(
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.only(top: 14),
-                                title: TextField(
-                                  focusNode: _focusNode,
-                                  controller: _handleSuggest,
-                                  decoration: const InputDecoration.collapsed(
-                                    hintStyle: TextStyle(
-                                        color: CupertinoColors.inactiveGray),
-                                    hintText: "处理意见",
-                                    border: InputBorder.none,
-                                  ),
-                                  maxLines: 5,
-                                  maxLength: 300,
-                                ),
+                      _handleResult.text == "已解决" ?
+                          Container() :
+                          Column(
+                            children: [
+                              Divider(thickness: 0.5, color: Colors.grey.shade400),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Expanded(
+                                      child: ListTile(title: Text('问题描述')), flex: 2),
+                                  Expanded(
+                                      child: ListTile(
+                                        contentPadding: const EdgeInsets.only(top: 14),
+                                        title: TextField(
+                                          focusNode: _focusNode,
+                                          controller: _handleSuggest,
+                                          decoration: const InputDecoration.collapsed(
+                                            hintStyle: TextStyle(
+                                                color: CupertinoColors.inactiveGray),
+                                            hintText: "问题描述",
+                                            border: InputBorder.none,
+                                          ),
+                                          maxLines: 5,
+                                          maxLength: 300,
+                                        ),
+                                      ),
+                                      flex: 3),
+                                  Expanded(child: Container(), flex: 1),
+                                ],
                               ),
-                              flex: 3),
-                          Expanded(child: Container(), flex: 1),
-                        ],
-                      ),
+                            ],
+                          ),
                       Divider(thickness: 0.5, color: Colors.grey.shade400),
                       Row(
                         children: [
@@ -168,14 +173,7 @@ class OrderEvaluateState extends State<OrderEvaluate> {
                     child: GestureDetector(
                         onTap: () {
                           SnackBar snackBar;
-                          if (_handleResult.text == "") {
-                            snackBar = const SnackBar(
-                              duration: Duration(seconds: 1),
-                              backgroundColor: Colors.red,
-                              content: Text('问题解决情况不能为空!'),
-                            );
-                            Scaffold.of(context).showSnackBar(snackBar);
-                          } else if (_handleSuggest.text == "") {
+                          if (_handleSuggest.text == "") {
                             snackBar = const SnackBar(
                               duration: Duration(seconds: 1),
                               backgroundColor: Colors.red,
@@ -183,23 +181,6 @@ class OrderEvaluateState extends State<OrderEvaluate> {
                             );
                             Scaffold.of(context).showSnackBar(snackBar);
                           } else {
-                            // switch (_handleOption.text) {
-                            //   case "取消工单":
-                            //
-                            //     /// 取消订单 TODO
-                            //     Navigator.of(context).pop();
-                            //     break;
-                            //   case "驳回请求":
-                            //
-                            //     /// 驳回请求 TODO
-                            //     Navigator.of(context).pop();
-                            //     break;
-                            //   case "重新分配":
-                            //
-                            //     /// 重新分配 TODO
-                            //     Navigator.of(context).pop();
-                            //     break;
-                            // }
                             printWithDebug(_handleResult.text + ' ' + _score.toString());
                           }
                         },

@@ -6,6 +6,9 @@ import '../main.dart';
 
 
 class ExceptionHandle extends StatefulWidget {
+
+  ExceptionHandle({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState()  => ExceptionHandleState();
 }

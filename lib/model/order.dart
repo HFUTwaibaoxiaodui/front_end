@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/operation.dart';
+
+import 'operation.dart';
 
 class Order {
   /// 工单id

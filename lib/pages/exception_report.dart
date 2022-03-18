@@ -1,9 +1,21 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/main.dart';
+import 'package:frontend/util/debug_print.dart';
+
+import '../global/back_end_interface_url.dart';
+import '../global/my_event_bus.dart';
+import '../util/net/network_util.dart';
 
 
 class ExceptionReport extends StatefulWidget {
+
+  int id;
+
+  ExceptionReport({Key? key, required this.id}) : super(key: key);
+
   @override
   State<StatefulWidget> createState()  => ExceptionReportState();
 }
@@ -180,9 +192,34 @@ class ExceptionReportState extends State<ExceptionReport> {
                             );
                             Scaffold.of(context).showSnackBar(snackBar);
                           } else {
-                            Navigator.of(context).pop();
-                          }
+                            HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '异常'});
+                            String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                            HttpManager().post(
+                                addOperationLog,
+                                args: {
+                                  'orderId': widget.id,
+                                  'operationTime': formattedDate,
+                                  'operationName': '上报异常',
+                                  'description': '【我】上报异常，异常类别：' + _exceptionClass.text + "，异常说明：" + _exceptionDetail.text
+                                }
+                            ).then((value) {
+                              Fluttertoast.showToast(
+                                  msg: "异常上报成功",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0
+                              );
 
+                              eventBus.fire(RefreshOrderDetailEvent());
+                              eventBus.fire(InitOrderListEvent());
+
+                              printWithDebug('已发送页面刷新');
+
+                              Navigator.of(context).pop();
+                            });
+                          }
                         },
                         child: Container(
                           color: Colors.cyanAccent.shade700,

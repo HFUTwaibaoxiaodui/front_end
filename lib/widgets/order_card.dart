@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../global/state_label_colors.dart';
-import 'order.dart';
+import '../model/order.dart';
 
 
 class OrderCard extends StatefulWidget {

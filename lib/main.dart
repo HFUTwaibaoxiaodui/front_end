@@ -1,11 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/global/back_end_interface_url.dart';
 import 'package:frontend/util/debug_print.dart';
 import 'package:frontend/util/net/network_util.dart';
-import 'package:frontend/widgets/operation.dart';
-import 'package:frontend/widgets/order.dart';
+import 'package:frontend/model/order.dart';
 import 'package:frontend/widgets/order_card.dart';
 import 'global/future_build.dart';
+import 'global/my_event_bus.dart';
 import 'global/routers.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -61,24 +63,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
   late Future _orderList;
+  late StreamSubscription _initSubscription;
 
   @override
   void initState() {
     super.initState();
+    _initOrderList();
+    _initSubscription = eventBus.on<InitOrderListEvent>().listen((event) {
+      _initOrderList();
+    });
+  }
+
+
+  @override
+  void dispose() {
+    _initSubscription.cancel();
+  }
+
+  void _initOrderList() {
     _orderList = _getOrderList();
   }
 
