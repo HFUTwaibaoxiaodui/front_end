@@ -48,6 +48,12 @@ class _WorkOrderPage extends State<WorkOrderPage> {
     }
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(child: Icon(Icons.swap_horiz),onTap: (){
+          // Navigator.push(context, MaterialPageRoute(builder: (_) {
+          //   return DetailPage();
+          // }));
+        },),
+        centerTitle: true,
         title: Text("工单视图"),
       ),
       body: new Scrollbar(
@@ -126,9 +132,7 @@ class _WorkOrderPage extends State<WorkOrderPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Positioned(
-                    right: 0,
-                    child: Container(
+                     Container(
                       padding: EdgeInsets.all(1),
                       decoration: BoxDecoration(
                         color: Colors.red,
@@ -147,7 +151,6 @@ class _WorkOrderPage extends State<WorkOrderPage> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                  ),
                   Icon(Icons.arrow_forward_ios_rounded),
                 ],
               ),

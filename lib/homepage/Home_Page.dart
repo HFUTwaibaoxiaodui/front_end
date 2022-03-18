@@ -5,6 +5,7 @@ import 'package:frontend/homepage/list_view.dart';
 import 'package:frontend/routes/today_work.dart';
 import 'package:frontend/routes/yest_work.dart';
 import 'package:frontend/routes/month_work.dart';
+import 'package:frontend/routes/message.dart';
 
 class HomePage extends StatelessWidget {
   String? today_work = '12';
@@ -19,7 +20,30 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(child: Icon(Icons.swap_horiz),onTap: (){
+          // Navigator.push(context, MaterialPageRoute(builder: (_) {
+          //   return DetailPage();
+          // }));
+        },),
+        centerTitle: true,
         title: Text("机房巡检"),
+        actions: <Widget>[
+          GestureDetector(
+            child: Container(
+              margin: EdgeInsets.only(right: 10),
+              child: IconButton (
+                icon:Icon(Icons.notifications_none),
+                onPressed:(){
+                  Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    return MessagePage();
+                  }));
+
+                },),
+            ),
+
+          )
+        ],
+
       ),
       body: Column(
         children: [
