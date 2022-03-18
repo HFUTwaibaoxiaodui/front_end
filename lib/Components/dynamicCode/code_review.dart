@@ -2,8 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/dynamicCode/code_paint.dart';
-import 'package:frontend/dynamicCode/tools/dzy_theme.dart';
+import 'package:frontend/Components/dynamicCode/code_paint.dart';
+import 'package:frontend/Components/dynamicCode/tools/dzy_theme.dart';
 import 'package:random_string/random_string.dart';
 
 // 当前存在的问题是，必须在外部调用的时候给一个初始值
@@ -41,7 +41,7 @@ class _CodeReviewState extends State<CodeReview> {
   @override
   void initState() {
     super.initState();
-    _textLength = widget.text.length ?? 4;
+    _textLength = widget.text.length;
     _width = _textLength!.toDouble() * 22;
     _height = 36;
     _ranStr = widget.text;

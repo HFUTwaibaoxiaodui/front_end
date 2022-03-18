@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/dynamicCode/code_main.dart';
-import 'package:frontend/main.dart';
+import 'package:frontend/Components/dynamicCode/code_main.dart';
+import 'package:frontend/Register_main.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 

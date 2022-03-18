@@ -55,6 +55,10 @@ dev_dependencies:
   flutter_screenutil: ^5.3.1
   date_format: ^2.0.5
   random_string: ^1.1.0
+  image_picker: ^0.6.2+1
+  flutter_datetime_picker: 1.2.6
+  intl_translation: ^0.17.2
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
