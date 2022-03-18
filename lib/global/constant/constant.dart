@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Constant {
   static const String baseUrl = 'api.douban.com';
 

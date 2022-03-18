@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../global/theme.dart';
+import '../order_detail.dart';
 
-import '../global/theme.dart';
-import '../pages/order_detail.dart';
 
 class ApplyPage extends StatelessWidget {
   @override

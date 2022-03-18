@@ -1,12 +1,10 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/PersonalCenter/Personinfo.dart';
-import 'package:frontend/constant/constant.dart';
-import 'package:path/path.dart';
+import 'package:frontend/global/theme.dart';
+
+import '../../global/constant/constant.dart';
 
 class Personinfo extends StatefulWidget {
-  const Personinfo({Key key}) : super(key: key);
+  const Personinfo({Key? key}) : super(key: key);
 
   @override
   _PersoninfoState createState() => _PersoninfoState();
@@ -15,7 +13,7 @@ class Personinfo extends StatefulWidget {
 
 //头像布局
 class SettingHead extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   SettingHead({this.onPressed});
 
@@ -72,12 +70,12 @@ class SettingHead extends StatelessWidget {
 
 //普通条目布局
 class SettingCommon extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const SettingCommon({this.title, this.content, this.onPressed});
 
-  final String title;
-  final String content;
+  final String? title;
+  final String? content;
 
   @override
   Widget build(BuildContext context) {
@@ -97,14 +95,14 @@ class SettingCommon extends StatelessWidget {
                       Expanded(
                         child: Container(
                           margin: const EdgeInsets.only(left: 15.0),
-                          child: Text(title,
+                          child: Text(title ?? 'null',
                               style:
                               TextStyle(fontSize: 13, color: Colors.black)),
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Text(content,
+                        child: Text(content ?? 'null',
                             style:
                             TextStyle(fontSize: 13, color: Colors.black)),
                       ),
@@ -151,15 +149,17 @@ class _PersoninfoState extends State<Personinfo> {
                   '个人主页',
                   style: TextStyle(fontSize: 15,color: Colors.white),
                 ),
+                backgroundColor: mainColor,
                 elevation: 0.5),
             body: Container(
-              color: Color(0xffF2F2F2),
+              color: const Color(0xffF2F2F2),
               child: ListView(
                 children: <Widget>[
                   SettingHead(onPressed: () {
                     showModalBottomSheet(
                         context: context,
                         builder: (context) {
+                          return Container();
                           // return HeadChooseWidget(
                           //     chooseImgCallBack: (File mHeadFile) {
                           //       FormData formData = FormData.fromMap({

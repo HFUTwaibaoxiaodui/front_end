@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/homepage/list_view.dart';
 import 'package:frontend/pages/today_work.dart';
 import 'package:frontend/pages/yest_work.dart';
 import 'package:frontend/pages/message.dart';
 
-import '../global/my_event_bus.dart';
-import '../global/theme.dart';
-import '../pages/month_work.dart';
-import '../widgets/order_list.dart';
+import '../../global/my_event_bus.dart';
+import '../../global/theme.dart';
+import '../../widgets/order_list.dart';
+import '../month_work.dart';
 
 class HomePage extends StatefulWidget {
   @override

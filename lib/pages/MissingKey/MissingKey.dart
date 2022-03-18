@@ -4,39 +4,39 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 
 
-class FixKey extends StatelessWidget {
+class MissingKey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
+        body: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus &&
+                currentFocus.focusedChild != null) {
+              FocusManager.instance.primaryFocus!.unfocus();
+            }
+          },
+          child: MissingKeyPage(),
         ),
-        home: Scaffold(
-          body: GestureDetector(
-            onTap: () {
-              FocusScopeNode currentFocus = FocusScope.of(context);
-              if (!currentFocus.hasPrimaryFocus &&
-                  currentFocus.focusedChild != null) {
-                FocusManager.instance.primaryFocus.unfocus();
-              }
-            },
-            child: FixKeyPage(),
-          ),
-        ),
+      ),
     );
   }
 }
 
-class FixKeyPage extends StatefulWidget {
+class MissingKeyPage extends StatefulWidget {
   @override
-  _FixKeyPageState createState() {
+  _MissingKeyPage createState() {
     // TODO: implement createState
-    return _FixKeyPageState();
+    return _MissingKeyPage();
   }
 }
 
-class _FixKeyPageState extends State<FixKeyPage> {
+class _MissingKeyPage extends State<MissingKeyPage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -51,12 +51,12 @@ class _FixKeyPageState extends State<FixKeyPage> {
               padding: EdgeInsets.only(left:15.0),
               color: Colors.white,
               child: Container(
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      onPressed:(){
-                        print('返回');
-                      },
-                    )
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed:(){
+                      print('返回');
+                    },
+                  )
               ),
             ),
             Container(
@@ -100,7 +100,7 @@ class _FixKeyPageState extends State<FixKeyPage> {
               obscureText: true,
 //              校验密码
               validator: (v) {
-                return v.trim().length > 5 ? null : "密码不能少于6位";
+                return v!.trim().length > 5 ? null : "密码不能少于6位";
               }),
           TextFormField(
               autofocus: false,
@@ -110,9 +110,9 @@ class _FixKeyPageState extends State<FixKeyPage> {
               obscureText: true,
 //              校验密码
               validator: (v) {
-                return v.trim().length > 5 ? null : "密码不能少于6位";
+                return v!.trim().length > 5 ? null : "密码不能少于6位";
               }
-              ),
+          ),
           // 登录按钮
           Padding(
             padding: const EdgeInsets.only(top: 28.0),
@@ -149,7 +149,7 @@ class _FixKeyPageState extends State<FixKeyPage> {
 }
 
 class EolToast {
-  static OverlayEntry overlayEntry;
+  static OverlayEntry? overlayEntry;
 
   static final EolToast _showToast = EolToast._internal();
   factory EolToast() {
@@ -187,9 +187,9 @@ class EolToast {
       );
     });
     var overlayState = Overlay.of(context);
-    overlayState.insert(overlayEntry);
+    overlayState!.insert(overlayEntry!);
     Future.delayed(Duration(seconds: 1), () {
-      overlayEntry.remove();
+      overlayEntry!.remove();
       overlayEntry = null;
     });
   }

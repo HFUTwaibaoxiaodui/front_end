@@ -188,6 +188,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_verification_box",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/flutter_verification_box-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
       "name": "flutter_web_plugins",
       "rootUri": "file:///D:/FlutterSDK/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
@@ -608,7 +614,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-18T08:32:02.845781Z",
+  "generated": "2022-03-18T12:38:52.818698Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

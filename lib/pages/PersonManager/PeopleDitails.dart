@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/constant/constant.dart';
+
+import '../../global/constant/constant.dart';
 
 class PeopleDitails extends StatefulWidget {
   // final String imageUrl;
@@ -16,11 +16,11 @@ class PeopleDitails extends StatefulWidget {
 
 //头像布局
 class SettingHead extends StatelessWidget {
-  final String imageUrl;
-  final String name;
-  final String groupTitle;
-  final String imageAssets;
-  final VoidCallback onPressed;
+  final String? imageUrl;
+  final String? name;
+  final String? groupTitle;
+  final String? imageAssets;
+  final VoidCallback? onPressed;
 
   SettingHead({this.onPressed, this.imageUrl, this.name, this.groupTitle, this.imageAssets});
 
@@ -52,9 +52,7 @@ class SettingHead extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6.0),
                             image: DecorationImage(
-                              image: imageUrl != null
-                                  ? NetworkImage(imageUrl)
-                                  : AssetImage(imageAssets),
+                              image: _getImage(),
                             )),
                       ), //图片
                       Container(
@@ -78,16 +76,20 @@ class SettingHead extends StatelessWidget {
           )),
     );
   }
+
+   _getImage() {
+    return imageUrl != null ? NetworkImage(imageUrl!) : AssetImage(imageAssets!);
+  }
 }
 
 //普通条目布局
 class SettingCommon extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const SettingCommon({this.title, this.content, this.onPressed});
 
-  final String title;
-  final String content;
+  final String? title;
+  final String? content;
 
   @override
   Widget build(BuildContext context) {
@@ -107,14 +109,14 @@ class SettingCommon extends StatelessWidget {
                       Expanded(
                         child: Container(
                           margin: const EdgeInsets.only(left: 15.0),
-                          child: Text(title,
+                          child: Text(title ?? 'null',
                               style:
                               TextStyle(fontSize: 13, color: Colors.black)),
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Text(content,
+                        child: Text(content ?? 'null',
                             style:
                             TextStyle(fontSize: 13, color: Colors.black)),
                       ),

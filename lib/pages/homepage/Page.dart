@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/homepage/Apply.dart';
-import 'package:frontend/homepage/Mine.dart';
-import 'package:frontend/homepage/Work_Order.dart';
-import 'package:frontend/homepage/Home_Page.dart';
+import 'Mine.dart';
+import 'Work_Order.dart';
+import 'Apply.dart';
+import 'Home_Page.dart';
 
 
 class IndexPage extends StatefulWidget {

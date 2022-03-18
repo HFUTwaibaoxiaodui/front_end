@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/PersonalCenter/Personinfo.dart';
-import '../constant/ContainerRepository.dart';
-import '../constant/constant.dart';
+import '../../global/constant/constant.dart';
 import 'PersonData.dart';
+import 'Personinfo.dart';
 import 'Setting.dart';
 
 class PersonCenterPage extends StatelessWidget{
@@ -143,7 +142,7 @@ class Records extends StatelessWidget{
   }
 }
 
-SliverToBoxAdapter _personItem(String imgAsset, String title, {VoidCallback onTab}){
+SliverToBoxAdapter _personItem(String imgAsset, String title, {VoidCallback? onTab}){
   return SliverToBoxAdapter(
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -306,7 +305,7 @@ class Personpage extends StatelessWidget {
                       alignment: AlignmentDirectional.centerStart,
                       onPressed: () {
                         Navigator.of(context).push(
-                            CupertinoPageRoute(builder: (BuildContext context){return Personinfo();})
+                            CupertinoPageRoute(builder: (BuildContext context){return const Personinfo();})
                         );
                       })
                 ],

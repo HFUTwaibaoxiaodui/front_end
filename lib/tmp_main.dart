@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/homepage/Page.dart';
 import 'global/routers.dart';
-import 'homepage/Page.dart';
 
 void main() {
   runApp(const MyApp());

@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/const.dart';
+import 'package:frontend/global/const.dart';
 import 'friends_data.dart';
 
 class IndexBar extends StatefulWidget {
   //创建索引条回调
   final void Function(String str) indexBarCallBack;
 
-  IndexBar({this.indexBarCallBack});
+  IndexBar({required this.indexBarCallBack});
 
   @override
   _IndexBarState createState() => _IndexBarState();
@@ -17,9 +17,10 @@ class IndexBar extends StatefulWidget {
 
 int getIdex(BuildContext context, Offset globalPosition, List index_word) {
 //  拿到box
-  RenderBox box = context.findRenderObject();
+  RenderBox box = context.findRenderObject() as RenderBox;
 //  拿到y值
   double y = box.globalToLocal(globalPosition).dy;
+
 //  算出字符高度  box 的总高度 / 2 / 字符开头数组个数
   var itemHeight = ScreenHeight(context) / 2 / index_word.length;
   //算出第几个item，并且给一个取值范围   ~/ y除以item的高度取整  clamp 取值返回 0 -
@@ -42,7 +43,7 @@ class _IndexBarState extends State<IndexBar> {
 //  排序后的数组
   final List<Friends> _listDatas = [];
 
-  List<dynamic> list;
+  late List<dynamic> list;
 
   getinfo() async {
     Response response = await dio.get('http://192.168.114.151:9090/account/selectAllInformation');
@@ -58,13 +59,13 @@ class _IndexBarState extends State<IndexBar> {
     _index_word.add('🔍');
     _index_word.add('☆');
     _listDatas.sort((Friends a, Friends b) {
-      return a.indexLetter.compareTo(b.indexLetter);
+      return a.indexLetter!.compareTo(b.indexLetter!);
     });
 
 //经过循环，将每一个头的首字母放入index_word数组
     for (int i = 0; i < _listDatas.length; i++) {
       if (i < 1 || _listDatas[i].indexLetter != _listDatas[i - 1].indexLetter) {
-        _index_word.add(_listDatas[i].indexLetter);
+        _index_word.add(_listDatas[i].indexLetter!);
       }
     }
 

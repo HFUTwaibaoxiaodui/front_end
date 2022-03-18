@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/const.dart';
-import 'package:frontend/PersonManager/IndexBar.dart';
+import 'package:frontend/global/const.dart';
 
+import 'IndexBar.dart';
 import 'PeopleDitails.dart';
 import 'SearchPage.dart';
 import 'friends_data.dart';
@@ -24,11 +24,11 @@ class _PeoplesPageState extends State<PeoplesPage> {
     INDEX_WORDS[1]: 0.0,
   };
 
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
 
   final List<Friends> _listDatas = [];
 
-  List<dynamic> list;
+  late List<dynamic> list;
 
   getinfo() async {
   Response response = await dio.get('http://192.168.114.151:9090/account/selectAllInformation');
@@ -41,7 +41,7 @@ class _PeoplesPageState extends State<PeoplesPage> {
       indexLetter:element['firstLetter']
     ));
     _listDatas.sort((Friends a, Friends b) {
-      return a.indexLetter.compareTo(b.indexLetter);
+      return a.indexLetter!.compareTo(b.indexLetter!);
     });
     var _groupOffset = 54.5 * 4;
 //经过循环计算，将每一个头的位置算出来，放入字典
@@ -90,8 +90,8 @@ class _PeoplesPageState extends State<PeoplesPage> {
 //    系统cell
     if (index < _headerData.length) {
       return _FriendsCell(
-        imageAssets: _headerData[index].imageUrl,
-        name: _headerData[index].name,
+        imageAssets: _headerData[index].imageUrl!,
+        name: _headerData[index].name!,
       );
     }
     //显示剩下的cell
@@ -99,9 +99,9 @@ class _PeoplesPageState extends State<PeoplesPage> {
     bool _hideIndexLetter = (index - 4 > 0 &&
         _listDatas[index - 4].indexLetter == _listDatas[index - 5].indexLetter);
     return _FriendsCell(
-      imageUrl: _listDatas[index - 4].imageUrl,
-      name: _listDatas[index - 4].name,
-      groupTitle: _hideIndexLetter ? null : _listDatas[index - 4].indexLetter,
+      imageUrl: _listDatas[index - 4].imageUrl!,
+      name: _listDatas[index - 4].name!,
+      groupTitle: _hideIndexLetter ? 'null' : _listDatas[index - 4].indexLetter!,
     );
   }
 
@@ -155,13 +155,13 @@ class _PeoplesPageState extends State<PeoplesPage> {
 }
 
 class _FriendsCell extends StatelessWidget {
-  final String imageUrl;
+  final String? imageUrl;
   final String name;
-  final String groupTitle;
-  final String imageAssets;
+  final String? groupTitle;
+  final String? imageAssets;
 
   const _FriendsCell(
-      {this.imageUrl, this.name, this.imageAssets, this.groupTitle}); //首字母大写
+      {this.imageUrl, required this.name, this.imageAssets, this.groupTitle}); //首字母大写
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +174,7 @@ class _FriendsCell extends StatelessWidget {
           color: Color.fromRGBO(1, 1, 1, 0.0),
           child: groupTitle != null
               ? Text(
-            groupTitle,
+            groupTitle ?? 'null',
             style: TextStyle(fontSize: 13, color: Colors.grey),
           )
               : null,
@@ -199,9 +199,7 @@ class _FriendsCell extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6.0),
                       image: DecorationImage(
-                        image: imageUrl != null
-                            ? NetworkImage(imageUrl)
-                            : AssetImage(imageAssets),
+                        image: _getImage(),
                       )),
                 ), //图片
                 Container(
@@ -231,5 +229,13 @@ class _FriendsCell extends StatelessWidget {
         ) //分割线
       ],
     );
+  }
+
+    _getImage() {
+    if (imageUrl != null) {
+      return NetworkImage(imageUrl!);
+    } else {
+      return AssetImage(imageAssets!);
+    }
   }
 }

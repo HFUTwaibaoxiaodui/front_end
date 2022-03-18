@@ -1,18 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ContainerRepository extends Container{
-  final Widget child;
-  final double width;
-  final Decoration decoration;
-  final Function onTap;  // 添加点击事件
+  final Widget? child;
+  final double? width;
+  final Decoration? decoration;
+  final void Function()? onTap;  // 添加点击事件
 
   ContainerRepository({
-    Key key,
+    Key? key,
     this.child,
     this.width,
     this.decoration,
-    this.onTap, EdgeInsets padding,
+    this.onTap, EdgeInsets? padding,
   }) : super(key: key);
 
   @override

@@ -26,7 +26,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
           icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
       onPressed: () {
         if (query.isEmpty) {
-          close(context, null);
+          close(context, 'null');
         } else {
           query = "";
           showSuggestions(context);
@@ -99,8 +99,8 @@ class _SearchItemViewState extends State<SearchItemView> {
 
 class SearchItem extends StatefulWidget {
   @required
-  final String title;
-  const SearchItem({Key key, this.title}) : super(key: key);
+  final String? title;
+  const SearchItem({Key? key, this.title}) : super(key: key);
   @override
   _SearchItemState createState() => _SearchItemState();
 }
@@ -111,7 +111,7 @@ class _SearchItemState extends State<SearchItem> {
     return Container(
       child: InkWell(
         child: Chip(
-          label: Text(widget.title),
+          label: Text(widget.title ?? 'null'),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10)
           ),

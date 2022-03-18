@@ -1,10 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:frontend/Components/dynamicCode/code_main.dart';
 import 'package:frontend/Register_main.dart';
-
-import 'package:url_launcher/url_launcher.dart';
+import 'package:frontend/widgets/Components/dynamicCode/code_main.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key? key}) : super(key: key);

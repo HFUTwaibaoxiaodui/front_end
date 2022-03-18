@@ -1,12 +1,8 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/PersonalCenter/Personinfo.dart';
-import 'package:frontend/constant/constant.dart';
-import 'package:path/path.dart';
+import '../../global/constant/constant.dart';
 
 class Setting extends StatefulWidget {
-  const Setting({Key key}) : super(key: key);
+  const Setting({Key? key}) : super(key: key);
 
   @override
   _SettingState createState() => _SettingState();
@@ -14,12 +10,12 @@ class Setting extends StatefulWidget {
 
 //普通条目布局
 class SettingCommon extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const SettingCommon({this.title, this.content, this.onPressed});
 
-  final String title;
-  final String content;
+  final String? title;
+  final String? content;
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +35,14 @@ class SettingCommon extends StatelessWidget {
                       Expanded(
                         child: Container(
                           margin: const EdgeInsets.only(left: 15.0),
-                          child: Text(title,
+                          child: Text(title ?? 'null',
                               style:
                               TextStyle(fontSize: 13, color: Colors.black)),
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Text(content,
+                        child: Text(content ?? 'null',
                             style:
                             TextStyle(fontSize: 14, color: Colors.black)),
                       ),

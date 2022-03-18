@@ -1,9 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:frontend/Components/dynamicCode/code_paint.dart';
-import 'package:frontend/Components/dynamicCode/tools/dzy_theme.dart';
+import 'tools/dzy_theme.dart';
+import 'code_paint.dart';
 import 'package:random_string/random_string.dart';
 
 // 当前存在的问题是，必须在外部调用的时候给一个初始值
