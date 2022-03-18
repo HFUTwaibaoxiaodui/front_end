@@ -1,12 +1,20 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:image_picker/image_picker.dart';
-import '../main.dart';
+import '../global/back_end_interface_url.dart';
+import '../global/my_event_bus.dart';
+import '../util/net/network_util.dart';
 
 
 class EditOrder extends StatefulWidget {
+  int id;
+
+  EditOrder({Key? key, required this.id}) : super(key: key);
+
   @override
   State<StatefulWidget> createState()  => EditOrderState();
 }
@@ -30,10 +38,11 @@ class EditOrderState extends State<EditOrder> {
     {"name": "相册", "icon": Icon(Icons.photo)}
   ];
 
+  final ImagePicker _imagePicker = ImagePicker();
   //拍照或者相册选取图片，只能单选
   Future _getImage() async {
     Navigator.of(context).pop();
-    var image = await ImagePicker.pickImage(
+    var image = await _imagePicker.pickImage(
         source: _photoIndex == 0 ? ImageSource.camera : ImageSource.gallery);
 
     //没有选择图片或者没有拍照
@@ -219,7 +228,7 @@ class EditOrderState extends State<EditOrder> {
                                 title: const Icon(Icons.keyboard_arrow_right),
                                 onTap: () {
                                   showDialog(
-                                      context: navigatorKey.currentContext!,
+                                      context: context,
                                       builder: (BuildContext context) {
                                         return StatefulBuilder(
                                           builder: (BuildContext context, void Function(void Function()) setState) {
@@ -416,6 +425,33 @@ class EditOrderState extends State<EditOrder> {
                                 );
                                 Scaffold.of(context).showSnackBar(snackBar);
                               } else {
+
+                                HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '待评价'});
+                                String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                                HttpManager().post(
+                                    addOperationLog,
+                                    args: {
+                                      'orderId': widget.id,
+                                      'operationTime': formattedDate,
+                                      'operationName': '填写回单',
+                                      'description': '【我】已经完成服务任务'
+                                    }
+                                ).then((value){
+                                  /// 提示用户抢单成功
+                                  // Fluttertoast.showToast(
+                                  //     msg: "抢单成功",
+                                  //     toastLength: Toast.LENGTH_SHORT,
+                                  //     gravity: ToastGravity.CENTER,
+                                  //     backgroundColor: Colors.green,
+                                  //     textColor: Colors.white,
+                                  //     fontSize: 16.0
+                                  // );
+                                  eventBus.fire(RefreshOrderDetailEvent());
+                                  eventBus.fire(InitOrderListEvent());
+                                  /// 返回上一个界面
+                                  Navigator.of(context).pop();
+                                });
+
                                 Navigator.of(context).pop();
                               }
                             },

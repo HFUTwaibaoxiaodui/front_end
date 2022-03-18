@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/register_page.dart';
 import '../Components/bottomNavi.dart';
+import '../homepage/Page.dart';
 import '../pages/login_page.dart';
-
-
-final _routes = {
-  '/': (context, {arguments}) => LoginPage(userInfo: arguments),
-  '/register': (context) => RegisterPage(),
-  '/home': (context) => const BottomNavi()
 import 'package:frontend/pages/exception_handle.dart';
 import 'package:frontend/pages/exception_report.dart';
 import 'package:frontend/pages/order_evaluate.dart';
 import '../widgets/order_list.dart';
 import '../widgets/order_detail.dart';
 
+
 final _routes = {
   // '/': (context) => OrderListWidget(),
+  // '/': (context, {arguments}) => LoginPage(userInfo: arguments),
+  // '/register': (context) => RegisterPage(),
+  // '/home': (context) => IndexPage(),
   '/exception_report' : (context, {arguments}) => ExceptionReport(id: arguments),
-  '/order_evaluate': (context) => OrderEvaluate(),
+  '/order_evaluate': (context, {arguments}) => OrderEvaluate(id: arguments['id'], name: arguments['name']),
   '/order_detail': (context, {arguments}) => OrderDetail(id: arguments)
 };
 

@@ -20,7 +20,7 @@ class _PhotoState extends State<Photo> {
   //拍照或者相册选取图片，只能单选
   Future _getImage() async {
     Navigator.of(context).pop();
-    var image = await ImagePicker.pickImage(
+    var image = await picker.pickImage(
         source: _photoIndex == 0 ? ImageSource.camera : ImageSource.gallery);
 
     //没有选择图片或者没有拍照

@@ -9,11 +9,12 @@ import 'package:frontend/util/debug_print.dart';
 import '../global/back_end_interface_url.dart';
 import '../global/my_event_bus.dart';
 import '../global/state_label_colors.dart';
+import '../views/edit_work_order.dart';
 import 'order_list.dart';
-import '../model/operation.dart';
+import '../models/operation.dart';
 import '../pages/exception_report.dart';
 import '../util/net/network_util.dart';
-import '../model/order.dart';
+import '../models/order.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/util/qrcode_util.dart';
 
@@ -387,7 +388,9 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
               padding: const EdgeInsets.all(5),
               child: GestureDetector(
                 onTap: (){
-                  printWithDebug('填写回单');
+                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+                    return EditOrder(id: widget.id);
+                  }));
                 },
                 child: Container(
                   color: Colors.cyanAccent.shade700,
@@ -486,12 +489,51 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
               padding: const EdgeInsets.all(5),
               child: GestureDetector(
                 onTap: (){
-                  Navigator.of(context).pushNamed('/order_evaluate');
+                  Navigator.of(context).pushNamed('/order_evaluate', arguments: {'id': widget.id, 'name': _order!.creatorName!});
                 },
                 child: Container(
                   color: Colors.cyanAccent.shade700,
                   child: const Center(
                     child: Text('评价工单', style: TextStyle(color: Colors.white)
+                    ),
+                  ),
+                ),
+              )
+          )
+      );
+      case '已完成': return Container(
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+          child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: GestureDetector(
+                onTap: (){
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+
+                        return AlertDialog(
+                          title: const Text('工单评价'),
+                          content: Container(
+                            height: MediaQuery.of(context).size.height * 0.23,
+                            child:  Column(
+                              children: [
+
+                              ],
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(child: const Text('取消'),onPressed: (){
+                              Navigator.of(context).pop();
+                            }),
+                          ],
+                        );
+                      }
+                  );
+                },
+                child: Container(
+                  color: Colors.cyanAccent.shade700,
+                  child: const Center(
+                    child: Text('查看评价', style: TextStyle(color: Colors.white)
                     ),
                   ),
                 ),
@@ -521,7 +563,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                 flex: 4,
                 child: Container(
                   color: Colors.white,
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 2),
                   child: _buildTop(),
                 ),
               ),

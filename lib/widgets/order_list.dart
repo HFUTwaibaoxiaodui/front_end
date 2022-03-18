@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend/global/back_end_interface_url.dart';
 import 'package:frontend/util/debug_print.dart';
 import 'package:frontend/util/net/network_util.dart';
-import 'package:frontend/model/order.dart';
 import 'package:frontend/widgets/order_card.dart';
 import '../global/future_build.dart';
 import '../global/my_event_bus.dart';
+import '../models/order.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 

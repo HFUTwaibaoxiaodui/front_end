@@ -1,11 +1,21 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:frontend/util/debug_print.dart';
 
+import '../global/back_end_interface_url.dart';
+import '../global/my_event_bus.dart';
+import '../util/net/network_util.dart';
 import '../widgets/order_list.dart';
 
 class OrderEvaluate extends StatefulWidget {
+
+  int id;
+  String name;
+
+  OrderEvaluate({Key? key, required this.id, required this.name}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => OrderEvaluateState();
 }
@@ -173,7 +183,7 @@ class OrderEvaluateState extends State<OrderEvaluate> {
                     child: GestureDetector(
                         onTap: () {
                           SnackBar snackBar;
-                          if (_handleSuggest.text == "") {
+                          if (_handleSuggest.text == '为解决' && _handleSuggest.text == "") {
                             snackBar = const SnackBar(
                               duration: Duration(seconds: 1),
                               backgroundColor: Colors.red,
@@ -181,7 +191,35 @@ class OrderEvaluateState extends State<OrderEvaluate> {
                             );
                             Scaffold.of(context).showSnackBar(snackBar);
                           } else {
-                            printWithDebug(_handleResult.text + ' ' + _score.toString());
+
+                            HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '已完成'});
+
+                            HttpManager().post(updateOrderState, args: {'orderId': widget.id, 'orderState': '已完成'});
+
+                            String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                            HttpManager().post(
+                                addOperationLog,
+                                args: {
+                                  'orderId': widget.id,
+                                  'operationTime': formattedDate,
+                                  'operationName': '服务评价',
+                                  'description': '【' + widget.name + '】已经对本次巡检任务进行评价'
+                                }
+                            ).then((value){
+                              /// 提示用户抢单成功
+                              // Fluttertoast.showToast(
+                              //     msg: "抢单成功",
+                              //     toastLength: Toast.LENGTH_SHORT,
+                              //     gravity: ToastGravity.CENTER,
+                              //     backgroundColor: Colors.green,
+                              //     textColor: Colors.white,
+                              //     fontSize: 16.0
+                              // );
+                              eventBus.fire(RefreshOrderDetailEvent());
+                              eventBus.fire(InitOrderListEvent());
+                              /// 返回上一个界面
+                              Navigator.of(context).pop();
+                            });
                           }
                         },
                         child: Container(
