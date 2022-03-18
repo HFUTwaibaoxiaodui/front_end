@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:frontend/src/signup.dart';
 import 'package:dio/dio.dart';
 import 'Widget/bezierContainer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, this.title}) : super(key: key);
@@ -153,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
             gradient: const LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+                colors: [Colors.cyan, Colors.cyanAccent])),
         child: const Text(
           '登录',
           style: TextStyle(fontSize: 20, color: Color(0xffffffff)),
@@ -234,7 +235,7 @@ class _LoginPageState extends State<LoginPage> {
               },
               child:Text('注册',
                 style: TextStyle(
-                    color: Color(0xfff79c4f),
+                    color: Color(0xff17a9c2),
                     fontSize: 13,
                     fontWeight: FontWeight.w600),)
 
@@ -252,16 +253,16 @@ class _LoginPageState extends State<LoginPage> {
           style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.w700,
-              color: Color(0xffe46b10)
+              color: Color(0xff17a9c2)
           ),
           children: [
             TextSpan(
               text: '巡检',
-              style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
+              style: TextStyle(color: Color(0xff17a9c2), fontSize: 30),
             ),
             TextSpan(
               text: '系统',
-              style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
+              style: TextStyle(color: Color(0xff17a9c2), fontSize: 30),
             ),
           ]),
     );
@@ -327,7 +328,6 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _checkForReturn(context) async {
     if (_formKey.currentState!.validate()) {
       infomodel account=infomodel(_username,_password);
-      // dio.options.contentType = "application/json";
       Response response = await dio.post(
           'http://192.168.114.151:9090/account/userlogin',
           queryParameters: {
@@ -336,11 +336,32 @@ class _LoginPageState extends State<LoginPage> {
           }
       );
       print(response.data);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const LoginPage()),
-              (Route<dynamic> route) {
-            return route.isFirst;
-          });
+      print(json.decode(response.data)['token']);
+      if(response.data.toString() == 'false'){
+        Fluttertoast.showToast(
+          msg: "登录失败，账号或密码错误",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          textColor: Colors.grey,
+        );
+      }else
+        {
+          var username=json.decode(response.data)['token'];
+          Fluttertoast.showToast(
+            msg: "登陆成功\n欢迎您，$username",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 2,
+            textColor: Colors.grey,
+          );
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) => const LoginPage()),
+                  (Route<dynamic> route) {
+                return route.isFirst;
+              });
+        }
+
     }
   }
 }

@@ -305,7 +305,7 @@ class _SignUpPageState extends State<SignUpPage> {
             gradient: const LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+                colors: [Colors.cyan, Colors.cyanAccent])),
         child: const Text(
           '注册',
           style: TextStyle(fontSize: 20, color: Color(0xffffffff)),
@@ -342,7 +342,7 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Text(
                 '登录',
                 style: TextStyle(
-                    color: Color(0xfff79c4f),
+                    color: Color(0xff03bfbf),
                     fontSize: 13,
                     fontWeight: FontWeight.w600),
               ),
@@ -361,7 +361,7 @@ class _SignUpPageState extends State<SignUpPage> {
         style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.w700,
-            color: Color(0xffe46b10)),
+            color: Color(0xff17a9c2)),
       ),
     );
   }
@@ -386,6 +386,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         height: height,
         child: Stack(

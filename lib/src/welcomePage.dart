@@ -26,13 +26,13 @@ class _WelcomePageState extends State<WelcomePage> {
             borderRadius: BorderRadius.all(Radius.circular(5)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: Color(0xffdf8e33).withAlpha(100),
+                  color: Colors.cyanAccent.withAlpha(100),
                   offset: Offset(2, 4),
                   blurRadius: 8,
                   spreadRadius: 2)
             ],
             color: Colors.white),
-        child: Text('登录', style: TextStyle(fontSize: 20, color: const Color(0xfff7892b))),
+        child: Text('登录', style: TextStyle(fontSize: 20, color:  Colors.cyanAccent)),
       ),
     );
   }
@@ -70,7 +70,7 @@ class _WelcomePageState extends State<WelcomePage> {
             ),
             TextSpan(
               text: '欢迎您',
-              style: TextStyle(color: Colors.black, fontSize: 25,fontWeight: FontWeight.w600),
+              style: TextStyle(color: Colors.black45, fontSize: 25,fontWeight: FontWeight.w600),
             ),
           ]),
     );
@@ -95,7 +95,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0xfffbb448), Color(0xffe46b10)])),
+                    colors: [Colors.cyan, Colors.cyanAccent])),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
