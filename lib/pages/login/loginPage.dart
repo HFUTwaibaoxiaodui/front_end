@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:frontend/src/signup.dart';
 import 'package:dio/dio.dart';
-import 'Widget/bezierContainer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../global/back_end_interface_url.dart';
+import '../homepage/Page.dart';
+import 'signup.dart';
+import '../../widgets/bezierContainer.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, this.title}) : super(key: key);
@@ -28,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    pswdvisible=false;
+    pswdvisible=true;
     _usernameController.addListener(() {
       _username = _usernameController.text;
     });
@@ -66,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
           SizedBox(
             height: 10,
@@ -84,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
               decoration: InputDecoration(
                   suffixIcon: IconButton(
                     icon: Icon(
-                      pswdvisible ? Icons.visibility : Icons.visibility_off,
+                      !pswdvisible ? Icons.visibility : Icons.visibility_off,
                       color: Theme.of(context).primaryColorDark,
                     ),
                     onPressed: () {
@@ -312,9 +314,9 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500)),
                   ),
-                  _divider(),
-                  _wechatButton(),
-                  SizedBox(height: height * .055),
+                  // _divider(),
+                  // _wechatButton(),
+                  // SizedBox(height: height * .055),
                   _createAccountLabel(),
                 ],
               ),
@@ -327,16 +329,16 @@ class _LoginPageState extends State<LoginPage> {
   }
   Future<void> _checkForReturn(context) async {
     if (_formKey.currentState!.validate()) {
-      infomodel account=infomodel(_username,_password);
+      infomodel account = infomodel(_username,_password);
       Response response = await dio.post(
-          'http://192.168.114.151:9090/account/userlogin',
+          logIn,
           queryParameters: {
             'username':account.accountName,
             'password':account.password
           }
       );
-      print(response.data);
-      print(json.decode(response.data)['token']);
+      // print(response.data);
+      // print(json.decode(response.data)['token']);
       if(response.data.toString() == 'false'){
         Fluttertoast.showToast(
           msg: "登录失败，账号或密码错误",
@@ -356,7 +358,7 @@ class _LoginPageState extends State<LoginPage> {
             textColor: Colors.grey,
           );
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (_) => const LoginPage()),
+              MaterialPageRoute(builder: (_) => IndexPage()),
                   (Route<dynamic> route) {
                 return route.isFirst;
               });

@@ -1,10 +1,7 @@
-
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:frontend/src/welcomePage.dart';
-import 'Widget/bezierContainer.dart';
+import '../../widgets/bezierContainer.dart';
 import 'loginPage.dart';
 import 'package:dio/dio.dart';
 
@@ -321,13 +318,13 @@ class _SignUpPageState extends State<SignUpPage> {
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
+        margin: EdgeInsets.symmetric(vertical: 10),
         padding: EdgeInsets.all(15),
         alignment: Alignment.bottomCenter,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               '已经有账户了?',
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
@@ -339,7 +336,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   return route.isFirst;
                 });
               },
-              child: Text(
+              child: const Text(
                 '登录',
                 style: TextStyle(
                     color: Color(0xff03bfbf),
@@ -356,7 +353,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _title() {
     return RichText(
       textAlign: TextAlign.center,
-      text: TextSpan(
+      text: const TextSpan(
         text: '账号注册',
         style: TextStyle(
             fontSize: 30,

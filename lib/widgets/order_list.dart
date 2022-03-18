@@ -31,10 +31,10 @@ class _OrderListWidgetState extends State<OrderListWidget> {
     });
   }
 
-
   @override
   void dispose() {
     _initSubscription.cancel();
+    super.dispose();
   }
 
   void _initOrderList() {

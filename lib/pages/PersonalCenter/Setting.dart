@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/login/loginPage.dart';
 import '../../global/constant/constant.dart';
 
 class Setting extends StatefulWidget {
@@ -140,12 +141,9 @@ class _SettingState extends State<Setting> {
                             FlatButton(
                               child: const Text('确定',style: TextStyle(fontSize: 13),),
                               onPressed: () {
-                                // UserUtil.loginout();
-                                // Navigator.of(context).pop();
-                                // Routes.navigateTo(
-                                //     context, '${Routes.loginPage}',
-                                //     clearStack: true,
-                                //     transition: TransitionType.fadeIn);
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                                  return const LoginPage();
+                                }));
                               },
                             ),
                             FlatButton(
