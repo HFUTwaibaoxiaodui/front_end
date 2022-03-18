@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:frontend/pages/exception_handle.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:frontend/util/debug_print.dart';
@@ -52,6 +54,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
 
   StateSetter? _orderOperationSetter;
   late StreamSubscription _refreshSubscription;
+  Map<String, dynamic> _evaluate = {};
 
   @override
   void initState() {
@@ -99,6 +102,13 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
     _getOrder().then((value){
       setState(() {
         _order = value;
+      });
+    });
+
+    HttpManager().get(getEvaluateByOrderId, args: {'id': widget.id}).then((value) {
+      setState(() {
+        print(value);
+        _evaluate = value;
       });
     });
 
@@ -510,16 +520,40 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
-
                         return AlertDialog(
                           title: const Text('工单评价'),
                           content: Container(
-                            height: MediaQuery.of(context).size.height * 0.23,
-                            child:  Column(
-                              children: [
-
-                              ],
-                            ),
+                              height: MediaQuery.of(context).size.height * 0.23,
+                              child: ListView(
+                                children: [
+                                  ListTile(
+                                    title: const Text('问题解决情况'),
+                                    trailing: Text(_evaluate['situation'] ?? 'null'),
+                                  ),
+                                  _evaluate['description'] == "" ?
+                                    Container() :
+                                    ListTile(
+                                      title: const Text('问题描述'),
+                                      trailing: Text(_evaluate['description'] ?? 'null'),
+                                    ),
+                                  ListTile(
+                                    title: const Text('评分'),
+                                    trailing: RatingBar.builder(
+                                      initialRating: (_evaluate['score'] == null ? 0 : _evaluate['score'] * 0.5),
+                                      ignoreGestures: true,
+                                      direction: Axis.horizontal,
+                                      allowHalfRating: false,
+                                      itemCount: 5,
+                                      itemSize: 10.0,
+                                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ), onRatingUpdate: (double value) {},
+                                    ),
+                                  )
+                                ],
+                              )
                           ),
                           actions: <Widget>[
                             TextButton(child: const Text('取消'),onPressed: (){

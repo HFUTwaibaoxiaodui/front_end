@@ -2,12 +2,9 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:frontend/util/debug_print.dart';
-
 import '../global/back_end_interface_url.dart';
 import '../global/my_event_bus.dart';
 import '../util/net/network_util.dart';
-import '../widgets/order_list.dart';
 
 class OrderEvaluate extends StatefulWidget {
 
@@ -42,6 +39,7 @@ class OrderEvaluateState extends State<OrderEvaluate> {
     _handleSuggest = TextEditingController();
     _focusNode = FocusNode();
     _handleResult.text = "已解决";
+    _handleSuggest.text = "";
     _score = 2;
 
     _focusNode.addListener(() {
@@ -194,7 +192,15 @@ class OrderEvaluateState extends State<OrderEvaluate> {
 
                             HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '已完成'});
 
-                            HttpManager().post(updateOrderState, args: {'orderId': widget.id, 'orderState': '已完成'});
+                            HttpManager().post(
+                              addOrderEvaluate,
+                              args: {
+                                'orderId': widget.id,
+                                'situation': _handleResult.text,
+                                'description' : _handleSuggest.text,
+                                'score': _score
+                              }
+                            );
 
                             String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
                             HttpManager().post(

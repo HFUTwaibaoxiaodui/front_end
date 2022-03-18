@@ -451,8 +451,6 @@ class EditOrderState extends State<EditOrder> {
                                   /// 返回上一个界面
                                   Navigator.of(context).pop();
                                 });
-
-                                Navigator.of(context).pop();
                               }
                             },
                             child: Container(
