@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:frontend/util/debug_print.dart';
 
-import '../main.dart';
+import '../he_main.dart';
 
 class OrderEvaluate extends StatefulWidget {
   @override

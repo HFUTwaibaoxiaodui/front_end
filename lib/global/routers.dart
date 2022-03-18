@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/exception_handle.dart';
 import 'package:frontend/pages/exception_report.dart';
 import 'package:frontend/pages/order_evaluate.dart';
-import '../main.dart';
+import '../he_main.dart';
 import '../widgets/order_detail.dart';
 
 final _routes = {

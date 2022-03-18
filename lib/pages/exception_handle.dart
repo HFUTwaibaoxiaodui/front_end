@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/util/debug_print.dart';
 
-import '../main.dart';
+import '../he_main.dart';
 
 
 class ExceptionHandle extends StatefulWidget {

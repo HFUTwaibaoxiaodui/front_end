@@ -9,8 +9,9 @@ import 'package:frontend/util/debug_print.dart';
 import '../global/back_end_interface_url.dart';
 import '../global/my_event_bus.dart';
 import '../global/state_label_colors.dart';
-import '../main.dart';
+import '../he_main.dart';
 import '../model/operation.dart';
+import '../pages/exception_report.dart';
 import '../util/net/network_util.dart';
 import '../model/order.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -75,7 +76,10 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
       value: '异常上报',
       child: GestureDetector(
         onTap: () {
-          Navigator.of(navigatorKey.currentContext!).pushNamed('/exception_report', arguments: _order!.id);
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return ExceptionReport(id: widget.id);
+          }
+          ));
         },
         child: const Text('异常上报'),
       ),

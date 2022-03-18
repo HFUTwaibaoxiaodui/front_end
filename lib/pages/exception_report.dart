@@ -2,7 +2,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:frontend/main.dart';
+import 'package:frontend/he_main.dart';
 import 'package:frontend/util/debug_print.dart';
 
 import '../global/back_end_interface_url.dart';
