@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +44,7 @@ class EditOrderState extends State<EditOrder> {
   //拍照或者相册选取图片，只能单选
   Future _getImage() async {
     Navigator.of(context).pop();
-    var image = await _imagePicker.pickImage(
+    XFile? image = await _imagePicker.pickImage(
         source: _photoIndex == 0 ? ImageSource.camera : ImageSource.gallery);
 
     //没有选择图片或者没有拍照
@@ -481,7 +483,7 @@ class EditOrderState extends State<EditOrder> {
         child: Stack(
           children: <Widget>[
             Image.file(
-              img,
+              File(img!.path),
               fit: BoxFit.cover,
               width: 100.0,
               height: 70.0,
@@ -495,7 +497,7 @@ class EditOrderState extends State<EditOrder> {
                     width: 15.0,
                     height: 15.0,
                     color: Colors.lightBlue,
-                    child: Icon(
+                    child: const Icon(
                       Icons.close,
                       color: Colors.white,
                       size: 12.0,
