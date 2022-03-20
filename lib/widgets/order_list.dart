@@ -56,21 +56,27 @@ class _OrderListWidgetState extends State<OrderListWidget> {
   }
 
   Widget _buildOrderList(List<Order> list) {
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (BuildContext context, int index) {
-        return OrderCard(order: list[index]);
-      },
+    return RefreshIndicator(
+      child: ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (BuildContext context, int index) {
+          return OrderCard(order: list[index]);
+        },
+      ),
+      onRefresh: () => _getOrderList()
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: buildFutureBuilder(
-          buildWidgetBody: _buildOrderList,
-          future: _orderList
+      body: Container(
+        color: Colors.grey.shade200,
+        child: Center(
+          child: buildFutureBuilder(
+              buildWidgetBody: _buildOrderList,
+              future: _orderList
+          ),
         ),
       ),
     );

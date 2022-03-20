@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/homepage/Page.dart';
 import 'package:frontend/pages/login/welcomePage.dart';
-import 'package:frontend/widgets/order_list.dart';
 import 'global/routers.dart';
 
 void main() {
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: generateRoute,
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
-      home:OrderListWidget(),
+      home:IndexPage(),
     );
   }
 }

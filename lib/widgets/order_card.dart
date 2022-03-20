@@ -59,7 +59,7 @@ class OrderCard extends StatefulWidget {
                   children: [
                     const Padding(
                         padding: EdgeInsets.only(right: 10),
-                        child: Icon(Icons.where_to_vote, color: Colors.grey)
+                        child: Icon(Icons.place, color: Colors.grey)
                     ),
                     Text(
                         order.orderAddress ?? 'null',

@@ -189,33 +189,11 @@ class HomePageState extends State<HomePage> {
           ListTile(
             title: Text(
               '待处理工单($wait_work)',
-              style: TextStyle(fontSize: 16, color: Colors.black),
-            ),
-            trailing: IconButton(
-              icon: (new Icon(Icons.place)),
-              color: Colors.lightBlue,
-              onPressed: () {},
+              style: const TextStyle(fontSize: 16, color: Colors.black),
             ),
           ),
-          // Container(
-          //   height: 40,
-          //   padding: EdgeInsets.all(5),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     mainAxisSize: MainAxisSize.max,
-          //     children: [
-          //
-          //       IconButton(
-          //         icon: (new Icon(Icons.place)),
-          //         color: Colors.lightBlue,
-          //         onPressed: () {},
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.height * 0.58,
-            color: Colors.grey,
             child: OrderListWidget(),
           ),
         ],
