@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/global/user_info.dart';
+import 'package:provider/provider.dart';
 import '../../global/constant/constant.dart';
 import 'PersonData.dart';
 import 'Personinfo.dart';
@@ -235,10 +237,13 @@ class Personpage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.white,
-              child: Image.asset('assets/images/1.png'),
+            ClipOval(
+              child: Image.network(
+                Provider.of<UserInfo>(context, listen: false).imagePath!,
+                fit: BoxFit.cover,
+                width: MediaQuery.of(context).size.width * 0.2,
+                height: MediaQuery.of(context).size.width * 0.2,
+              ),
             ),
             Expanded(
               child: Padding(
@@ -250,8 +255,8 @@ class Personpage extends StatelessWidget {
                       children: <Widget>[
                         Container(
                           padding: EdgeInsets.only(bottom: 10.0),
-                          child: const Text(
-                            '顶针',
+                          child: Text(
+                            Provider.of<UserInfo>(context,listen: false).accountName!,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,

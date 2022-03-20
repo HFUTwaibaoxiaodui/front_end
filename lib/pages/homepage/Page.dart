@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/global/user_info.dart';
+import 'package:provider/provider.dart';
 import 'Mine.dart';
 import 'Work_Order.dart';
 import 'Apply.dart';
@@ -6,6 +8,8 @@ import 'Home_Page.dart';
 
 
 class IndexPage extends StatefulWidget {
+  const IndexPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _IndexState();
@@ -15,8 +19,23 @@ class IndexPage extends StatefulWidget {
 class _IndexState extends State<IndexPage> {
   late String counter;
 
-  late final List<BottomNavigationBarItem> bottomNavItems = [
-    BottomNavigationBarItem(
+  late final List<Widget> _pages;
+
+  late final BottomNavigationBarItem _home;
+  late final BottomNavigationBarItem _orders;
+  late final BottomNavigationBarItem _application;
+  late final BottomNavigationBarItem _mine;
+
+  late final List<BottomNavigationBarItem> _bottomItems;
+
+  int currentIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = 0;
+    counter='12';
+
+    _home = BottomNavigationBarItem(
       icon: Stack(
         children: <Widget>[
           const Icon(Icons.home),
@@ -46,33 +65,30 @@ class _IndexState extends State<IndexPage> {
       ),
       // icon: Icon(Icons.home),
       label: "首页",
-    ),
-    const BottomNavigationBarItem(
+    );
+    _orders = const BottomNavigationBarItem(
       // backgroundColor: Colors.green,
       icon: Icon(Icons.message),
       label: "工单",
-    ),
-    const BottomNavigationBarItem(
+    );
+    _application =  const BottomNavigationBarItem(
       // backgroundColor: Colors.amber,
       icon: Icon(Icons.apps),
       label: "应用",
-    ),
-    const BottomNavigationBarItem(
+    );
+    _mine =  const BottomNavigationBarItem(
       // backgroundColor: Colors.red,
       icon: Icon(Icons.person),
       label: "我的",
-    ),
-  ];
+    );
 
-  int currentIndex = 0;
-
-  final pages = [HomePage(),WorkOrderPage(),ApplyPage(),MinePage(),];
-
-  @override
-  void initState() {
-    super.initState();
-    currentIndex = 0;
-    counter='12';
+    if (Provider.of<UserInfo>(context, listen: false).accountType == 'ADMIN') {
+      _bottomItems = [_home, _orders, _application, _mine];
+      _pages = [HomePage(),WorkOrderPage(),ApplyPage(),MinePage()];
+    } else {
+      _bottomItems = [_home, _orders, _mine];
+      _pages = [HomePage(),WorkOrderPage(), MinePage()];
+    }
   }
 
   @override
@@ -81,7 +97,7 @@ class _IndexState extends State<IndexPage> {
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.grey,
         fixedColor: Colors.blue,
-        items: bottomNavItems,
+        items: _bottomItems,
         currentIndex: currentIndex,
         type: BottomNavigationBarType.shifting,
         onTap: (index) {
@@ -91,7 +107,7 @@ class _IndexState extends State<IndexPage> {
       // body: pages[currentIndex],
       body: IndexedStack(
         index: currentIndex,
-        children: pages,
+        children: _pages,
       ),
     );
   }

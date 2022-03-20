@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/global/theme.dart';
+import 'package:frontend/global/user_info.dart';
+import 'package:provider/provider.dart';
 
 import '../../global/constant/constant.dart';
 
@@ -40,9 +42,13 @@ class SettingHead extends StatelessWidget {
                       ),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: CircleAvatar(
-                          child: Image.asset('assets/images/1.png'),
-                          radius: 20.0,
+                        child: ClipOval(
+                          child: Image.network(
+                            Provider.of<UserInfo>(context, listen: false).imagePath!,
+                            fit: BoxFit.cover,
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            height: MediaQuery.of(context).size.width * 0.2,
+                          ),
                         ),
                       ),
                       Container(

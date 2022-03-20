@@ -72,6 +72,7 @@ class _WorkOrderPage extends State<WorkOrderPage> {
       appBar: AppBar(
         backgroundColor: mainColor,
         elevation: 0.5,
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: _showSearchTextField ? _buildSearch() : const Text("工单视图"),
         actions: [

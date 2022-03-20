@@ -11,16 +11,7 @@ class UserInfo with ChangeNotifier {
   String? lastLoginTime;
   String? accountState;
   String? accountName;
-
-  UserInfo({
-    this.accountType,
-    this.accountId,
-    this.imagePath,
-    this.password,
-    this.realName,
-    this.address,
-    this.area,
-    this.lastLoginTime,
-    this.accountState,
-    this.accountName});
+  String? phone;
+  String? firstLetter;
+  String? currentTime;
 }

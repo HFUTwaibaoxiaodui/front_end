@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/global/user_info.dart';
+import 'package:frontend/util/net/network_util.dart';
+import 'package:provider/provider.dart';
 import '../../global/back_end_interface_url.dart';
 import '../homepage/Page.dart';
 import 'signup.dart';
@@ -349,22 +352,41 @@ class _LoginPageState extends State<LoginPage> {
       }else
         {
           int id = int.parse(json.decode(response.data)['token']);
-          
+          HttpManager().get(selectAccountById, args: {'accountId' : id}).then((value){
+            _initUserInfo(context, value);
 
-          Fluttertoast.showToast(
-            msg: "登陆成功\n欢迎您，$username",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 2,
-            textColor: Colors.grey,
-          );
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (_) => IndexPage()),
-                  (Route<dynamic> route) {
-                return route.isFirst;
-              });
+            Fluttertoast.showToast(
+              msg: "登陆成功\n欢迎您，${Provider.of<UserInfo>(context, listen: false).accountName}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 2,
+              textColor: Colors.grey,
+            );
+
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => IndexPage()),
+                    (Route<dynamic> route) {
+                  return route.isFirst;
+                });
+          });
         }
     }
+  }
+
+  void _initUserInfo(context, value) {
+    UserInfo userInfo = Provider.of<UserInfo>(context, listen: false);
+    userInfo.accountId = value['accountId'];
+    userInfo.accountType = value['accountType'];
+    userInfo.imagePath = value['imagePath'];
+    userInfo.password = value['password'];
+    userInfo.realName = value['realName'];
+    userInfo.phone = value['phone'];
+    userInfo.address = value['address'];
+    userInfo.area = value['area'];
+    userInfo.currentTime = value['currentTime'];
+    userInfo.accountState = value['accountState'];
+    userInfo.firstLetter = value['firstLetter'];
+    userInfo.accountName = value['accountName'];
   }
 }
 class infomodel{

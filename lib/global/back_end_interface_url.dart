@@ -8,6 +8,7 @@ final String logIn =  generateURL('/account/userlogin');
 final String addOrderEvaluate =  generateURL('/evaluate/addOrderEvaluate');
 final String getEvaluateByOrderId =  generateURL('/evaluate/getEvaluateByOrderId');
 final String findOrderCardDetail = generateURL('/PatrolOrder/findOrderCardDetail');
+final String selectAccountById = generateURL('/account/selectInformationbyid');
 
 String generateURL(String path) {
   return 'http://' + serverIp + ':' + serverPort + path;
