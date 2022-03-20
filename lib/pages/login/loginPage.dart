@@ -339,6 +339,9 @@ class _LoginPageState extends State<LoginPage> {
       );
       // print(response.data);
       // print(json.decode(response.data)['token']);
+
+      print(response.data);
+
       if(response.data.toString() == 'false'){
         Fluttertoast.showToast(
           msg: "登录失败，账号或密码错误",
@@ -363,7 +366,6 @@ class _LoginPageState extends State<LoginPage> {
                 return route.isFirst;
               });
         }
-
     }
   }
 }

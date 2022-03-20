@@ -40,9 +40,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
 
   final List<Widget> _pages = [];
   Uint8List? _qrcodeBytes;
-
   final double detailFontSize = 14;
-
   int _currentIndex = 0;
   late TabController tabController;
   late PageController pageController;
@@ -107,7 +105,6 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
 
     HttpManager().get(getEvaluateByOrderId, args: {'id': widget.id}).then((value) {
       setState(() {
-        print(value);
         _evaluate = value;
       });
     });
@@ -120,9 +117,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
   }
 
   void _refresh() {
-    printWithDebug('开始refresh');
     _loadData();
-    printWithDebug('结束refresh');
   }
 
   Future<Order> _getOrder() async {
@@ -140,7 +135,6 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
 
   Widget _buildTop() {
     return Container(
-      // width: MediaQuery.of(context).size.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -153,41 +147,62 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
             ),
           ),
           Divider(thickness: 0.5, color: Colors.grey.shade300),
-          ListTile(
-            title: Text(_order!.orderTitle ?? 'null', style: const TextStyle(fontSize: 18)),
-          ),
-          ListTile(
-              title: Text(_creatorLine(), style: TextStyle(color: Colors.grey, fontSize: detailFontSize)),
-              trailing: GestureDetector(
-                onTap: () async {
-                    String url = 'tel:'+ _order!.phoneNum!;
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      Fluttertoast.showToast(
-                          msg: "拨号失败",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0
-                      );
-                    }
-                },
-                child: const Icon(Icons.phone, color: Colors.blue)
-              )
-          ),
-          ListTile(
-            title: Text(
-                _order!.orderAddress ?? 'null',
-                maxLines: 2,
-                style: const TextStyle (
-                    color: Colors.grey,
-                    overflow: TextOverflow.ellipsis,
-                    fontSize: 12
-                )
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: Text(_order!.orderTitle ?? 'null', style: const TextStyle(fontSize: 18))
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(_creatorLine(), style: TextStyle(color: Colors.grey, fontSize: detailFontSize)),
+                      GestureDetector(
+                          onTap: () async {
+                            String url = 'tel:'+ _order!.phoneNum!;
+                            if (await canLaunch(url)) {
+                              await launch(url);
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "拨号失败",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0
+                              );
+                            }
+                          },
+                          child: const Icon(Icons.phone, color: Colors.blue)
+                      )
+                    ],
+                  )
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          _order!.orderAddress ?? 'null',
+                          maxLines: 2,
+                          style: const TextStyle (
+                              color: Colors.grey,
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 12
+                          )
+                      ),
+                      const Icon(Icons.where_to_vote, color: Colors.blue)
+                    ],
+                  )
+                ),
+              ],
             ),
-            trailing: const Icon(Icons.where_to_vote, color: Colors.blue),
           ),
         ],
       ),
@@ -561,32 +576,30 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
       // width: MediaQuery.of(context).size.width,
         color: Colors.grey.shade300,
         // margin: EdgeInsets.all(5),
-        child: Container(
-          child: Column(
-            children: [
-              Expanded(
-                flex: 4,
-                child: Container(
-                  color: Colors.white,
-                  margin: const EdgeInsets.only(bottom: 2),
-                  child: _buildTop(),
-                ),
+        child: Column(
+          children: [
+            Expanded(
+              flex: 5,
+              child: Container(
+                color: Colors.white,
+                margin: const EdgeInsets.only(bottom: 2),
+                child: _buildTop(),
               ),
-              Expanded(
-                flex: 5,
-                child: Container(
-                  color: Colors.white,
-                  child: _buildMiddle(),
-                ),
+            ),
+            Expanded(
+              flex: 10,
+              child: Container(
+                color: Colors.white,
+                child: _buildMiddle(),
               ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: _buildBottom(),
-                ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                child: _buildBottom(),
               ),
-            ],
-          ),
+            ),
+          ],
         )
     );
   }

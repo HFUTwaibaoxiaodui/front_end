@@ -1,8 +1,5 @@
-import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/global/user_provider.dart';
+import 'package:frontend/global/user_info.dart';
 import 'package:frontend/pages/today_work.dart';
 import 'package:frontend/pages/yest_work.dart';
 import 'package:frontend/pages/message.dart';
@@ -63,7 +60,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
   }
 
   Widget _buildOrderListView() {
-    if (Provider.of<UserInfo>(context).userType == 'USER') {
+    if (Provider.of<UserInfo>(context).accountType == 'USER') {
       return Column(
         children: [
           TabBar(
@@ -111,7 +108,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: GestureDetector(child: Icon(Icons.swap_horiz),onTap: (){
+        leading: GestureDetector(child: const Icon(Icons.swap_horiz),onTap: (){
           // Navigator.push(context, MaterialPageRoute(builder: (_) {
           //   return DetailPage();
           // }));
