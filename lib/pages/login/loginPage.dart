@@ -337,10 +337,6 @@ class _LoginPageState extends State<LoginPage> {
             'password':account.password
           }
       );
-      // print(response.data);
-      // print(json.decode(response.data)['token']);
-
-      print(response.data);
 
       if(response.data.toString() == 'false'){
         Fluttertoast.showToast(
@@ -352,7 +348,9 @@ class _LoginPageState extends State<LoginPage> {
         );
       }else
         {
-          var username=json.decode(response.data)['token'];
+          int id = int.parse(json.decode(response.data)['token']);
+          
+
           Fluttertoast.showToast(
             msg: "登陆成功\n欢迎您，$username",
             toastLength: Toast.LENGTH_SHORT,

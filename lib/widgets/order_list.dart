@@ -57,7 +57,6 @@ class _OrderListWidgetState extends State<OrderListWidget> {
     printWithDebug(getAllOrders);
     List<Order> _orderList = [];
     List orders;
-
     if (widget.withStatus == null && widget.withUserId == null) {
       orders = await HttpManager().get(getAllOrders);
     } else {

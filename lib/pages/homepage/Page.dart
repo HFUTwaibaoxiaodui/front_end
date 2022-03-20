@@ -19,22 +19,22 @@ class _IndexState extends State<IndexPage> {
     BottomNavigationBarItem(
       icon: Stack(
         children: <Widget>[
-          Icon(Icons.home),
+          const Icon(Icons.home),
           Positioned(
             right: 0,
             child: Container(
-              padding: EdgeInsets.all(1),
+              padding: const EdgeInsets.all(1),
               decoration: BoxDecoration(
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(6),
               ),
-              constraints: BoxConstraints(
+              constraints: const BoxConstraints(
                 minHeight: 12,
                 minWidth: 12,
               ),
               child: Text(
                 counter,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 8,
                 ),
@@ -47,17 +47,17 @@ class _IndexState extends State<IndexPage> {
       // icon: Icon(Icons.home),
       label: "首页",
     ),
-    BottomNavigationBarItem(
+    const BottomNavigationBarItem(
       // backgroundColor: Colors.green,
       icon: Icon(Icons.message),
       label: "工单",
     ),
-    BottomNavigationBarItem(
+    const BottomNavigationBarItem(
       // backgroundColor: Colors.amber,
       icon: Icon(Icons.apps),
       label: "应用",
     ),
-    BottomNavigationBarItem(
+    const BottomNavigationBarItem(
       // backgroundColor: Colors.red,
       icon: Icon(Icons.person),
       label: "我的",

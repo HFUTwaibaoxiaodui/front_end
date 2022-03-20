@@ -36,14 +36,13 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
     '已完成'
   ];
 
-  late String _currentState;
+  String? _currentState;
 
   @override
   void initState() {
     print('123123');
     super.initState();
 
-    _currentState = _tabValues[0];
     _tabController = TabController(length: _tabValues.length, vsync: this);
 
      eventBus.on<UpdateOrderNumEvent>().listen((event) {
