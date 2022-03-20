@@ -4,9 +4,13 @@ EventBus eventBus = EventBus();
 
 class RefreshOrderDetailEvent {}
 class InitOrderListEvent {}
-class UpdateOrderNum{
+class UpdateTabViewEvent {
+  String state;
+  UpdateTabViewEvent({required this.state});
+}
+class UpdateOrderNumEvent {
   int num;
-  UpdateOrderNum({required this.num});
+  UpdateOrderNumEvent({required this.num});
 }
 
 

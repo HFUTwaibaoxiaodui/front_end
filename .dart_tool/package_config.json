@@ -302,6 +302,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "nested",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "node_interop",
       "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/node_interop-1.2.1",
       "packageUri": "lib/",
@@ -402,6 +408,12 @@
       "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/process-4.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.14"
+    },
+    {
+      "name": "provider",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/provider-6.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "pub_semver",
@@ -591,7 +603,7 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/win32-2.4.1",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/win32-2.4.2",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -614,7 +626,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-18T14:23:21.286580Z",
+  "generated": "2022-03-20T03:57:16.003032Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

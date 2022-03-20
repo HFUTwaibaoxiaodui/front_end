@@ -41,9 +41,12 @@ class Order {
   static Order fromJson(Map<String, dynamic> json) {
 
     List<Operation> operationLogList = [];
-    json['operationLogList'].forEach((element) {
-      operationLogList.add(Operation.fromJson(element));
-    });
+
+    if (json['operationLogList'] != null) {
+      json['operationLogList'].forEach((element) {
+        operationLogList.add(Operation.fromJson(element));
+      });
+    }
 
     return Order(
       id: json['orderId'],

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/global/user_provider.dart';
 import 'package:frontend/pages/homepage/Page.dart';
-import 'package:frontend/pages/login/welcomePage.dart';
+import 'package:provider/provider.dart';
 import 'global/routers.dart';
 
 void main() {
-  runApp(const MyApp());
+
+  runApp(ChangeNotifierProvider<UserInfo>.value(
+    value: UserInfo(),//1
+    child: const MyApp(),
+  ));
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

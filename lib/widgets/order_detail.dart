@@ -305,35 +305,6 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
 
   Widget _buildBottom() {
     switch(_order!.orderState) {
-      // case '待服务': return Container(
-      //   padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      //   child: Padding(
-      //     padding: const EdgeInsets.all(5),
-      //     child: Row(
-      //         children: [
-      //           Expanded(
-      //             flex: 1,
-      //             child: Container(
-      //               color: Colors.white,
-      //               child: const Center(
-      //                 child: Text('扫码签到'),
-      //               ),
-      //             )
-      //           ),
-      //           const SizedBox(width: 10),
-      //           Expanded(
-      //               flex: 1,
-      //               child: Container(
-      //                 color: Colors.cyanAccent.shade700,
-      //                 child: const Center(
-      //                   child: Text('开始巡检', style: TextStyle(color: Colors.white)),
-      //                 ),
-      //               )
-      //           ),
-      //         ],
-      //       ),
-      //   )
-      // );
       case '待服务': return Container(
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Padding(

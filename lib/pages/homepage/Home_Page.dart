@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/global/user_provider.dart';
 import 'package:frontend/pages/today_work.dart';
 import 'package:frontend/pages/yest_work.dart';
 import 'package:frontend/pages/message.dart';
+import 'package:provider/provider.dart';
 
 import '../../global/my_event_bus.dart';
 import '../../global/theme.dart';
@@ -15,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
 
   String? yest_work = '0';
 
@@ -25,15 +29,82 @@ class HomePageState extends State<HomePage> {
 
   int wait_work = 0;
 
+  late TabController _tabController;
+
+  final List<String> _tabValues = [
+    '待抢单',
+    '待服务',
+    '服务中',
+    '待评价',
+    '已完成'
+  ];
+
+  late String _currentState;
 
   @override
   void initState() {
     print('123123');
-    eventBus.on<UpdateOrderNum>().listen((event) {
+    super.initState();
+
+    _currentState = _tabValues[0];
+    _tabController = TabController(length: _tabValues.length, vsync: this);
+
+     eventBus.on<UpdateOrderNumEvent>().listen((event) {
       setState(() {
         wait_work = event.num;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildOrderListView() {
+    if (Provider.of<UserInfo>(context).userType == 'USER') {
+      return Column(
+        children: [
+          TabBar(
+            isScrollable: true,
+            controller: _tabController,
+            labelColor: mainColor,
+            unselectedLabelColor: Colors.black,
+            tabs: _tabValues.map( (v) => Tab(text: v) ).toList(),
+            indicatorColor: mainColor,
+            indicatorSize: TabBarIndicatorSize.tab,
+            onTap: (int index){
+              eventBus.fire(UpdateTabViewEvent(state: _tabValues[index]));
+              eventBus.fire(InitOrderListEvent());
+            },
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.58,
+            child: OrderListWidget(
+              withStatus: _currentState,
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          ListTile(
+            title: Text(
+              '待处理工单($wait_work)',
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.58,
+            child: OrderListWidget(
+              withStatus: _currentState,
+            ),
+          ),
+        ],
+      );
+    }
   }
 
   @override
@@ -186,16 +257,7 @@ class HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          ListTile(
-            title: Text(
-              '待处理工单($wait_work)',
-              style: const TextStyle(fontSize: 16, color: Colors.black),
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.58,
-            child: OrderListWidget(),
-          ),
+          _buildOrderListView()
         ],
       ),
     );

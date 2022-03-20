@@ -186,6 +186,10 @@ meta
 2.12
 file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/meta-1.7.0/
 file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/meta-1.7.0/lib/
+nested
+2.12
+file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/nested-1.0.0/
+file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/nested-1.0.0/lib/
 node_interop
 2.9
 file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/node_interop-1.2.1/
@@ -254,6 +258,10 @@ process
 2.14
 file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/process-4.2.4/
 file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/process-4.2.4/lib/
+provider
+2.12
+file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/provider-6.0.2/
+file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/provider-6.0.2/lib/
 pub_semver
 2.0
 file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/pub_semver-1.4.4/
@@ -376,8 +384,8 @@ file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/watcher-
 file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/watcher-0.9.7+15/lib/
 win32
 2.15
-file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/win32-2.4.1/
-file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/win32-2.4.1/lib/
+file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/win32-2.4.2/
+file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/win32-2.4.2/lib/
 xdg_directories
 2.12
 file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/xdg_directories-0.2.0+1/

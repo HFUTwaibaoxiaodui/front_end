@@ -11,7 +11,11 @@ import '../models/order.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class OrderListWidget extends StatefulWidget {
-  const OrderListWidget({Key? key}) : super(key: key);
+
+  String? withStatus;
+  int? withUserId;
+
+  OrderListWidget({Key? key, this.withStatus, this.withUserId}) : super(key: key);
 
   @override
   State<OrderListWidget> createState() => _OrderListWidgetState();
@@ -21,6 +25,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
 
   late Future _orderList;
   late StreamSubscription _initSubscription;
+  late StreamSubscription _updateTabViewSubscription;
 
   @override
   void initState() {
@@ -29,10 +34,17 @@ class _OrderListWidgetState extends State<OrderListWidget> {
     _initSubscription = eventBus.on<InitOrderListEvent>().listen((event) {
       _initOrderList();
     });
+
+    _updateTabViewSubscription = eventBus.on<UpdateTabViewEvent>().listen((event) {
+      setState(() {
+        widget.withStatus = event.state;
+      });
+    });
   }
 
   @override
   void dispose() {
+    _updateTabViewSubscription.cancel();
     _initSubscription.cancel();
     super.dispose();
   }
@@ -44,14 +56,27 @@ class _OrderListWidgetState extends State<OrderListWidget> {
   Future _getOrderList() async {
     printWithDebug(getAllOrders);
     List<Order> _orderList = [];
-    List orders = await HttpManager().get(getAllOrders);
+    List orders;
+
+    if (widget.withStatus == null && widget.withUserId == null) {
+      orders = await HttpManager().get(getAllOrders);
+    } else {
+      orders = await HttpManager().get(
+        findOrderCardDetail,
+        args: {
+          'orderState': widget.withStatus,
+          'workerId': widget.withUserId
+        }
+      );
+    }
+
     for (var element in orders) {
       setState(() {
         _orderList.add(Order.fromJson(element));
       });
     }
 
-    eventBus.fire(UpdateOrderNum(num: _orderList.length));
+    eventBus.fire(UpdateOrderNumEvent(num: _orderList.length));
     return _orderList;
   }
 

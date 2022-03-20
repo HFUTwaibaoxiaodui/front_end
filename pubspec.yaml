@@ -54,6 +54,7 @@ dependencies:
   dio:
   flutter_verification_box: ^1.0.4
   http: ^0.13.4
+  provider:
 
 dev_dependencies:
   flutter_test:
