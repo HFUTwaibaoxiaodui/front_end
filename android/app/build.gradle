@@ -36,10 +36,20 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "edu.hfut.frontend"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 17
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'x86_64', 'mips', 'mips64', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "8a44ad1f8ca8a48a829f31f5", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
 
     buildTypes {
@@ -51,6 +61,12 @@ android {
     }
 }
 
+dependencies {
+
+    compile 'cn.jiguang.sdk:jpush:4.6.0'  // 此处以JPush 4.6.0 版本为例。
+    compile 'cn.jiguang.sdk:jcore:3.1.2'  // 此处以JCore 3.1.2 版本为例。
+
+}
 flutter {
     source '../..'
 }
