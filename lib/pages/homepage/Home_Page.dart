@@ -129,13 +129,10 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return MessagePage();
                   }));
-
                 },),
             ),
-
           )
         ],
-
       ),
       body: Column(
         children: [
