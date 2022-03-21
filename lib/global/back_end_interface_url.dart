@@ -11,6 +11,7 @@ final String findOrderCardDetail = generateURL('/PatrolOrder/findOrderCardDetail
 final String selectAccountById = generateURL('/account/selectInformationbyid');
 final String submitException = generateURL('/exception/submitException');
 final String getExceptionMessageById = generateURL('/exception/getExceptionMessageById');
+final String updateExceptionSolveState = generateURL('/exception/updateExceptionSolveState');
 
 String generateURL(String path) {
   return 'http://' + serverIp + ':' + serverPort + path;

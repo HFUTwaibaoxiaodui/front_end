@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/global/user_info.dart';
-import 'package:frontend/widgets/order_list.dart';
 import 'package:frontend/util/debug_print.dart';
 import 'package:provider/provider.dart';
 
@@ -15,8 +14,9 @@ import '../util/net/network_util.dart';
 class ExceptionReport extends StatefulWidget {
 
   int id;
+  String lastOrderState;
 
-  ExceptionReport({Key? key, required this.id}) : super(key: key);
+  ExceptionReport({Key? key, required this.id, required this.lastOrderState}) : super(key: key);
 
   @override
   State<StatefulWidget> createState()  => ExceptionReportState();
@@ -201,7 +201,8 @@ class ExceptionReportState extends State<ExceptionReport> {
                                   'exceptionClass': _exceptionClass.text,
                                   'exceptionDetail': _exceptionDetail.text,
                                   'orderId': widget.id,
-                                  'submitTime': formattedDate
+                                  'submitTime': formattedDate,
+                                  'lastOrderState': widget.lastOrderState
                                 }
                             );
                             HttpManager().post(

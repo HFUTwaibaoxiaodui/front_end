@@ -74,12 +74,16 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
         child: const Text('转派工单'),
       ),
     );
+
     exception = PopupMenuItem<String>(
       value: '异常上报',
       child: GestureDetector(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return ExceptionReport(id: widget.id);
+            return ExceptionReport(
+              id: widget.id,
+              lastOrderState: _order!.orderState,
+            );
           }
           ));
         },
@@ -321,6 +325,19 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
 
   Widget _buildBottom() {
     switch(_order!.orderState) {
+      case '已取消': return Container(
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+          child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: Container(
+                color: Colors.grey,
+                child: const Center(
+                  child: Text('该工单已取消', style: TextStyle(color: Colors.white)
+                  ),
+                ),
+              )
+          )
+      );
       case '待服务': return Container(
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Padding(

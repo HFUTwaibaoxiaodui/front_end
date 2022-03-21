@@ -1,12 +1,15 @@
 import 'dart:async';
 
+import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/global/my_event_bus.dart';
 import 'package:frontend/util/debug_print.dart';
 import 'package:frontend/util/net/network_util.dart';
-
+import 'package:provider/provider.dart';
 import '../global/back_end_interface_url.dart';
+import '../global/user_info.dart';
 import '../widgets/order_list.dart';
 
 
@@ -28,6 +31,7 @@ class ExceptionHandleState extends State<ExceptionHandle> {
   String _selecting = "";
   String? _exceptionClass;
   String? _exceptionDescription;
+  String? _lastOrderState;
   late StreamSubscription _updateExceptionHandlePage;
 
   @override
@@ -60,6 +64,7 @@ class ExceptionHandleState extends State<ExceptionHandle> {
       }
     ).then((value){
        setState(() {
+         _lastOrderState = value['lastOrderState'];
          _exceptionClass = value['exceptionClass'];
          _exceptionDescription = value['exceptionDetail'];
        });
@@ -95,6 +100,58 @@ class ExceptionHandleState extends State<ExceptionHandle> {
             )
           ],
         );
+      case '取消工单':
+        return Column(
+          children: [
+            Divider(thickness: 0.5, color: Colors.grey.shade400),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Expanded(child: ListTile(title: Text('取消原因')),flex: 2),
+                Expanded(child: ListTile(
+                  contentPadding: const EdgeInsets.only(top: 14),
+                  title: TextField(
+                    focusNode: _focusNode,
+                    controller: _handleDetail,
+                    decoration: const InputDecoration.collapsed(
+                      hintStyle: TextStyle(color: CupertinoColors.inactiveGray),
+                      hintText: "取消原因",
+                      border: InputBorder.none,
+                    ),
+                    maxLines: 5,
+                    maxLength: 300,
+                  ),
+                ),flex: 3),
+                Expanded(child: Container(),flex: 1),
+              ],
+            )
+          ],
+        );
+      case '重新分配':
+        return Column(
+          children: [
+            Divider(thickness: 0.5, color: Colors.grey.shade400),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Expanded(child: ListTile(title: Text('巡检员')),flex: 4),
+                Expanded(child: ListTile(
+                  title: TextField(
+                    controller: _handleDetail,
+                    enabled: false,
+                    decoration: const InputDecoration.collapsed(
+                      hintText: "请选择巡检员（必填）",
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),flex: 8),
+                const Expanded(child: ListTile(
+                  title: Icon(Icons.keyboard_arrow_right),
+                ),flex: 3),
+              ],
+            )
+          ],
+        );
     }
 
     return Container();
@@ -103,6 +160,7 @@ class ExceptionHandleState extends State<ExceptionHandle> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('异常处理', style: TextStyle(color: Colors.white, fontSize: 20)),
           centerTitle: true,
@@ -228,14 +286,66 @@ class ExceptionHandleState extends State<ExceptionHandle> {
                               );
                               Scaffold.of(context).showSnackBar(snackBar);
                             } else {
+                              HttpManager().put(
+                                updateExceptionSolveState,
+                                args: {
+                                  'orderId': widget.id
+                                }
+                              );
                               switch (_handleOption.text) {
                                 case "取消工单":
-                                /// 取消订单 TODO
-                                  Navigator.of(context).pop();
+                                  HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '已取消'});
+                                  String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                                  HttpManager().post(
+                                      addOperationLog,
+                                      args: {
+                                        'orderId': widget.id,
+                                        'operationTime': formattedDate,
+                                        'operationName': '异常处理',
+                                        'description':
+                                        '【' + Provider.of<UserInfo>(context, listen: false).realName! + '】取消工单，取消原因：' +
+                                            _handleDetail.text
+                                      }
+                                  ).then((value){
+                                    Fluttertoast.showToast(
+                                        msg: "已取消工单",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        backgroundColor: Colors.blue,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0
+                                    );
+                                    eventBus.fire(RefreshOrderDetailEvent());
+                                    eventBus.fire(InitOrderListEvent());
+                                    Navigator.of(context).pop();
+                                  });
                                   break;
                                 case "驳回请求":
-                                /// 驳回请求 TODO
-                                  Navigator.of(context).pop();
+                                  HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': _lastOrderState});
+                                  String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                                  HttpManager().post(
+                                      addOperationLog,
+                                      args: {
+                                        'orderId': widget.id,
+                                        'operationTime': formattedDate,
+                                        'operationName': '异常处理',
+                                        'description':
+                                        '【' + Provider.of<UserInfo>(context, listen: false).realName! + '】驳回请求，驳回原因：' +
+                                        _handleDetail.text
+                                      }
+                                  ).then((value){
+                                    Fluttertoast.showToast(
+                                        msg: "已驳回异常请求",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        backgroundColor: Colors.blue,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0
+                                    );
+                                    eventBus.fire(RefreshOrderDetailEvent());
+                                    eventBus.fire(InitOrderListEvent());
+                                    Navigator.of(context).pop();
+                                  });
                                   break;
                                 case "重新分配":
                                 /// 重新分配 TODO

@@ -9,7 +9,7 @@ final _routes = {
   // '/': (context, {arguments}) => LoginPage(userInfo: arguments),
   // '/register': (context) => RegisterPage(),
   // '/home': (context) => IndexPage(),
-  '/exception_report' : (context, {arguments}) => ExceptionReport(id: arguments),
+  '/exception_report' : (context, {arguments}) => ExceptionReport(id: arguments['id'], lastOrderState: arguments['lastOrderState']),
   '/order_evaluate': (context, {arguments}) => OrderEvaluate(id: arguments['id'], name: arguments['name']),
   '/order_detail': (context, {arguments}) => OrderDetail(id: arguments)
 };
