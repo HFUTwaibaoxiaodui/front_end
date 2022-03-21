@@ -290,15 +290,6 @@ class Personpage extends StatelessWidget {
             Container(
               child: Row(
                 children: <Widget>[
-                  Container(
-                      child: Text('主页',
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white
-                        ),
-                      )
-                  ),
                   IconButton(
                       icon: Icon(
                         Icons.chevron_right,

@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/global/theme.dart';
 import 'package:frontend/global/user_info.dart';
 import 'package:provider/provider.dart';
 
 import '../../global/constant/constant.dart';
+import 'ChangeRealName.dart';
 
 class Personinfo extends StatefulWidget {
   const Personinfo({Key? key}) : super(key: key);
@@ -43,7 +45,7 @@ class SettingHead extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: ClipOval(
-                          child: Provider.of<UserInfo>(context).buildImage(context)
+                          child: Provider.of<UserInfo>(context).buildImage(context),
                         ),
                       ),
                       Container(
@@ -107,7 +109,7 @@ class SettingCommon extends StatelessWidget {
                         margin: EdgeInsets.symmetric(horizontal: 5.0),
                         child: Text(content ?? 'null',
                             style:
-                            TextStyle(fontSize: 13, color: Colors.black)),
+                            TextStyle(fontSize: 12, color: Colors.grey)),
                       ),
                       Container(
                         margin: const EdgeInsets.only(left: 5.0, right: 15),
@@ -188,47 +190,41 @@ class _PersoninfoState extends State<Personinfo> {
                   }),
                   SettingCommon(
                       title: "账户名",
-                      content: "",
-                      // content: UserUtil.getUserInfo().nick,
+                      content: Provider.of<UserInfo>(context).accountId.toString(),
                       onPressed: () {
 
                         // Routes.navigateTo(context, '${Routes.changeNickNamePage}');
                       }),
                   SettingCommon(
                       title: "用户名称",
-                      content: "",
-                      // content: UserUtil.getUserInfo().nick,
+                      content: Provider.of<UserInfo>(context).realName,
                       onPressed: () {
-
-                        // Routes.navigateTo(context, '${Routes.changeNickNamePage}');
+                        Navigator.of(context).push(
+                            CupertinoPageRoute(builder: (BuildContext context){return ChangeRealName();})
+                        );
                       }),
+
                   SettingCommon(
-                      title: "性别",
-                      content: "",
+                      title: "地区",
+                      content: Provider.of<UserInfo>(context).address,
                       onPressed: () {
                         // Routes.navigateTo(context, '${Routes.changeDescPage}');
                       }),
                   SettingCommon(
-                      title: "工号",
-                      content: "",
+                      title: "具体所在地",
+                      content: Provider.of<UserInfo>(context).area,
                       onPressed: () {
                         //  ToastUtil.show('暂未开发!');
                       }),
                   SettingCommon(
                       title: "手机号",
-                      content: "",
-                      onPressed: () {
-                        // ToastUtil.show('暂未开发!');
-                      }),
-                  SettingCommon(
-                      title: "邮箱",
-                      content: "",
+                      content: Provider.of<UserInfo>(context).phone,
                       onPressed: () {
                         // ToastUtil.show('暂未开发!');
                       }),
                   SettingCommon(
                       title: "状态",
-                      content: "",
+                      content: Provider.of<UserInfo>(context).accountState,
                       onPressed: () {
                         // ToastUtil.show('暂未开发!');
                       }),
