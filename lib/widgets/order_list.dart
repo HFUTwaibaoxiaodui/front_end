@@ -79,6 +79,10 @@ class _OrderListWidgetState extends State<OrderListWidget> {
     return _orderList;
   }
 
+  Future<void> _listRefresh() async {
+    eventBus.fire(InitOrderListEvent());
+  }
+
   Widget _buildOrderList(List<Order> list) {
     return RefreshIndicator(
       child: ListView.builder(
@@ -87,7 +91,9 @@ class _OrderListWidgetState extends State<OrderListWidget> {
           return OrderCard(order: list[index]);
         },
       ),
-      onRefresh: () => _getOrderList()
+      onRefresh: () {
+        return _listRefresh();
+      }
     );
   }
 

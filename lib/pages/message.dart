@@ -6,9 +6,9 @@ class MessagePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("消息"),
+        title: const Text("消息"),
       ),
-      body: Center(
+      body: const Center(
         child: Text("消息"),
       ),
     );

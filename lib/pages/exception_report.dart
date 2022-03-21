@@ -2,8 +2,10 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/global/user_info.dart';
 import 'package:frontend/widgets/order_list.dart';
 import 'package:frontend/util/debug_print.dart';
+import 'package:provider/provider.dart';
 
 import '../global/back_end_interface_url.dart';
 import '../global/my_event_bus.dart';
@@ -194,13 +196,26 @@ class ExceptionReportState extends State<ExceptionReport> {
                           } else {
                             HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '异常'});
                             String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                            HttpManager().post(submitException,
+                                args: {
+                                  'exceptionClass': _exceptionClass.text,
+                                  'exceptionDetail': _exceptionDetail.text,
+                                  'orderId': widget.id,
+                                  'submitTime': formattedDate
+                                }
+                            );
                             HttpManager().post(
                                 addOperationLog,
                                 args: {
                                   'orderId': widget.id,
                                   'operationTime': formattedDate,
                                   'operationName': '上报异常',
-                                  'description': '【我】上报异常，异常类别：' + _exceptionClass.text + "，异常说明：" + _exceptionDetail.text
+                                  'description':
+                                      '【' + Provider.of<UserInfo>(context, listen: false).realName! + '】'
+                                      '上报异常，异常类别：' +
+                                      _exceptionClass.text +
+                                          "，异常说明：" +
+                                          _exceptionDetail.text
                                 }
                             ).then((value) {
                               Fluttertoast.showToast(

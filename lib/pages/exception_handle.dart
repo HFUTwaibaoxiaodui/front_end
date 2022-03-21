@@ -1,13 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/global/my_event_bus.dart';
 import 'package:frontend/util/debug_print.dart';
+import 'package:frontend/util/net/network_util.dart';
 
+import '../global/back_end_interface_url.dart';
 import '../widgets/order_list.dart';
 
 
 class ExceptionHandle extends StatefulWidget {
 
-  ExceptionHandle({Key? key}) : super(key: key);
+  int id;
+
+  ExceptionHandle({Key? key, required this.id}) : super(key: key);
 
   @override
   State<StatefulWidget> createState()  => ExceptionHandleState();
@@ -16,26 +23,81 @@ class ExceptionHandle extends StatefulWidget {
 class ExceptionHandleState extends State<ExceptionHandle> {
 
   late TextEditingController _handleOption;
-  late TextEditingController _handleSuggest;
+  late TextEditingController _handleDetail;
   late FocusNode _focusNode;
   String _selecting = "";
+  String? _exceptionClass;
+  String? _exceptionDescription;
+  late StreamSubscription _updateExceptionHandlePage;
 
   @override
   void initState() {
     super.initState();
-
+    _loadExceptionMessage();
+    _updateExceptionHandlePage = eventBus.on<UpdateExceptionHandlePage>().listen((event) {
+      setState(() {});
+    });
     _handleOption = TextEditingController();
-    _handleSuggest = TextEditingController();
+    _handleDetail = TextEditingController();
     _focusNode = FocusNode();
     _handleOption.text = "";
   }
 
   @override
   void dispose() {
+    _updateExceptionHandlePage.cancel();
     _handleOption.dispose();
-    _handleSuggest.dispose();
+    _handleDetail.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+
+  void _loadExceptionMessage() {
+    HttpManager().get(
+      getExceptionMessageById,
+      args: {
+        'orderId': widget.id
+      }
+    ).then((value){
+       setState(() {
+         _exceptionClass = value['exceptionClass'];
+         _exceptionDescription = value['exceptionDetail'];
+       });
+    });
+  }
+
+  Widget _buildBottom() {
+    switch (_handleOption.text) {
+      case '驳回请求':
+        return Column(
+          children: [
+            Divider(thickness: 0.5, color: Colors.grey.shade400),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Expanded(child: ListTile(title: Text('驳回原因')),flex: 2),
+                Expanded(child: ListTile(
+                  contentPadding: const EdgeInsets.only(top: 14),
+                  title: TextField(
+                    focusNode: _focusNode,
+                    controller: _handleDetail,
+                    decoration: const InputDecoration.collapsed(
+                      hintStyle: TextStyle(color: CupertinoColors.inactiveGray),
+                      hintText: "驳回原因",
+                      border: InputBorder.none,
+                    ),
+                    maxLines: 5,
+                    maxLength: 300,
+                  ),
+                ),flex: 3),
+                Expanded(child: Container(),flex: 1),
+              ],
+            )
+          ],
+        );
+    }
+
+    return Container();
   }
 
   @override
@@ -57,10 +119,11 @@ class ExceptionHandleState extends State<ExceptionHandle> {
               child: Column(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.3,
                     color: Colors.white,
-                    child: ListView(
+                    child: Column(
                       children: [
+                        ListTile(title: const Text('异常类型'), subtitle: Text(_exceptionClass ?? 'null')),
+                        ListTile(title: const Text('异常描述'), subtitle: Text(_exceptionDescription ?? 'null')),
                         Row(
                           children: [
                             const Expanded(child: ListTile(title: Text('处理方式')),flex: 2),
@@ -125,6 +188,7 @@ class ExceptionHandleState extends State<ExceptionHandle> {
                                               }),
                                               TextButton(child: const Text('确认'),onPressed: (){
                                                 _handleOption.text = _selecting;
+                                                eventBus.fire(UpdateExceptionHandlePage());
                                                 Navigator.of(context).pop();
                                               },),
                                             ],
@@ -138,28 +202,7 @@ class ExceptionHandleState extends State<ExceptionHandle> {
                                 ,flex: 1),
                           ],
                         ),
-                        Divider(thickness: 0.5, color: Colors.grey.shade400),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Expanded(child: ListTile(title: Text('处理意见')),flex: 2),
-                            Expanded(child: ListTile(
-                              contentPadding: const EdgeInsets.only(top: 14),
-                              title: TextField(
-                                focusNode: _focusNode,
-                                controller: _handleSuggest,
-                                decoration: const InputDecoration.collapsed(
-                                  hintStyle: TextStyle(color: CupertinoColors.inactiveGray),
-                                  hintText: "处理意见",
-                                  border: InputBorder.none,
-                                ),
-                                maxLines: 5,
-                                maxLength: 300,
-                              ),
-                            ),flex: 3),
-                            Expanded(child: Container(),flex: 1),
-                          ],
-                        )
+                        _buildBottom()
                       ],
                     ),
                   ),
@@ -177,7 +220,7 @@ class ExceptionHandleState extends State<ExceptionHandle> {
                                 content: Text('处理方式不能为空!'),
                               );
                               Scaffold.of(context).showSnackBar(snackBar);
-                            } else if (_handleSuggest.text == "") {
+                            } else if (_handleDetail.text == "") {
                               snackBar = const SnackBar(
                                 duration: Duration(seconds: 1),
                                 backgroundColor: Colors.red,

@@ -211,12 +211,13 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
 
   Widget _buildPopUpList() {
     switch (_order!.orderState) {
+      // case '待服务':
+      //   return PopupMenuButton<String>(
+      //     itemBuilder: (context) => <PopupMenuEntry<String>>[
+      //       reassignment
+      //     ],
+      //   );
       case '待服务':
-        return PopupMenuButton<String>(
-          itemBuilder: (context) => <PopupMenuEntry<String>>[
-            reassignment
-          ],
-        );
       case '服务中':
         return PopupMenuButton<String>(
           itemBuilder: (context) => <PopupMenuEntry<String>>[
@@ -466,7 +467,9 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
               child: GestureDetector(
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                    return ExceptionHandle();
+                    return ExceptionHandle(
+                      id: widget.id,
+                    );
                   }));
                 },
                 child: Container(
