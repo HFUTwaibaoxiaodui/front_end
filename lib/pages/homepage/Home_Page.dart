@@ -40,7 +40,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
     '已完成'
   ];
 
-  String? _currentState;
+ final String _initState = '待抢单';
 
   @override
   void initState() {
@@ -74,7 +74,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
             tabs: _tabValues.map( (v) => Tab(text: v) ).toList(),
             indicatorColor: mainColor,
             indicatorSize: TabBarIndicatorSize.tab,
-            onTap: (int index){
+            onTap: (int index) {
               eventBus.fire(UpdateTabViewEvent(state: _tabValues[index]));
               eventBus.fire(InitOrderListEvent());
             },
@@ -82,13 +82,13 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.58,
             child: OrderListWidget(
-              withStatus: _currentState,
+              withStatus: _initState,
             ),
           ),
         ],
       );
     } else {
-      return Column(
+      return Column (
         children: [
           ListTile(
             title: Text(
@@ -99,7 +99,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.58,
             child: OrderListWidget(
-              withStatus: _currentState,
+              withStatus: _initState,
             ),
           ),
         ],
