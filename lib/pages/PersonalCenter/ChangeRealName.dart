@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/util/toast_util.dart';
+import 'package:random_string/random_string.dart';
+
+import '../../global/user_info.dart';
 
 //修改昵称界面
 class ChangeRealName extends StatefulWidget {
@@ -45,7 +48,7 @@ class _ChangeRealNameState extends State<ChangeRealName> {
                         child: TextField(
                           controller: _mEtController,
                           decoration: const InputDecoration(
-                            hintText: context,
+                            hintText: "请输入您的姓名",
                             hintStyle:
                             TextStyle(color: Color(0xff999999), fontSize: 13),
                             contentPadding: EdgeInsets.only(left: 15, right: 15),
@@ -64,7 +67,7 @@ class _ChangeRealNameState extends State<ChangeRealName> {
                         ),
                       )),
                   Container(
-                    margin: const EdgeInsets.only(top: 60.0, left: 30, right: 30),
+                    margin: const EdgeInsets.only(top: 60.0, left: 20, right: 20),
                     child: SizedBox(
                       width: double.infinity,
                       child: RaisedButton(
@@ -88,6 +91,9 @@ class _ChangeRealNameState extends State<ChangeRealName> {
                             ToastUtil.show('姓名不能为空!');
                             return;
                           }
+                          // else
+                          //   return Provider.of<UserInfo>(context).realName = _mEtController.text;
+                        },
                         //   FormData params = FormData.fromMap({
                         //     'userId': UserUtil.getUserInfo().id,
                         //     'nick': _mEtController.text
@@ -101,7 +107,7 @@ class _ChangeRealNameState extends State<ChangeRealName> {
                         //   }, (error) {
                         //     ToastUtil.show(error);
                         //   });
-                        },
+
                         child: const Padding(
                           padding: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
                           child: Text(
