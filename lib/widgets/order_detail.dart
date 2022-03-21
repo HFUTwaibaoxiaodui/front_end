@@ -566,7 +566,6 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
   }
 
   Widget _buildOrderDetail() {
-    print(' 当前order  ' + _order!.toString());
     _pages.add(_buildOrderAttributes());
     _pages.add(_buildOperationProgress());
     _pages.add(Container(color: Colors.green));
@@ -606,7 +605,6 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
 
   @override
   Widget build(BuildContext context) {
-    printWithDebug('触发build');
 
     _isLoading = (_order == null);
 

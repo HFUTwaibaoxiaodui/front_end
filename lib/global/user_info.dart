@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 class UserInfo with ChangeNotifier {
   String? accountType;
@@ -14,4 +15,20 @@ class UserInfo with ChangeNotifier {
   String? phone;
   String? firstLetter;
   String? currentTime;
+
+  Image buildImage(BuildContext context) {
+    return Provider.of<UserInfo>(context, listen: false).imagePath != null ?
+    Image.network(
+      Provider.of<UserInfo>(context, listen: false).imagePath!,
+      fit: BoxFit.cover,
+      width: MediaQuery.of(context).size.width * 0.2,
+      height: MediaQuery.of(context).size.width * 0.2,
+    ) :
+    Image.asset(
+      'assets/images/1.png',
+      fit: BoxFit.cover,
+      width: MediaQuery.of(context).size.width * 0.2,
+      height: MediaQuery.of(context).size.width * 0.2,
+    );
+  }
 }

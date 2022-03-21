@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/global/user_info.dart';
 import 'package:frontend/pages/today_work.dart';
@@ -27,6 +29,8 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
   int wait_work = 0;
 
   late TabController _tabController;
+  late StreamSubscription _updateOrderSubscription;
+
 
   final List<String> _tabValues = [
     '待抢单',
@@ -44,8 +48,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
     super.initState();
 
     _tabController = TabController(length: _tabValues.length, vsync: this);
-
-     eventBus.on<UpdateOrderNumEvent>().listen((event) {
+    _updateOrderSubscription = eventBus.on<UpdateOrderNumEvent>().listen((event) {
       setState(() {
         wait_work = event.num;
       });
@@ -55,6 +58,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
   @override
   void dispose() {
     _tabController.dispose();
+    _updateOrderSubscription.cancel();
     super.dispose();
   }
 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/global/user_info.dart';
@@ -238,12 +240,7 @@ class Personpage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             ClipOval(
-              child: Image.network(
-                Provider.of<UserInfo>(context, listen: false).imagePath!,
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width * 0.2,
-                height: MediaQuery.of(context).size.width * 0.2,
-              ),
+              child: Provider.of<UserInfo>(context).buildImage(context)
             ),
             Expanded(
               child: Padding(

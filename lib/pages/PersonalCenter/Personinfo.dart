@@ -41,14 +41,9 @@ class SettingHead extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: ClipOval(
-                          child: Image.network(
-                            Provider.of<UserInfo>(context, listen: false).imagePath!,
-                            fit: BoxFit.cover,
-                            width: MediaQuery.of(context).size.width * 0.2,
-                            height: MediaQuery.of(context).size.width * 0.2,
-                          ),
+                          child: Provider.of<UserInfo>(context).buildImage(context)
                         ),
                       ),
                       Container(
@@ -72,6 +67,8 @@ class SettingHead extends StatelessWidget {
           )),
     );
   }
+
+
 }
 
 //普通条目布局
