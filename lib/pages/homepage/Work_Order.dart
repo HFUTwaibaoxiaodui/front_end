@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/global/theme.dart';
 import 'package:frontend/util/debug_print.dart';
 
+import '../../views/create_work_order.dart';
+
 class WorkOrderPage extends StatefulWidget {
   @override
   createState() => _WorkOrderPage();
@@ -93,7 +95,12 @@ class _WorkOrderPage extends State<WorkOrderPage> {
                 ),
                 const SizedBox(width: 10),
                 GestureDetector(
-                  onTap: (){printWithDebug('add');},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return CreateOrder();
+                    }));
+                  },
+                  // onTap: (){printWithDebug('add');},
                   child: const Icon(Icons.add, color: Colors.white, size: 25),
                 ),
               ],
