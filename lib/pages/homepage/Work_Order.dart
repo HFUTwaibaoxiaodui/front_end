@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/global/theme.dart';
 import 'package:frontend/util/debug_print.dart';
 
+import '../../widgets/order_with_different_state.dart';
+
 class WorkOrderPage extends StatefulWidget {
   @override
   createState() => _WorkOrderPage();
@@ -126,7 +128,12 @@ class _WorkOrderPage extends State<WorkOrderPage> {
                     print(_titleItems[index]);
                     switch(_titleItems[index]) {
                       case '待抢单工单' :
-
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                          return const DifferentStateOrderList(
+                            title: '待抢单工单',
+                            state: '待抢单',
+                          );
+                        }));
                     }
                   },
                 );

@@ -13,9 +13,10 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 class OrderListWidget extends StatefulWidget {
 
   String? withStatus;
-  int? withUserId;
+  int? withWorkerId;
+  int? withCreatorId;
 
-  OrderListWidget({Key? key, this.withStatus, this.withUserId}) : super(key: key);
+  OrderListWidget({Key? key, this.withStatus, this.withWorkerId, this.withCreatorId}) : super(key: key);
 
   @override
   State<OrderListWidget> createState() => _OrderListWidgetState();
@@ -57,14 +58,15 @@ class _OrderListWidgetState extends State<OrderListWidget> {
     printWithDebug(getAllOrders);
     List<Order> _orderList = [];
     List orders;
-    if (widget.withStatus == null && widget.withUserId == null) {
+    if (widget.withStatus == null && widget.withWorkerId == null && widget.withCreatorId == null) {
       orders = await HttpManager().get(getAllOrders);
     } else {
       orders = await HttpManager().get(
         findOrderCardDetail,
         args: {
           'orderState': widget.withStatus,
-          'workerId': widget.withUserId
+          'workerId': widget.withWorkerId,
+          'creatorId': widget.withCreatorId
         }
       );
     }
