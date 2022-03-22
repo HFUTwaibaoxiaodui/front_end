@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/global/theme.dart';
+import 'package:frontend/global/user_info.dart';
 import 'package:frontend/util/debug_print.dart';
+import 'package:frontend/util/net/network_util.dart';
+import 'package:provider/provider.dart';
 
+import '../../global/back_end_interface_url.dart';
 import '../../widgets/order_with_different_state.dart';
 
 class WorkOrderPage extends StatefulWidget {
+  const WorkOrderPage({Key? key}) : super(key: key);
+
   @override
   createState() => _WorkOrderPage();
 }
@@ -13,12 +19,31 @@ class _WorkOrderPage extends State<WorkOrderPage> {
 
   bool _showSearchTextField = false;
   late TextEditingController _textEditingController;
+  late final List<int> _orderCount;
 
   @override
   void initState() {
     super.initState();
     _textEditingController = TextEditingController();
     _textEditingController.text = "";
+    _orderCount = List.filled(_titleState.length, 0);
+    _initOrderCount();
+  }
+
+  void _initOrderCount() {
+    for (int i = 0; i < _titleState.length; i++) {
+      HttpManager().get(
+          findOrderCardDetailCount,
+          args: {
+            'creatorId': Provider.of<UserInfo>(context, listen: false).accountId,
+            'orderState': _titleState[i]
+          }
+      ).then((value){
+        setState(() {
+          _orderCount[i] = value;
+        });
+      });
+    }
   }
 
   @override
@@ -36,6 +61,17 @@ class _WorkOrderPage extends State<WorkOrderPage> {
     '待评论工单',
     '已取消工单',
     '异常工单',
+  ];
+
+  final List<String> _titleState = [
+    '我创建',
+    '待分配',
+    '待抢单',
+    '待服务',
+    '服务中',
+    '待评论',
+    '已取消',
+    '异常',
   ];
 
   Widget _buildSearch() {
@@ -69,7 +105,6 @@ class _WorkOrderPage extends State<WorkOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mainColor,
@@ -115,7 +150,7 @@ class _WorkOrderPage extends State<WorkOrderPage> {
                     child: Row(
                       children: [
                         RawChip(
-                          label: const Text('12'),
+                          label: Text(_orderCount[index].toString()),
                           padding: const EdgeInsets.all(0),
                           backgroundColor: mainColor,
                           labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
@@ -126,15 +161,12 @@ class _WorkOrderPage extends State<WorkOrderPage> {
                   ),
                   onTap: (){
                     print(_titleItems[index]);
-                    switch(_titleItems[index]) {
-                      case '待抢单工单' :
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                          return const DifferentStateOrderList(
-                            title: '待抢单工单',
-                            state: '待抢单',
-                          );
-                        }));
-                    }
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                      return DifferentStateOrderList(
+                        title: _titleItems[index],
+                        state: _titleState[index],
+                      );
+                    }));
                   },
                 );
               },
