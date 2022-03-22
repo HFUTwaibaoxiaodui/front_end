@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+import 'back_end_interface_url.dart';
+
 class UserInfo with ChangeNotifier {
   String? accountType;
   int? accountId;
@@ -24,8 +26,8 @@ class UserInfo with ChangeNotifier {
       width: MediaQuery.of(context).size.width * 0.2,
       height: MediaQuery.of(context).size.width * 0.2,
     ) :
-    Image.asset(
-      'assets/images/1.png',
+    Image.network(
+      defaultImagePath,
       fit: BoxFit.cover,
       width: MediaQuery.of(context).size.width * 0.2,
       height: MediaQuery.of(context).size.width * 0.2,

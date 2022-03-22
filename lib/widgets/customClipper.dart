@@ -45,5 +45,4 @@ class ClipPainter extends CustomClipper<Path>{
     return true;
   }
 
-  
 }

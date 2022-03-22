@@ -8,10 +8,12 @@ class UpdateTabViewEvent {
   String state;
   UpdateTabViewEvent({required this.state});
 }
+
 class UpdateOrderNumEvent {
   int num;
   UpdateOrderNumEvent({required this.num});
 }
 
+class UpdateExceptionHandlePage{}
 
 

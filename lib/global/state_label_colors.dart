@@ -7,4 +7,5 @@ Map<String, Color> labelColorMap = {
   '异常': Colors.red,
   '待评价': Colors.orange,
   '已完成': Colors.green,
+  '已取消': Colors.grey
 };
