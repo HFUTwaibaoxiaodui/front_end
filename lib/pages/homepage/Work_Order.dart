@@ -33,7 +33,7 @@ class _WorkOrderPage extends State<WorkOrderPage> {
     _textEditingController.text = "";
     _orderCount = List.filled(_titleState.length, 0);
     _initOrderCount();
-    _refreshOrderCount = eventBus.on<RefreshOrderCount>().listen((event) {
+    _refreshOrderCount = eventBus.on<RefreshDifferentStateOrderCount>().listen((event) {
       setState(() {
         _initOrderCount();
       });

@@ -370,7 +370,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                           textColor: Colors.white,
                           fontSize: 16.0
                       );
-                      eventBus.fire(RefreshOrderCount());
+                      eventBus.fire(RefreshDifferentStateOrderCount());
                       _refreshOrderDetail();
                       eventBus.fire(InitOrderListEvent());
                     });
@@ -458,7 +458,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                               );
                               _initTabState();
                               _refreshOrderDetail();
-                              eventBus.fire(RefreshOrderCount());
+                              eventBus.fire(RefreshDifferentStateOrderCount());
                               eventBus.fire(InitOrderListEvent());
                               /// 返回上一个界面
                               Navigator.of(context).pop();
