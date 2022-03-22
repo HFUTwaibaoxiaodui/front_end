@@ -31,7 +31,7 @@ class _PeoplesPageState extends State<PeoplesPage> {
   late List<dynamic> list;
 
   getinfo() async {
-  Response response = await dio.get('http://192.168.114.151:9090/account/selectAllInformation');
+  Response response = await dio.get('http://121.40.130.17:9090/account/selectAllInformation');
   // print(response.data);
   list=response.data;
   for (var element in list) {
