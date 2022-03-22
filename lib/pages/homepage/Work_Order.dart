@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:frontend/global/my_event_bus.dart';
 import 'package:frontend/global/theme.dart';
 import 'package:frontend/global/user_info.dart';
-import 'package:frontend/util/debug_print.dart';
+import 'package:frontend/pages/homepage/Search_Page.dart';
 import 'package:frontend/util/net/network_util.dart';
 import 'package:provider/provider.dart';
 
@@ -19,9 +22,9 @@ class WorkOrderPage extends StatefulWidget {
 
 class _WorkOrderPage extends State<WorkOrderPage> {
 
-  bool _showSearchTextField = false;
   late TextEditingController _textEditingController;
   late final List<int> _orderCount;
+  late StreamSubscription _refreshOrderCount;
 
   @override
   void initState() {
@@ -30,6 +33,11 @@ class _WorkOrderPage extends State<WorkOrderPage> {
     _textEditingController.text = "";
     _orderCount = List.filled(_titleState.length, 0);
     _initOrderCount();
+    _refreshOrderCount = eventBus.on<RefreshOrderCount>().listen((event) {
+      setState(() {
+        _initOrderCount();
+      });
+    });
   }
 
   void _initOrderCount() {
@@ -76,35 +84,6 @@ class _WorkOrderPage extends State<WorkOrderPage> {
     '异常',
   ];
 
-  Widget _buildSearch() {
-    return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-            maxHeight: 36,
-            maxWidth: MediaQuery.of(context).size.width * 0.6
-        ),
-        child: TextField(
-          controller: _textEditingController,
-          onChanged: (input){
-            setState(() {
-              _textEditingController.text = input;
-              _textEditingController.selection = TextSelection.fromPosition(
-                  TextPosition(offset: _textEditingController.text.length));
-            });
-          },
-          decoration: InputDecoration(
-            fillColor: Colors.white,
-            filled: true,
-            hintStyle: TextStyle(color: Colors.grey.shade400),
-            hintText: "请输入工单名称",
-            contentPadding: const EdgeInsets.all(5),
-            border: const OutlineInputBorder()
-          )
-        ),
-      )
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,24 +92,15 @@ class _WorkOrderPage extends State<WorkOrderPage> {
         elevation: 0.5,
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: _showSearchTextField ? _buildSearch() : const Text("工单视图"),
+        title: const Text("工单视图"),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: Row(
               children: [
                 GestureDetector(
-                  onDoubleTap: (){
-                    setState(() {
-                      _showSearchTextField = !_showSearchTextField;
-                    });
-                  },
                   onTap: () {
                     showSearch(context: context, delegate: searchBarDelegate());
-                    // print(_textEditingController.text);
-                    // Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    //   return SearchDemo();
-                    // }));
                   },
                   child: const Icon(Icons.search, color: Colors.white, size: 25),
                 ),

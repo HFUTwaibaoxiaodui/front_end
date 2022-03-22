@@ -13,12 +13,12 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class OrderListWidget extends StatefulWidget {
 
-  String? withStatus;
+  String? withState;
   int? withWorkerId;
   int? withCreatorId;
-  String? orderName;
+  String? withOrderName;
 
-  OrderListWidget({Key? key, this.withStatus, this.withWorkerId, this.withCreatorId, this.orderName}) : super(key: key);
+  OrderListWidget({Key? key, this.withState, this.withWorkerId, this.withCreatorId, this.withOrderName}) : super(key: key);
 
   @override
   State<OrderListWidget> createState() => _OrderListWidgetState();
@@ -40,7 +40,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
 
     _updateTabViewSubscription = eventBus.on<UpdateTabViewEvent>().listen((event) {
       setState(() {
-        widget.withStatus = event.state;
+        widget.withState = event.state;
       });
     });
   }
@@ -57,22 +57,18 @@ class _OrderListWidgetState extends State<OrderListWidget> {
   }
 
   Future _getOrderList() async {
-    printWithDebug(getAllOrders);
     List<Order> _orderList = [];
     List orders;
-    if (widget.withStatus == null &&
-        widget.withWorkerId == null &&
-        widget.withCreatorId == null &&
-        widget.orderName == null) {
+    if (_isAllNull()) {
       orders = await HttpManager().get(getAllOrders);
     } else {
       orders = await HttpManager().get(
         findOrderCardDetail,
         args: {
-          'orderState': widget.withStatus,
+          'orderState': widget.withState,
           'workerId': widget.withWorkerId,
           'creatorId': widget.withCreatorId,
-          'orderName': widget.orderName
+          'orderName': widget.withOrderName
         }
       );
     }
@@ -83,12 +79,14 @@ class _OrderListWidgetState extends State<OrderListWidget> {
       });
     }
 
-    if (widget.withStatus == null && widget.withWorkerId == null && widget.withCreatorId == null) {
+    if (_isAllNull()) {
       eventBus.fire(UpdateOrderNumEvent(num: _orderList.length));
     }
 
     return _orderList;
   }
+
+  bool _isAllNull() => widget.withState == null && widget.withWorkerId == null && widget.withCreatorId == null && widget.withOrderName == null;
 
   Future<void> _listRefresh() async {
     eventBus.fire(InitOrderListEvent());

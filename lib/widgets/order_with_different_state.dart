@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/global/theme.dart';
 import 'package:frontend/widgets/order_list.dart';
@@ -46,7 +45,7 @@ class _DifferentStateOrderListState extends State <DifferentStateOrderList> {
          ),
        ),
        body: OrderListWidget(
-         withStatus: widget.state,
+         withState: widget.state,
          withCreatorId: Provider.of<UserInfo>(context, listen: false).accountId,
        )
      );

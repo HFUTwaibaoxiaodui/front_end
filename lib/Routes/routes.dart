@@ -14,7 +14,7 @@ Map<String, WidgetBuilder> routes = {
   // 'ShopRegister': (context) => ShopRegister(),
 };
 
-const  serchList=[
+const searchList=[
   "宇智波-斑",
   "宇智波-泉奈",
   "宇智波-鼬",

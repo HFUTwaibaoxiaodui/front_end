@@ -81,7 +81,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.58,
             child: OrderListWidget(
-              withStatus: _initState,
+              withState: _initState,
             ),
           ),
         ],
@@ -98,7 +98,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.58,
             child: OrderListWidget(
-              withStatus: null,
+              withState: null,
             ),
           ),
         ],

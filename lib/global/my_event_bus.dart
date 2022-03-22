@@ -16,4 +16,6 @@ class UpdateOrderNumEvent {
 
 class UpdateExceptionHandlePage{}
 
+class RefreshOrderCount{}
+
 

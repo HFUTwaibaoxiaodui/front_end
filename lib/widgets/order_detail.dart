@@ -62,7 +62,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
     pageController = PageController(initialPage: _currentIndex);
 
     _refreshSubscription = eventBus.on<RefreshOrderDetailEvent>().listen((event) {
-      _refresh();
+      _refreshOrderDetail();
     });
 
     reassignment = PopupMenuItem<String>(
@@ -120,7 +120,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
     // });
   }
 
-  void _refresh() {
+  void _refreshOrderDetail() {
     _loadData();
   }
 
@@ -370,7 +370,8 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                           textColor: Colors.white,
                           fontSize: 16.0
                       );
-                      _refresh();
+                      eventBus.fire(RefreshOrderCount());
+                      _refreshOrderDetail();
                       eventBus.fire(InitOrderListEvent());
                     });
                   } else {
@@ -456,7 +457,8 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                                   fontSize: 16.0
                               );
                               _initTabState();
-                              _refresh();
+                              _refreshOrderDetail();
+                              eventBus.fire(RefreshOrderCount());
                               eventBus.fire(InitOrderListEvent());
                               /// 返回上一个界面
                               Navigator.of(context).pop();
