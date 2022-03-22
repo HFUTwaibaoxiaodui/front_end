@@ -154,7 +154,7 @@ SliverToBoxAdapter _personItem(String imgAsset, String title, {VoidCallback? onT
         child: Row(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Image.asset(
                   Constant.ASSETS_IMG + imgAsset,
                   width:25.0,
@@ -164,7 +164,7 @@ SliverToBoxAdapter _personItem(String imgAsset, String title, {VoidCallback? onT
             Expanded(
               child: Text(
                   title,
-                  style: TextStyle(fontSize: 13.0)
+                  style: const TextStyle(fontSize: 13.0)
               ),
             ),
             _rightArrow(),
