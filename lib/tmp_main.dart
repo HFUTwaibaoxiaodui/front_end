@@ -6,6 +6,7 @@ import 'package:frontend/pages/login/loginPage.dart';
 import 'package:frontend/pages/login/welcomePage.dart';
 import 'package:provider/provider.dart';
 import 'global/routers.dart';
+import 'pages/homepage/Apply.dart';
 
 void main() {
 
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
       home:LoginPage(),
+      // home: ApplyPage(),
     );
   }
 }

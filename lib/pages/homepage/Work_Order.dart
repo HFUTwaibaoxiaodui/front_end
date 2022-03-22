@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/global/theme.dart';
 import 'package:frontend/util/debug_print.dart';
+import 'package:frontend/pages/homepage/Search_Page.dart';
 
 class WorkOrderPage extends StatefulWidget {
   @override
@@ -87,7 +88,11 @@ class _WorkOrderPage extends State<WorkOrderPage> {
                     });
                   },
                   onTap: () {
-                    print(_textEditingController.text);
+                    showSearch(context: context, delegate: searchBarDelegate());
+                    // print(_textEditingController.text);
+                    // Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    //   return SearchDemo();
+                    // }));
                   },
                   child: const Icon(Icons.search, color: Colors.white, size: 25),
                 ),
