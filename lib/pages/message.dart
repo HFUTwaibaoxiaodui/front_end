@@ -68,7 +68,7 @@ class _Messagepage extends State<MessagePage>{
           onTap: (){
           },
           child: Column(
-            children: [SizedBox(height: 20),
+            children: [const SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
@@ -123,14 +123,12 @@ class _Messagepage extends State<MessagePage>{
       appBar: AppBar(
         backgroundColor: mainColor,
         centerTitle: true,
-        title: Text("消息"),
-        actions: [IconButton(onPressed: (){}, icon: Icon(Icons.refresh))],
+        title: const Text("消息"),
+        actions: [IconButton(onPressed: (){}, icon: const Icon(Icons.refresh))],
       ),
-      body: Container(
-        child: ListView.builder(
-            itemCount: 5,
-            itemBuilder: (BuildContext context, int index)=>_singleMessage(index,context))
-        ),
+      body: ListView.builder(
+          itemCount: 5,
+          itemBuilder: (BuildContext context, int index)=>_singleMessage(index,context)),
     );
   }
   getTimeStr() {

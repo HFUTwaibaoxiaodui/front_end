@@ -44,6 +44,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "city_pickers",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/city_pickers-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "cli_util",
       "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/cli_util-0.2.0",
       "packageUri": "lib/",
@@ -272,6 +278,12 @@
       "languageVersion": "2.7"
     },
     {
+      "name": "jpush_flutter",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/jpush_flutter-2.2.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "js",
       "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/js-0.6.3",
       "packageUri": "lib/",
@@ -280,6 +292,12 @@
     {
       "name": "lints",
       "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/lints-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "lpinyin",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/lpinyin-2.0.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -603,7 +621,7 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/win32-2.4.2",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/win32-2.4.4",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -626,7 +644,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-22T11:02:05.516839Z",
+  "generated": "2022-03-23T01:06:31.566091Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }
