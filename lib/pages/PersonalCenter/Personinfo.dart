@@ -1,3 +1,4 @@
+import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/global/theme.dart';
@@ -5,6 +6,9 @@ import 'package:frontend/global/user_info.dart';
 import 'package:provider/provider.dart';
 
 import '../../global/constant/constant.dart';
+import 'ChangeAdress.dart';
+import 'ChangeArea.dart';
+import 'ChangePhone.dart';
 import 'ChangeRealName.dart';
 
 class Personinfo extends StatefulWidget {
@@ -136,18 +140,19 @@ class SettingCommon extends StatelessWidget {
 
 //, elevation: 0.5
 class _PersoninfoState extends State<Personinfo> {
+  String area='';
+  String area1='';
+  String area2='';
+
   @override
-  // void initState() {
-  //   super.initState();
-  //   Constant.eventBus.on<ChangeInfoEvent>().listen((event) {
-  //     setState(() {
-  //       print("接收更换个人信息的消息");
-  //     });
-  //   });
-  // }
+  void initState() {
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
             appBar: AppBar(
                 title: const Text(
@@ -200,27 +205,39 @@ class _PersoninfoState extends State<Personinfo> {
                       content: Provider.of<UserInfo>(context).realName,
                       onPressed: () {
                         Navigator.of(context).push(
-                            CupertinoPageRoute(builder: (BuildContext context){return ChangeRealName();})
+                            CupertinoPageRoute(builder: (BuildContext context){
+                              return ChangeRealName();})
                         );
                       }),
 
                   SettingCommon(
                       title: "地区",
-                      content: Provider.of<UserInfo>(context).address,
+                      content: Provider.of<UserInfo>(context).area,
                       onPressed: () {
-                        // Routes.navigateTo(context, '${Routes.changeDescPage}');
+                        _bottomSheet(context);
+                        // Navigator.of(context).push(
+                        //     CupertinoPageRoute(builder: (BuildContext context){
+                        //       return citypicker();
+                        //     })
+                        // );
                       }),
                   SettingCommon(
                       title: "具体所在地",
-                      content: Provider.of<UserInfo>(context).area,
+                      content: Provider.of<UserInfo>(context).address,
                       onPressed: () {
-                        //  ToastUtil.show('暂未开发!');
+                        Navigator.of(context).push(
+                            CupertinoPageRoute(builder: (BuildContext context){
+                              return ChangeAdress();})
+                        );
                       }),
                   SettingCommon(
                       title: "手机号",
                       content: Provider.of<UserInfo>(context).phone,
                       onPressed: () {
-                        // ToastUtil.show('暂未开发!');
+                        Navigator.of(context).push(
+                            CupertinoPageRoute(builder: (BuildContext context){
+                              return ChangePhone();})
+                        );
                       }),
                   SettingCommon(
                       title: "状态",
@@ -300,5 +317,40 @@ class _PersoninfoState extends State<Personinfo> {
               ),
             ),
           );
+  }
+  Future<void> _bottomSheet(BuildContext context) async {
+    return showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return buildcitypicker();
+      },
+    );
+  }
+  Widget buildcitypicker(){
+    return Container(
+      height: 400,
+      child: InkWell(
+        child: Row(
+          children: <Widget>[
+            Icon(Icons.add_location),
+            this.area.length>0?Text("$area",style: const TextStyle(fontSize: 13,
+                color: Colors.black54
+            ),):Text("省/市/区",style: TextStyle(fontSize: 13,
+                color: Colors.black54))
+          ],
+        ),
+        onTap: () async{
+          Result? result = await CityPickers.showCityPicker(
+              context: context,
+              cancelWidget: Text("取消",style: TextStyle(color: Colors.black),),
+              confirmWidget: Text("确定",style: TextStyle(color: Colors.black),)
+          );
+          setState(() {
+            this.area="${result?.provinceName}/${result?.cityName}/${result?.areaName}";
+          });
+
+        },
+      ),
+    );
   }
 }

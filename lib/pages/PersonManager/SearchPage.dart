@@ -68,12 +68,13 @@ class _SearchContentViewState extends State<SearchContentView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SearchItemView(),
           Container(
             margin: EdgeInsets.only(top: 10),
-            child: Text(
-              '历史记录',
-              style: TextStyle(fontSize: 14),
+            // child: Text(
+            //   '历史记录',
+            //   style: TextStyle(fontSize: 14),
+            // ),
+            child: Container(
             ),
           ),
           SearchItemView()
@@ -92,7 +93,9 @@ class _SearchItemViewState extends State<SearchItemView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
+        child: Text(
+          "hhh"
+        ),
     );
   }
 }
@@ -120,7 +123,7 @@ class _SearchItemState extends State<SearchItem> {
           print(widget.title);
         },
       ),
-      color: Colors.white,
+      color: Colors.blue,
     );
   }
 }

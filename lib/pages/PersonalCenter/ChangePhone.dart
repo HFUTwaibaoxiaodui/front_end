@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/util/toast_util.dart';
-import 'package:random_string/random_string.dart' as PP;
-import 'package:provider/provider.dart' ;
+import 'package:random_string/random_string.dart';
+import 'package:provider/provider.dart';
 import 'package:frontend/util/net/network_util.dart';
+import 'package:provider/provider.dart';
 import '../../global/back_end_interface_url.dart';
 import '../../global/my_event_bus.dart';
 import '../../global/user_info.dart';
@@ -15,26 +16,19 @@ import 'package:frontend/global/back_end_interface_url.dart';
 
 
 //修改昵称界面
-class ChangeRealName extends StatefulWidget {
-  const ChangeRealName({Key? key,}) : super(key: key);
-
-
+class ChangePhone extends StatefulWidget {
+  const ChangePhone({Key? key,}) : super(key: key);
 
   @override
-  _ChangeRealNameState createState() => _ChangeRealNameState();
+  _ChangePhoneState createState() => _ChangePhoneState();
 }
 
-class _ChangeRealNameState extends State<ChangeRealName> {
-
+class _ChangePhoneState extends State<ChangePhone> {
   final TextEditingController _mEtController = TextEditingController();
+
   @override
-  // void initState() {
-  //   super.initState();
-  //   _controller = TextEditingController();
-  //   _controller.addListener(() {});
-  // }
-  //接受修改信息的
-  String minputrealName = "";
+  String mInputPhone = "";
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +42,7 @@ class _ChangeRealNameState extends State<ChangeRealName> {
                   Navigator.pop(context);
                 }),
             title: const Text(
-              '修改姓名',
+              '修改手机号',
               style: TextStyle(fontSize: 15),
             ),
             elevation: 0.5,
@@ -73,17 +67,16 @@ class _ChangeRealNameState extends State<ChangeRealName> {
 
                           controller: _mEtController,
                           decoration: const InputDecoration(
-                            // labelText: "请输入您的姓名",
-                            hintText: "请输入您的姓名",
+                            hintText: "请输入您的手机号",
                             hintStyle:
                             TextStyle(color: Color(0xff999999), fontSize: 13),
                             contentPadding: EdgeInsets.only(left: 15, right: 15),
                             border: InputBorder.none,
                           ),
-                          // onChanged: (minputrealName) {
-                          //   print('========'+minputrealName);
+                          // onChanged: (mInputName) {
+                          //   print('========'+mInputName);
                           //   // setState(() {
-                          //   //   UserInfo().realName = minputrealName;
+                          //   //   UserInfo().realName = mInputName;
                           //   // });
                           // },
                         ),
@@ -93,11 +86,6 @@ class _ChangeRealNameState extends State<ChangeRealName> {
                       alignment: Alignment.centerLeft,
                       child: Container(
                         margin: const EdgeInsets.only(top: 10, left: 10),
-                        child: const Text(
-                          "4-30个字符,支持中英文、数字",
-                          style: TextStyle(
-                              fontSize: 12.0, color: Color(0xff999999)),
-                        ),
                       )),
                   Container(
                     margin: const EdgeInsets.only(top: 60.0, left: 20, right: 20),
@@ -121,14 +109,13 @@ class _ChangeRealNameState extends State<ChangeRealName> {
                         ),
                         onPressed: () {
                           if (_mEtController.text.isEmpty) {
-                            ToastUtil.show('姓名不能为空!');
-                            return;
-                          } else{
-                            minputrealName = _mEtController.text;
+                            ToastUtil.show('手机号不能为空!');
+                            return;}
+                          else{
+                            mInputPhone = _mEtController.text;
                             _update(post);
                           }
                         },
-
                         child: const Padding(
                           padding: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
                           child: Text(
@@ -149,10 +136,10 @@ class _ChangeRealNameState extends State<ChangeRealName> {
         headers: {"content-type" : "application/json"},
         body: json.encode(post)
     ).then((value){
-      ToastUtil.show('修改姓名成功!');
-          eventBus.fire(RefreshOrderDetailEvent());
-          eventBus.fire(InitOrderListEvent());
-          Navigator.of(context).pop(context);
+      ToastUtil.show('修改成功!');
+      eventBus.fire(RefreshOrderDetailEvent());
+      eventBus.fire(InitOrderListEvent());
+      Navigator.of(context).pop(context);
     });
     print('===================');
     print(addput.body.toString());
@@ -161,17 +148,8 @@ class _ChangeRealNameState extends State<ChangeRealName> {
 
   late var post = {
     "accountId": 1,
-    "accountName": "why",
-    "accountState": "正常",
-    "accountType": "ADMIN",
-    "address": "安徽省合肥市",
-    "area": "安徽省-合肥市-蜀山区",
-    "currentTime": "2022-03-23T03:07:02.205Z",
-    "firstLetter": "string",
-    "imagePath": "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200515%2F1-200515164137.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1650183945&t=97d7c899493b0f52d4ab3bf404ad9680",
-    "password": "string",
-    "phone": "18857743243",
-    "realName": minputrealName
+    "phone": mInputPhone,
   };
+
 }
 

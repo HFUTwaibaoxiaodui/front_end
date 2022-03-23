@@ -16,6 +16,11 @@ class UserInfo with ChangeNotifier {
   String? firstLetter;
   String? currentTime;
 
+  void setName (realName) {
+    UserInfo().realName = realName;
+    notifyListeners();
+  }
+
   Image buildImage(BuildContext context) {
     return Provider.of<UserInfo>(context, listen: false).imagePath != null ?
     Image.network(
@@ -30,5 +35,8 @@ class UserInfo with ChangeNotifier {
       width: MediaQuery.of(context).size.width * 0.2,
       height: MediaQuery.of(context).size.width * 0.2,
     );
+  }
+  String? buildText(BuildContext context){
+    return Provider.of<UserInfo>(context,listen: false).realName;
   }
 }

@@ -44,6 +44,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "city_pickers",
+      "rootUri": "file:///D:/flutter_windows_2.10.2-stable/flutter/.pub-cache/hosted/pub.flutter-io.cn/city_pickers-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "cli_util",
       "rootUri": "file:///D:/flutter_windows_2.10.2-stable/flutter/.pub-cache/hosted/pub.flutter-io.cn/cli_util-0.2.0",
       "packageUri": "lib/",
@@ -280,6 +286,12 @@
     {
       "name": "lints",
       "rootUri": "file:///D:/flutter_windows_2.10.2-stable/flutter/.pub-cache/hosted/pub.flutter-io.cn/lints-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "lpinyin",
+      "rootUri": "file:///D:/flutter_windows_2.10.2-stable/flutter/.pub-cache/hosted/pub.flutter-io.cn/lpinyin-2.0.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -626,7 +638,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-21T01:59:00.833759Z",
+  "generated": "2022-03-23T10:17:56.906352Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

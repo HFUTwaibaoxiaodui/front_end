@@ -4,7 +4,27 @@ class Friends {
   final String? indexLetter; //首字母大写
 
   Friends({this.imageUrl, this.name, this.indexLetter});
+
+  @override
+  String toString() {
+    return imageUrl! + ' ' + name! + ' ' + indexLetter!;
+  }
 }
+
+class Heads {
+  final String? imageUrl;
+  final String? name;
+  final String? indexLetter; //首字母大写
+
+  Heads({this.imageUrl, this.name, this.indexLetter});
+
+  @override
+  String toString() {
+    return imageUrl! + ' ' + name! + ' ' + indexLetter!;
+  }
+}
+
+
 
 // List<Friends> datas = [
 //   Friends(

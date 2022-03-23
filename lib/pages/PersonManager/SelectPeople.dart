@@ -7,14 +7,16 @@ import 'package:frontend/global/const.dart';
 import 'IndexBar.dart';
 import 'PeopleDitails.dart';
 import 'SearchPage.dart';
-import 'SelectPeople.dart';
 import 'friends_data.dart';
 
-class PeoplesPage extends StatefulWidget {
-  _PeoplesPageState createState() => _PeoplesPageState();
+class SelectPeoplesPage extends StatefulWidget {
+
+
+
+  _SelectPeoplesPageState createState() => _SelectPeoplesPageState();
 }
-  Dio dio =Dio();
-class _PeoplesPageState extends State<PeoplesPage> {
+Dio dio =Dio();
+class _SelectPeoplesPageState extends State<SelectPeoplesPage> {
 //  字典里面放item和高度的对应数据
   final Map _groupOffsetMap = {
 //    这里因为根据实际数据变化和固定全部字母前两个值都是一样的，所以没有做动态修改，如果不一样记得要修改
@@ -29,36 +31,36 @@ class _PeoplesPageState extends State<PeoplesPage> {
   late List<dynamic> list;
 
   getinfo() async {
-  Response response = await dio.get('http://121.40.130.17:9090/account/selectAllInformation');
-  print(response.data);
-  list=response.data;
-  for (var element in list) {
-    _listDatas.add(Friends(
-      imageUrl:'https://randomuser.me/api/portraits/women/17.jpg' ,
-      name: element['realName'],
-      indexLetter:element['firstLetter']
-    ));
-    _listDatas.sort((Friends a, Friends b) {
-      return a.indexLetter!.compareTo(b.indexLetter!);
-    });
+    Response response = await dio.get('http://121.40.130.17:9090/account/selectAllInformation');
+    print(response.data);
+    list=response.data;
+    for (var element in list) {
+      _listDatas.add(Friends(
+          imageUrl:'https://randomuser.me/api/portraits/women/17.jpg' ,
+          name: element['realName'],
+          indexLetter:element['firstLetter']
+      ));
+      _listDatas.sort((Friends a, Friends b) {
+        return a.indexLetter!.compareTo(b.indexLetter!);
+      });
 
-    var _groupOffset = 54.5 * 4;
+      var _groupOffset = 54.5 * 4;
 //经过循环计算，将每一个头的位置算出来，放入字典
-    for (int i = 0; i < _listDatas.length; i++) {
-      if (i < 1 || _listDatas[i].indexLetter != _listDatas[i - 1].indexLetter) {
-        //第一个cell
-        _groupOffsetMap.addAll({_listDatas[i].indexLetter: _groupOffset});
-        //保存完了再加——groupOffset偏移
-        _groupOffset += 84.5;
-      } else {
+      for (int i = 0; i < _listDatas.length; i++) {
+        if (i < 1 || _listDatas[i].indexLetter != _listDatas[i - 1].indexLetter) {
+          //第一个cell
+          _groupOffsetMap.addAll({_listDatas[i].indexLetter: _groupOffset});
+          //保存完了再加——groupOffset偏移
+          _groupOffset += 84.5;
+        } else {
 //        if (_listDatas[i].indexLetter == _listDatas[i - 1].indexLetter) {
-        //此时没有头部，只需要加偏移量就好了
-        _groupOffset += 54.5;
+          //此时没有头部，只需要加偏移量就好了
+          _groupOffset += 54.5;
+        }
       }
     }
+    print(_listDatas);
   }
-  print(_listDatas);
-}
   @override
   void initState(){
     super.initState();
@@ -67,26 +69,15 @@ class _PeoplesPageState extends State<PeoplesPage> {
     //排序!
     _scrollController = ScrollController();
   }
-  // _getData() async{
-  //   Response response;
-  //   var apiUrl="";
-  //   Response result=await Dio().get(apiUrl);
-  //   // print(json.decode(result.data)["result"]);
-  //   setState(() {
-  //     this._list=json.decode(result.data)["result"];
-  //   });
-  // }
 
-  final List<Heads> _headerData = [
-    Heads(imageUrl: 'assets/images/新的朋友.png', name: '添加人员'),
-    Heads(imageUrl: 'assets/images/群聊.png', name: '选择人员'),
-    Heads(imageUrl: 'assets/images/标签.png', name: '收藏'),
-    Heads(imageUrl: 'assets/images/公众号.png', name: '群组'),
+  final List<Friends> _headerData = [
+    // Friends(imageUrl: 'assets/images/新的朋友.png', name: '添加人员'),
+    // Friends(imageUrl: 'assets/images/群聊.png', name: '选择人员'),
+    // Friends(imageUrl: 'assets/images/标签.png', name: '收藏'),
+    // Friends(imageUrl: 'assets/images/公众号.png', name: '群组'),
   ];
 
   Widget _itemForRow(BuildContext context, int index) {
-    // print('=================');
-    // print(_listDatas.length.toString());
 //    系统cell
     if (index < _headerData.length) {
       return _FriendsCell(
@@ -122,10 +113,12 @@ class _PeoplesPageState extends State<PeoplesPage> {
                   showSearch(context: context,delegate: SearchBarDelegate());
                 },),
             ),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => SelectPeoplesPage()));
-            },
+            // onTap: () {
+            //   Navigator.of(context).push(MaterialPageRoute(
+            //       builder: (BuildContext context) => SelectPeople(
+            //         title: '选择人员',
+            //       )));
+            // },
           )
         ],
       ),
@@ -224,7 +217,7 @@ class _FriendsCell extends StatelessWidget {
     );
   }
 
-    _getImage() {
+  _getImage() {
     if (imageUrl != null) {
       return NetworkImage(imageUrl!);
     } else {

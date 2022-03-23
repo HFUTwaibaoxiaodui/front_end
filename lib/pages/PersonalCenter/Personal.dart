@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/global/user_info.dart';
@@ -10,6 +11,14 @@ import 'Personinfo.dart';
 import 'Setting.dart';
 
 class PersonCenterPage extends StatelessWidget{
+
+  // final List _listPerson = [];
+  // late List<dynamic> listp;
+  // Dio dio = Dio();
+  // getPersoninfo() async{
+  //   Response response = await dio.get();
+  // }
+
   @override
   Widget build(BuildContext context) {
     // Scaffold 实现了基本的 material 布局
