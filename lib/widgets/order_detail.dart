@@ -20,6 +20,7 @@ import '../pages/exception_report.dart';
 import '../util/net/network_util.dart';
 import '../models/order.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/global/my_event_bus.dart';
 import 'package:frontend/util/qrcode_util.dart';
 
 class OrderDetail extends StatefulWidget {
