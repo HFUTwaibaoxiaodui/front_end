@@ -5,7 +5,9 @@ import 'dart:typed_data';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:frontend/global/user_info.dart';
 import 'package:frontend/pages/exception_handle.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:frontend/util/debug_print.dart';
 import '../global/back_end_interface_url.dart';
@@ -437,7 +439,16 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                           }),
                           TextButton(child: const Text('确认'),onPressed: () {
                             HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '待服务'});
-
+                            HttpManager().post(
+                              sendMessage,
+                              args: {
+                                'alias': _order!.creatorId.toString(),
+                                'message': '你有一份工单已被抢单',
+                                'name': Provider.of<UserInfo>(context, listen:false).realName,
+                                'orderId': _order!.id
+                              }
+                            );
+                            print(123123);
                             String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
                             HttpManager().post(
                                 addOperationLog,

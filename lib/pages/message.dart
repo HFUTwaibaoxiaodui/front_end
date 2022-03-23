@@ -38,7 +38,7 @@ class _Messagepage extends State<MessagePage>{
           onReceiveNotification: (Map<String, dynamic> message) async {
             print("接收到的通知是:$message");
             setState(() {
-              notification=message;
+              notification = message;
               print(json.decode(notification['extras']['cn.jpush.android.EXTRA'])['orderId']);
               listview.add(_singleMessage(notification['title'], notification['alert'],json.decode(notification['extras']['cn.jpush.android.EXTRA'])['time']));
             });

@@ -16,6 +16,7 @@ final String submitException = generateURL('/exception/submitException');
 final String getExceptionMessageById = generateURL('/exception/getExceptionMessageById');
 final String updateExceptionSolveState = generateURL('/exception/updateExceptionSolveState');
 final String findOrderCardDetailCount = generateURL('/PatrolOrder/findOrderCardDetailCount');
+final String sendMessage = generateURL('/JPush/sendMessage');
 
 String generateURL(String path) {
   return 'http://' + serverIp + ':' + serverPort + path;
