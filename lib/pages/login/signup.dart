@@ -1,6 +1,11 @@
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/global/back_end_interface_url.dart';
+import 'package:city_pickers/city_pickers.dart';
+import '../../util/net/network_util.dart';
 import '../../widgets/bezierContainer.dart';
 import 'loginPage.dart';
 import 'package:dio/dio.dart';
@@ -264,6 +269,7 @@ class _SignUpPageState extends State<SignUpPage> {
             height: 10,
           ),
           TextFormField(
+            readOnly: true,
             controller: _areaController,
               validator: (value) {
                 if (value == "") {
@@ -273,9 +279,23 @@ class _SignUpPageState extends State<SignUpPage> {
                 }
               },
               decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.expand_more,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    onPressed: () {
+                      CityPickers.showCityPicker(context: context).then((value){
+                        setState(() {
+                          _areaController.text = value!.provinceName! + ' ' + value.cityName! + ' ' + value.areaName!;
+                        });
+                      });
+                    },
+                  ),
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
-                  filled: true))
+                  filled: true)
+          )
         ],
       ),
     );
@@ -372,8 +392,8 @@ class _SignUpPageState extends State<SignUpPage> {
           _phoneentryField("手机号"),
           _pswdentryField("密码"),
           _nameentryField('姓名'),
-          _addressentryField('地址'),
-          _areaentryField('地区')
+          _areaentryField('地区'),
+          _addressentryField('地址')
         ],
       )
     );
@@ -445,15 +465,40 @@ class _SignUpPageState extends State<SignUpPage> {
    //   ContentType contentType = ContentType.parse("application/x-www-form-urlencoded");
       dio.options.contentType = "application/json";
       Response response = await dio.post(
-          'http://192.168.114.151:9090/account/usersignin',
+          signin,
           data: jsonVar
       );
       print(response.data);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const LoginPage()),
-          (Route<dynamic> route) {
-        return route.isFirst;
-      });
+      if(response.data.toString() == '手机号重复'){
+        Fluttertoast.showToast(
+          msg: "注册失败，手机号有重复",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2,
+          textColor: Colors.grey,
+        );
+      }else if(response.data.toString() == '用户名重复') {
+        Fluttertoast.showToast(
+          msg: "注册失败，手机号有重复",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2,
+          textColor: Colors.grey,
+        );
+      }else{
+        Fluttertoast.showToast(
+          msg: "注册成功，跳转至登录页",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2,
+          textColor: Colors.grey,
+        );
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const LoginPage()),
+                (Route<dynamic> route) {
+              return route.isFirst;
+            });
+      }
     }
   }
 }

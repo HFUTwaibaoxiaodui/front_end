@@ -7,6 +7,7 @@ final String getOrderById = generateURL('/PatrolOrder/findByOrderId');
 final String updateOrderState = generateURL('/PatrolOrder/updateOrderState');
 final String addOperationLog = generateURL('/OperationLog/add');
 final String logIn =  generateURL('/account/userlogin');
+final String signin = generateURL('/account/usersignin');
 final String addOrderEvaluate =  generateURL('/evaluate/addOrderEvaluate');
 final String getEvaluateByOrderId =  generateURL('/evaluate/getEvaluateByOrderId');
 final String findOrderCardDetail = generateURL('/PatrolOrder/findOrderCardDetail');
