@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/global/theme.dart';
 import 'package:date_format/date_format.dart';
+import 'package:frontend/global/user_info.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
-
+import 'package:provider/provider.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _Messagepage extends State<MessagePage>{
 
   late Map<dynamic,dynamic> notification;
 
-  JPush jPush = new JPush();
+  JPush jPush = JPush();
 
   String idLabel = "";
 
@@ -66,7 +67,7 @@ class _Messagepage extends State<MessagePage>{
         debug: true
     );
 
-    jPush.setAlias('1');
+    jPush.setAlias(Provider.of<UserInfo>(context, listen: false).accountId.toString());
 
     jPush.applyPushAuthority(
         new NotificationSettingsIOS(sound: true, alert: true, badge: true));
