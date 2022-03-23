@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/global/theme.dart';
 import 'package:date_format/date_format.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+
 
 class MessagePage extends StatefulWidget {
   const MessagePage({Key? key}) : super(key: key);
@@ -15,24 +18,40 @@ class _Messagepage extends State<MessagePage>{
     super.initState();
     initPlatFormState();
   }
+  String customMessage='' ;
 
+  late Map<dynamic,dynamic> notification;
 
   JPush jPush = new JPush();
 
   String idLabel = "";
 
+  List<Widget> listview= [];
+
   Future<void> initPlatFormState() async {
-    String platform = "";
+
+    String platform = '';
 
     try {
       jPush.addEventHandler(
           onReceiveNotification: (Map<String, dynamic> message) async {
             print("接收到的通知是:$message");
-          }, onOpenNotification: (Map<String, dynamic> message) async {
+            setState(() {
+              notification=message;
+              print(json.decode(notification['extras']['cn.jpush.android.EXTRA'])['orderId']);
+              listview.add(_singleMessage(notification['title'], notification['alert'],json.decode(notification['extras']['cn.jpush.android.EXTRA'])['time']));
+            });
+          },
+          onOpenNotification: (Map<String, dynamic> message) async {
         print("通过点击推送进入app：$message");
-      }, onReceiveMessage: (Map<String, dynamic> message) async {
+      },
+          onReceiveMessage: (Map<String, dynamic> message) async {
         print("接收到自定义消息：$message");
-      }, onReceiveNotificationAuthorization:
+        setState(() {
+          customMessage=json.encode(message);
+        });
+      },
+          onReceiveNotificationAuthorization:
           (Map<String, dynamic> message) async {
         print("通知权限发生变更：$message");
       });
@@ -61,7 +80,7 @@ class _Messagepage extends State<MessagePage>{
   }
 
 
-  Widget _singleMessage(index,content){
+  Widget _singleMessage(title,content,time){
       return Container(
         margin: const EdgeInsets.only(right: 20, left: 10),
         child: InkWell(
@@ -84,11 +103,11 @@ class _Messagepage extends State<MessagePage>{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             LimitedBox(
-                                child: Text('$index',maxLines: 1,overflow:TextOverflow.ellipsis ,style: TextStyle(fontSize: 19,fontWeight: FontWeight.w900))
+                                child: Text('$title',maxLines: 1,overflow:TextOverflow.ellipsis ,style: TextStyle(fontSize: 19,fontWeight: FontWeight.w900))
                             ),
                             SizedBox(height: 20),
                             LimitedBox(
-                                child: Text('[HFUT]$index，点击查看详情>>>>',maxLines: 2,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500))
+                                child: Text('[HFUT]$content，点击查看详情>>>>',maxLines: 2,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500))
                             ),
                           ],
                         )
@@ -101,7 +120,7 @@ class _Messagepage extends State<MessagePage>{
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(getTimeStr(),style: TextStyle(fontSize: 8)),
+                        Text(time,style: TextStyle(fontSize: 8)),
                         SizedBox(height: 50)
                       ],
                     )
@@ -124,12 +143,16 @@ class _Messagepage extends State<MessagePage>{
         backgroundColor: mainColor,
         centerTitle: true,
         title: Text("消息"),
-        actions: [IconButton(onPressed: (){}, icon: Icon(Icons.refresh))],
+        actions: [IconButton(onPressed: (){
+          initPlatFormState();
+        }, icon: Icon(Icons.refresh))],
       ),
       body: Container(
         child: ListView.builder(
-            itemCount: 5,
-            itemBuilder: (BuildContext context, int index)=>_singleMessage(index,context))
+            itemCount: listview.length,
+            itemBuilder: (context,index){
+              return listview[index];
+            })
         ),
     );
   }
