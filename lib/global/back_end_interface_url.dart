@@ -1,4 +1,4 @@
-const String serverIp = '192.168.43.31';
+const String serverIp = '121.40.130.17';
 const String serverPort = '9090';
 const String defaultImagePath = 'http://121.40.130.17:7777/images/cat.jpeg';
 
@@ -17,6 +17,7 @@ final String getExceptionMessageById = generateURL('/exception/getExceptionMessa
 final String updateExceptionSolveState = generateURL('/exception/updateExceptionSolveState');
 final String findOrderCardDetailCount = generateURL('/PatrolOrder/findOrderCardDetailCount');
 final String sendMessage = generateURL('/JPush/sendMessage');
+final String getmonthlyData =generateURL('/PatrolOrder/calculateMonthOrderData');
 
 String generateURL(String path) {
   return 'http://' + serverIp + ':' + serverPort + path;

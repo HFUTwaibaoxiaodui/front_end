@@ -44,6 +44,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "charts_common",
+      "rootUri": "file:///H:/flutter_windows_2.10.2-stable/2.10.2/.pub-cache/hosted/pub.flutter-io.cn/charts_common-0.12.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "charts_flutter",
+      "rootUri": "file:///H:/flutter_windows_2.10.2-stable/2.10.2/.pub-cache/hosted/pub.flutter-io.cn/charts_flutter-0.12.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "city_pickers",
       "rootUri": "file:///H:/flutter_windows_2.10.2-stable/2.10.2/.pub-cache/hosted/pub.flutter-io.cn/city_pickers-1.0.1",
       "packageUri": "lib/",
@@ -292,6 +304,12 @@
     {
       "name": "lints",
       "rootUri": "file:///H:/flutter_windows_2.10.2-stable/2.10.2/.pub-cache/hosted/pub.flutter-io.cn/lints-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "logging",
+      "rootUri": "file:///H:/flutter_windows_2.10.2-stable/2.10.2/.pub-cache/hosted/pub.flutter-io.cn/logging-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -644,7 +662,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-23T02:10:02.713111Z",
+  "generated": "2022-03-23T09:48:06.146767Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

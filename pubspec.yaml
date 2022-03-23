@@ -45,7 +45,7 @@ dependencies:
   date_format: ^2.0.5
   random_string: ^1.1.0
   image_picker:
-  flutter_datetime_picker: 1.2.6
+  flutter_datetime_picker:
   intl_translation: ^0.17.2
   get_it:
   event_bus:
@@ -57,6 +57,7 @@ dependencies:
   provider:
   city_pickers: ^1.0.1
   jpush_flutter:
+  charts_flutter: ^0.12.0
 
 dev_dependencies:
   flutter_test:
