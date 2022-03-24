@@ -1,9 +1,10 @@
 class Friends {
   final String? imageUrl;
   final String? name;
-  final String? indexLetter; //首字母大写
+  final String? indexLetter;
+  final int? peopleid;//首字母大写
 
-  Friends({this.imageUrl, this.name, this.indexLetter});
+  Friends({this.imageUrl, this.name, this.indexLetter,this.peopleid});
 }
 
 // List<Friends> datas = [

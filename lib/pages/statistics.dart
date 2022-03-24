@@ -102,108 +102,129 @@ class _StatisticPage extends State<StatisticsPage>{
               thickness:1 ,
               color: Colors.grey,
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey,width: 2),
-                borderRadius: BorderRadius.all(Radius.circular(5.0))
+            Card(
+              color: Color(0xffffffff),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: BorderSide(
+                  color: Colors.grey,
+                  width: 2,
+                ),
               ),
-              child: Column(
-                children: [
-                  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+              elevation: 10,
+              margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
+              child: Container(
+                child: Column(
                   children: [
-                    smallBox('本月创建工单数', _datalist123['currentMonthCreatedOrder']),
-                    smallBox('本月完成工单数', _datalist123['currentMonthFinishOrder'])
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        smallBox('本月创建工单数', _datalist123['currentMonthCreatedOrder']),
+                        smallBox('本月完成工单数', _datalist123['currentMonthFinishOrder']),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        smallBox('本月异常工单数', _datalist123['currentMonthExceptionOrder']),
+                        smallBox('工单完成率', temp.toStringAsFixed(2))
+                      ],
+                    )
                   ],
                 ),
-                  SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      smallBox('本月异常工单数', _datalist123['currentMonthExceptionOrder']),
-                      smallBox('工单完成率', temp)
+              ),
+            ),
+            const Divider(
+              height: 20,
+              thickness:1 ,
+              color: Colors.grey,
+            ),
+            Row(
+                children: [Text('工单数量趋势',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w900))],
+                mainAxisAlignment: MainAxisAlignment.center),
+            const Divider(
+              height: 20,
+              thickness:1 ,
+              color: Colors.grey,
+            ),
+            Card(
+              margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: BorderSide(
+                  color: Color(0xED404040),
+                  width: 2,
+                ),
+              ),
+              elevation: 20,
+              child:Container(
+                  width: double.infinity,
+                  height: 300,
+                  padding: EdgeInsets.all(20),
+                  // decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey,width: 2),
+                  //     borderRadius: BorderRadius.all(Radius.circular(5.0))
+                  // ),
+                  child: charts.BarChart(list,
+                    barGroupingType: charts.BarGroupingType.grouped,
+                    barRendererDecorator: charts.BarLabelDecorator<String>(),
+                    behaviors: [
+                      // Add the sliding viewport behavior to have the viewport center on the
+                      // domain that is currently selected.
+                      new charts.SlidingViewport(),
+                      // A pan and zoom behavior helps demonstrate the sliding viewport
+                      // behavior by allowing the data visible in the viewport to be adjusted
+                      // dynamically.
+                      new charts.PanAndZoomBehavior(),
+                      new charts.SeriesLegend(entryTextStyle: charts.TextStyleSpec(
+                        fontSize: 12,
+                        color: charts.Color.black,
+                      )),
                     ],
                   )
-                ],
-              ),
-            ),
-            Divider(
-              height: 20,
-              thickness:1 ,
-              color: Colors.grey,
-            ),
-            Container(
-                child: Row(
-                    children: [Text('工单数量趋势',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w900))],
-                    mainAxisAlignment: MainAxisAlignment.center)
-            ),
-            Divider(
-              height: 20,
-              thickness:1 ,
-              color: Colors.grey,
-            ),
-            Container(
-              width: double.infinity,
-              height: 300,
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey,width: 2),
-                  borderRadius: BorderRadius.all(Radius.circular(5.0))
-              ),
-              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: charts.BarChart(list,
-                barGroupingType: charts.BarGroupingType.grouped,
-                barRendererDecorator: charts.BarLabelDecorator<String>(),
-                  behaviors: [
-                    // Add the sliding viewport behavior to have the viewport center on the
-                    // domain that is currently selected.
-                    new charts.SlidingViewport(),
-                    // A pan and zoom behavior helps demonstrate the sliding viewport
-                    // behavior by allowing the data visible in the viewport to be adjusted
-                    // dynamically.
-                    new charts.PanAndZoomBehavior(),
-                    new charts.SeriesLegend(entryTextStyle: charts.TextStyleSpec(
-                      fontSize: 12,
-                      color: charts.Color.black,
-                    )),
-                  ],
-              )
+              ) ,
             )
           ],
         ),
     );
   }
 Widget smallBox(title,content){
-  return Container(
-    height: 100,
-    width: 150,
-    decoration: BoxDecoration(
-      border: Border.all(color: Colors.black, width: 1),//边框
-      borderRadius: BorderRadius.all(Radius.circular(7.0),
+  return Card(
+    margin: EdgeInsets.all(15),
+    color: Color(0x974dd0e1),
+    shadowColor: Colors.black,
+    elevation: 20,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+      side: BorderSide(
+        color: Color(0x974dd0e1),
+        width: 1,
       ),
     ),
-    child:Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text('$title',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700))],
+    child: Container(
+      height: 100,
+      width: 150,
+      child:Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text('$title',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700))],
+            ),
           ),
-        ),
-        Container(
-          padding: EdgeInsets.fromLTRB(0, 0, 10, 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text('$content',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))],
-          ),
-        )
-      ],
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text('$content',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))],
+            ),
+          )
+        ],
+      ),
     ),
   );
 }

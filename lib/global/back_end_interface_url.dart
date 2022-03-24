@@ -18,7 +18,8 @@ final String updateExceptionSolveState = generateURL('/exception/updateException
 final String findOrderCardDetailCount = generateURL('/PatrolOrder/findOrderCardDetailCount');
 final String sendMessage = generateURL('/JPush/sendMessage');
 final String getmonthlyData =generateURL('/PatrolOrder/calculateMonthOrderData');
-
+final String giveothers = generateURL('/PatrolOrder/giveOthers');
+final String notification = generateURL('/NoticeDetail/findByReceiverId');
 String generateURL(String path) {
   return 'http://' + serverIp + ':' + serverPort + path;
 }
