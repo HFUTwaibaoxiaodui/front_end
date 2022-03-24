@@ -51,6 +51,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
 
   late final PopupMenuItem<String> reassignment;
   late final PopupMenuItem<String> exception;
+  late final PopupMenuItem<String> cancel;
 
   StateSetter? _orderOperationSetter;
   late StreamSubscription _refreshSubscription;
@@ -90,6 +91,16 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
           ));
         },
         child: const Text('异常上报'),
+      ),
+    );
+
+    cancel = PopupMenuItem<String>(
+      value: '取消工单',
+      child: GestureDetector(
+        onTap: () {
+          print('取消工单');
+        },
+        child: const Text('取消工单'),
       ),
     );
   }
@@ -223,6 +234,15 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
       //       reassignment
       //     ],
       //   );
+      case '待抢单':
+         return
+           Provider.of<UserInfo>(context, listen: false).accountType == 'USER' ?
+               Container():
+               PopupMenuButton<String>(
+                   itemBuilder: (context) => <PopupMenuEntry<String>>[
+                     cancel
+                   ]
+               );
       case '待服务':
       case '服务中':
         return PopupMenuButton<String>(
@@ -344,7 +364,8 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Padding(
               padding: const EdgeInsets.all(5),
-              child: GestureDetector(
+              child: Provider.of<UserInfo>(context, listen: false).accountType == 'USER' ?
+                GestureDetector(
                 onTap: () async {
                   /// 进行扫码验证
                   printWithDebug('扫码验证');
@@ -396,14 +417,22 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                     ),
                   ),
                 ),
-              )
+              ) :
+                Container(
+                  color: Colors.grey.shade700,
+                  child: const Center(
+                    child: Text('该工单正待服务', style: TextStyle(color: Colors.white)
+                    ),
+                  ),
+                )
           )
       );
       case '服务中': return Container(
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Padding(
               padding: const EdgeInsets.all(5),
-              child: GestureDetector(
+              child:  Provider.of<UserInfo>(context, listen: false).accountType == 'USER' ?
+                GestureDetector(
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
                     return EditOrder(id: widget.id);
@@ -416,6 +445,13 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                     ),
                   ),
                 ),
+              ) :
+                Container(
+                color: Colors.grey.shade700,
+                child: const Center(
+                  child: Text('该工单正在服务中', style: TextStyle(color: Colors.white)
+                  ),
+                ),
               )
           )
       );
@@ -423,72 +459,80 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Padding(
           padding: const EdgeInsets.all(5),
-          child: GestureDetector(
-            onTap: (){
-              setState(() {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('提示'),
-                        content: const Text('确认接单吗？'),
-                        actions: <Widget>[
-                          TextButton(child: const Text('取消'),onPressed: (){
-                            printWithDebug('已取消接单');
-                            Navigator.of(context).pop();
-                          }),
-                          TextButton(child: const Text('确认'),onPressed: () {
-                            HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '待服务'});
-                            HttpManager().post(
-                              sendMessage,
-                              args: {
-                                'alias': _order!.creatorId.toString(),
-                                'message': '你有一份工单已被抢单',
-                                'name': Provider.of<UserInfo>(context, listen:false).realName,
-                                'orderId': _order!.id
-                              }
-                            );
-                            print(123123);
-                            String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
-                            HttpManager().post(
-                                addOperationLog,
-                                args: {
-                                  'orderId': _order!.id,
-                                  'operationTime': formattedDate,
-                                  'operationName': '抢单',
-                                  'description': '【我】已抢得【' + _order!.creatorName! + '】创建的工单'
-                                }
-                            ).then((value){
-                              /// 提示用户抢单成功
-                              Fluttertoast.showToast(
-                                  msg: "抢单成功",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.CENTER,
-                                  backgroundColor: Colors.green,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0
-                              );
-                              _initTabState();
-                              _refreshOrderDetail();
-                              eventBus.fire(RefreshDifferentStateOrderCount());
-                              eventBus.fire(InitOrderListEvent());
-                              /// 返回上一个界面
+          child:
+            Provider.of<UserInfo>(context, listen: false).accountType == 'USER' ?
+              GestureDetector(
+              onTap: (){
+                setState(() {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('提示'),
+                          content: const Text('确认接单吗？'),
+                          actions: <Widget>[
+                            TextButton(child: const Text('取消'),onPressed: (){
+                              printWithDebug('已取消接单');
                               Navigator.of(context).pop();
-                            });
-                          },),
-                        ],
-                      );
-                    });
-              });
-            },
-            child: Container(
-              color: Colors.cyanAccent.shade700,
-              child: const Center(
-                child: Text('我要抢单', style: TextStyle(color: Colors.white)
+                            }),
+                            TextButton(child: const Text('确认'),onPressed: () {
+                              HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '待服务'});
+                              HttpManager().post(
+                                  sendMessage,
+                                  args: {
+                                    'alias': _order!.creatorId.toString(),
+                                    'message': '你有一份工单已被抢单',
+                                    'name': Provider.of<UserInfo>(context, listen:false).realName,
+                                    'orderId': _order!.id
+                                  }
+                              );
+                              String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                              HttpManager().post(
+                                  addOperationLog,
+                                  args: {
+                                    'orderId': _order!.id,
+                                    'operationTime': formattedDate,
+                                    'operationName': '抢单',
+                                    'description': '【我】已抢得【' + _order!.creatorName! + '】创建的工单'
+                                  }
+                              ).then((value){
+                                /// 提示用户抢单成功
+                                Fluttertoast.showToast(
+                                    msg: "抢单成功",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    backgroundColor: Colors.green,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0
+                                );
+                                _initTabState();
+                                _refreshOrderDetail();
+                                eventBus.fire(RefreshDifferentStateOrderCount());
+                                eventBus.fire(InitOrderListEvent());
+                                /// 返回上一个界面
+                                Navigator.of(context).pop();
+                              });
+                            },),
+                          ],
+                        );
+                      });
+                });
+              },
+              child: Container(
+                color: Colors.cyanAccent.shade700,
+                child: const Center(
+                  child: Text('我要抢单', style: TextStyle(color: Colors.white)
+                  ),
                 ),
               ),
-            ),
-          )
+            ) :
+              Container(
+              color: Colors.grey.shade700,
+              child: const Center(
+                child: Text('该工单待抢单中', style: TextStyle(color: Colors.white)
+                ),
+              ),
+            )
         )
       );
       case '异常': return Container(
@@ -517,7 +561,15 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Padding(
               padding: const EdgeInsets.all(5),
-              child: GestureDetector(
+              child: Provider.of<UserInfo>(context, listen: false).accountType == 'USER' ?
+                Container(
+                color: Colors.grey.shade700,
+                child: const Center(
+                  child: Text('该工单正待评价', style: TextStyle(color: Colors.white)
+                  ),
+                ),
+              ) :
+                GestureDetector(
                 onTap: (){
                   Navigator.of(context).pushNamed('/order_evaluate', arguments: {'id': widget.id, 'name': _order!.creatorName!});
                 },

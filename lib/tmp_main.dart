@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/global/user_info.dart';
 import 'package:frontend/pages/login/loginPage.dart';
+import 'package:frontend/pages/map/init_map.dart';
 import 'package:provider/provider.dart';
 import 'global/routers.dart';
 

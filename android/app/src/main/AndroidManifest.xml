@@ -1,39 +1,467 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.hfut.frontend">
-
+    package="edu.hfut.frontend" >
     <!-- qrscan 权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 地图权限 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 允许获取粗略位置，若用GPS实现定位小蓝点功能则必选 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 允许获取设备和运营商信息，用于问题排查和网络定位，若无gps但仍需实现定位小蓝点功能则此权限必选 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 允许获取网络状态，用于网络定位，若无gps但仍需实现定位小蓝点功能则此权限必选 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 允许获取wifi网络信息，用于网络定位，若无gps但仍需实现定位小蓝点功能则此权限必选 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 允许获取wifi状态改变，用于网络定位，若无gps但仍需实现定位小蓝点功能则此权限必选 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- 允许写入扩展存储，用于数据缓存，若无此权限则写到私有目录 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 允许写设备缓存，用于问题排查 -->
+    <permission android:name="android.permission.WRITE_SETTINGS" /> <!-- 允许读设备等信息，用于问题排查 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-   <application
-        android:label="frontend"
-        android:icon="@mipmap/ic_launcher">
+    <permission android:name="android.permission.CHANGE_CONFIGURATION" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 用于申请调用A-GPS模块 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> <!-- 如果设置了target >= 28 如果需要启动后台定位则必须声明这个权限 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 如果您的应用需要后台定位权限，且有可能运行在Android Q设备上,并且设置了target>28，必须增加这个权限声明 -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name">
+
+        <activity
+            android:name=".demo.basic.BasicMapActivity"
+            android:label="@string/basic_map"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".demo.listmap.MapListViewActivity"
+            android:label="@string/list_map"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".demo.listmap.RecycleViewActivity"
+            android:label="@string/recycle_map"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".demo.basic.TextureMapViewActivity"
+            android:label="@string/basic_texturemapview"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".demo.basic.ViewPagerWithMapActivity"
+            android:label="@string/viewpager_map"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".demo.basic.map.BaseMapFragmentActivity"
+            android:label="@string/basic_map"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".demo.basic.map.MapImpMethodActivity"
+            android:label="@string/basic_map"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".demo.basic.map.BaseTextureMapFragmentActivity"
+            android:label="@string/basic_map"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".demo.basic.map.BaseTextureSupportMapFragmentActivity"
+            android:label="@string/basic_map"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.Animate_CameraActivity"
+            android:label="@string/camera_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.HeatMapActivity"
+            android:label="@string/heatmap_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.EventsActivity"
+            android:label="@string/events_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.LayersActivity"
+            android:label="@string/layers_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.PoiClickActivity"
+            android:label="@string/poiclick_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.ScreenShotActivity"
+            android:label="@string/screenshot_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.MinMaxZoomLevelActivity"
+            android:label="@string/set_min_max_zoomlevel"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.LimitBoundsActivity"
+            android:label="@string/limit_bounds"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.BuildingOverlayActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="edu.hfut.frontend.demo.opengl.OpenglActivity"
+            android:label="@string/opengl_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.UiSettingsActivity"
+            android:label="@string/uisettings_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.MarkerActivity"
+            android:label="@string/marker_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.MarkerAnimationActivity"
+            android:label="@string/marker_animation_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.PolylineActivity"
+            android:label="@string/polyline_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.ArcActivity"
+            android:label="@string/arc_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.GroundOverlayActivity"
+            android:label="@string/groundoverlay_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.PolygonActivity"
+            android:label="@string/polygon_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.CircleActivity"
+            android:label="@string/circle_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.NavigateArrowOverlayActivity"
+            android:label="@string/navigatearrow_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.MultiPointOverlayActivity"
+            android:label="@string/multipoint_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.ParticleMapActivity"
+            android:label="@string/particle_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.ParticleWeatherMapActivity"
+            android:label="@string/particle_weather_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".demo.overlay.HoneycombHeatMapActivity"
+            android:label="@string/show_honeycomb_heat_map_demo"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="edu.hfut.frontend.demo.location.LocationModeSourceActivity_Old"
+            android:label="@string/locationmodesource_demo_old"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.location.LocationModeSourceActivity"
+            android:label="@string/locationmodesource_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.location.CustomLocationModeActivity"
+            android:label="@string/locationmodesource_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.geocoder.GeocoderActivity"
+            android:label="@string/geocoder_demo"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="edu.hfut.frontend.demo.route.RouteActivity"
+            android:label="@string/route_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.busline.BuslineActivity"
+            android:label="@string/busline_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.poisearch.PoiKeywordSearchActivity"
+            android:label="@string/poikeywordsearch_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.poisearch.PoiAroundSearchActivity"
+            android:label="@string/poiaroundsearch_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.poisearch.PoiIDSearchActivity"
+            android:label="@string/poiidsearch_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.offlinemap.OfflineMapActivity_Old"
+            android:label="@string/offlinemap_demo"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.amap.api.maps.offlinemap.OfflineMapActivity"
+            android:label="@string/offlinemap_ui_demo"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name="edu.hfut.frontend.demo.district.DistrictActivity"
+            android:label="@string/district_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.district.DistrictWithBoundaryActivity"
+            android:label="@string/district_boundary_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.cloud.CloudActivity"
+            android:label="@string/cloud_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.share.ShareActivity"
+            android:label="@string/share_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.weather.WeatherSearchActivity"
+            android:label="@string/weather_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.poisearch.SubPoiSearchActivity"
+            android:label="@string/subpoi_demo"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.route.DriveRouteDetailActivity"
+            android:label="@string/route_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.route.WalkRouteDetailActivity"
+            android:label="@string/route_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.route.BusRouteDetailActivity"
+            android:label="@string/route_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.indoor.IndoorMapActivity"
+            android:label="@string/indoormap_demo"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.TwoMapActivity"
+            android:label="@string/multi_inst"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.LogoSettingsActivity"
+            android:label="@string/logo_position"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.GestureSettingsActivity"
+            android:label="@string/gesture"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.inputtip.InputtipsActivity"
+            android:label="@string/inputtips_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.GeodesicActivity"
+            android:label="@string/inputtips_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.ColourfulPolylineActivity"
+            android:label="@string/colourline_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.geocoder.ReGeocoderActivity"
+            android:label="@string/regeocoder_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.CameraActivity"
+            android:label="@string/animate"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.basic.ZoomActivity"
+            android:label="@string/map_zoom"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.CustomMarkerActivity"
+            android:label="@string/custommarker_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.MarkerClickActivity"
+            android:label="@string/marker_click"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.route.DriveRouteActivity"
+            android:label="@string/route_drive"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.route.BusRouteActivity"
+            android:label="@string/route_bus"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.route.WalkRouteActivity"
+            android:label="@string/route_walk"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.busline.BusStationActivity"
+            android:label="@string/busstation_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.location.CustomLocationActivity"
+            android:label="@string/customlocation_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.InfoWindowActivity"
+            android:label="@string/infowindow_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.tools.CoordConverActivity"
+            android:label="@string/coordconvert_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.tools.ContainsActivity"
+            android:label="@string/contains_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.tools.CalculateDistanceActivity"
+            android:label="@string/calculateLineDistance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.tools.GeoToScreenActivity"
+            android:label="@string/convertgeo2point_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.trace.TraceActivity"
+            android:label="@string/trace_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.trace.TraceActivity_Simple"
+            android:label="@string/trace_demo_simple"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="edu.hfut.frontend.demo.routepoi.RoutePOIActivity"
+            android:label="@string/routepoisearch_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.route.RideRouteActivity"
+            android:label="@string/route_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.route.TruckRouteActivity"
+            android:label="@string/route_truck"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="edu.hfut.frontend.demo.route.DriveRoutePlanActivity"
+            android:label="驾车未来规划"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.route.RouteDistanceActivity"
+            android:label="@string/route_distance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.route.RideRouteDetailActivity"
+            android:label="@string/route_ride"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.smooth.SmoothMoveActivity"
+            android:label="@string/smooth_move_demo"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.HoleActivity"
+            android:label="@string/hole_title"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="edu.hfut.frontend.demo.overlay.ProvinceHoleActivity"
+            android:label="@string/province_hole_demo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.hfut.frontend.demo.RealMainActivity"
+            android:label="@string/province_hole_demo"
+            android:screenOrientation="portrait" />
+
+
+
+        <activity android:name=".MainMapActivity"/>
+
+        <activity
+            android:name=".activities.AddressPickActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/TranparentTheme"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+
+        <activity
+            android:name=".ChooseAddressActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/TranparentTheme"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+
+        <activity
+            android:name=".CityChooseActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/TranparentTheme"
+            android:windowSoftInputMode="adjustPan"
+            >
+        </activity>
+
+        <activity
+            android:name=".PoiClickActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/TranparentTheme"
+            android:windowSoftInputMode="adjustPan"
+            >
+        </activity>
+
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:exported="true"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
-            <!-- Specifies an Android theme to apply to this Activity as soon as
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" >
+
+            <!--
+                 Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
-                 to determine the Window background behind the Flutter UI. -->
+                 to determine the Window background behind the Flutter UI.
+            -->
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
+
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- Don't delete the meta-model below.
-             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        <!--
+ Don't delete the meta-model below.
+             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+        -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="b8c9680dc5d466fcb3354bcfce13f621" />
+
+        <service android:name="com.amap.api.location.APSService" />
+
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+
 </manifest>
