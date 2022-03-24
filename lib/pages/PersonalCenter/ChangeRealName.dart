@@ -125,6 +125,7 @@ class _ChangeRealNameState extends State<ChangeRealName> {
                             return;
                           } else{
                             minputrealName = _mEtController.text;
+                            eventBus.fire(UpRealname(peopleInforealname: minputrealName));
                             _update(post);
                           }
                         },
@@ -149,7 +150,7 @@ class _ChangeRealNameState extends State<ChangeRealName> {
         headers: {"content-type" : "application/json"},
         body: json.encode(post)
     ).then((value){
-      ToastUtil.show('修改姓名成功!');
+      ToastUtil.show('修改成功!');
           eventBus.fire(RefreshOrderDetailEvent());
           eventBus.fire(InitOrderListEvent());
           Navigator.of(context).pop(context);
@@ -160,18 +161,18 @@ class _ChangeRealNameState extends State<ChangeRealName> {
   }
 
   late var post = {
-    "accountId": 1,
-    "accountName": "why",
-    "accountState": "正常",
-    "accountType": "ADMIN",
-    "address": "安徽省合肥市",
-    "area": "安徽省-合肥市-蜀山区",
-    "currentTime": "2022-03-23T03:07:02.205Z",
-    "firstLetter": "string",
-    "imagePath": "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200515%2F1-200515164137.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1650183945&t=97d7c899493b0f52d4ab3bf404ad9680",
-    "password": "string",
-    "phone": "18857743243",
-    "realName": minputrealName
+    "accountId": Provider.of<UserInfo>(context,listen: false).accountId,
+    "realName": minputrealName,
+    "accountName": "",
+    "accountState": "",
+    "accountType": "",
+    "address": "",
+    "area": "",
+    "currentTime": "",
+    "firstLetter": "",
+    "imagePath": "",
+    "password": "",
+    "phone": "",
   };
 }
 

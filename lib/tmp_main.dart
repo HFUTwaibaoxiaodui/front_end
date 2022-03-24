@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: generateRoute,
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
-      home:PeoplesPage(),
+      home:LoginPage(),
     );
   }
 }

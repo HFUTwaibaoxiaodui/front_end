@@ -1,10 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/util/toast_util.dart';
-import 'package:random_string/random_string.dart';
+import 'package:random_string/random_string.dart' as PP;
 import 'package:provider/provider.dart';
 import 'package:frontend/util/net/network_util.dart';
-import 'package:provider/provider.dart';
 import '../../global/back_end_interface_url.dart';
 import '../../global/my_event_bus.dart';
 import '../../global/user_info.dart';
@@ -16,18 +15,18 @@ import 'package:frontend/global/back_end_interface_url.dart';
 
 
 //修改昵称界面
-class ChangeAdress extends StatefulWidget {
-  const ChangeAdress({Key? key,}) : super(key: key);
+class Changeaddress extends StatefulWidget {
+  const Changeaddress({Key? key,}) : super(key: key);
 
   @override
-  _ChangeAdressState createState() => _ChangeAdressState();
+  _ChangeaddressState createState() => _ChangeaddressState();
 }
 
-class _ChangeAdressState extends State<ChangeAdress> {
+class _ChangeaddressState extends State<Changeaddress> {
   final TextEditingController _mEtController = TextEditingController();
 
   @override
-  String mInputAdress = "";
+  String mInputaddress = "";
 
 
   @override
@@ -113,8 +112,10 @@ class _ChangeAdressState extends State<ChangeAdress> {
                             ToastUtil.show('地址不能为空!');
                             return;}
                           else{
-                            mInputAdress = _mEtController.text;
+                            mInputaddress = _mEtController.text;
+                            eventBus.fire(UpdatePeopleInfoEvent(peopleInfo: mInputaddress));
                             _update(post);
+                            Navigator.of(context).pop(context);
                           }
                         },
                         child: const Padding(
@@ -140,17 +141,25 @@ class _ChangeAdressState extends State<ChangeAdress> {
       ToastUtil.show('修改成功!');
       eventBus.fire(RefreshOrderDetailEvent());
       eventBus.fire(InitOrderListEvent());
-      Navigator.of(context).pop(context);
+
     });
-    print('===================');
-    print(addput.body.toString());
-    print(addput.statusCode.toString());
   }
 
   late var post = {
-    "accountId": 1,
-    "Adress": mInputAdress,
+    "accountId": Provider.of<UserInfo>(context,listen: false).accountId,
+    "accountName": "",
+    "accountState": "",
+    "accountType": "",
+    "address": mInputaddress,
+    "area": "",
+    "currentTime": "",
+    "firstLetter": "",
+    "imagePath": "",
+    "password": "",
+    "phone": "",
+    "realName": "",
   };
+
 
 }
 

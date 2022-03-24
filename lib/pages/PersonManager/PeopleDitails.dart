@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../global/constant/constant.dart';
+import '../../util/toast_util.dart';
 
 class PeopleDitails extends StatefulWidget {
   // final String imageUrl;
@@ -279,17 +280,13 @@ class _PeopleDitailsState extends State<PeopleDitails> {
                       barrierDismissible: true, // user must tap button!
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          content: Text('删除人员?',style: TextStyle(fontSize: 12),),
+                          content: Text('人员离职?',style: TextStyle(fontSize: 12),),
                           actions: <Widget>[
                             FlatButton(
                               child: Text('确定',style: TextStyle(fontSize: 12),),
                               onPressed: () {
-                                // UserUtil.loginout();
-                                // Navigator.of(context).pop();
-                                // Routes.navigateTo(
-                                //     context, '${Routes.loginPage}',
-                                //     clearStack: true,
-                                //     transition: TransitionType.fadeIn);
+                                ToastUtil.show('修改人员离职成功!');
+                                Navigator.of(context).pop(context);
                               },
                             ),
                             FlatButton(
@@ -313,7 +310,7 @@ class _PeopleDitailsState extends State<PeopleDitails> {
                       vertical: 15.0,
                     ),
                     child: const Center(
-                      child: Text('删除人员',
+                      child: Text('人员离职',
                           style: TextStyle(fontSize: 13, color: Colors.red)),
                     ),
                   )),

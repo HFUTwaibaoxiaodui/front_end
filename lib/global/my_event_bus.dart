@@ -12,10 +12,32 @@ class UpdateOrderNumEvent {
   int num;
   UpdateOrderNumEvent({required this.num});
 }
-// class UpdaterealNameEvent {
-//   String realName;
-//   UpdaterealNameEvent({required this.realName});
-// }
+
+class UpdatePeopleInfoEvent{
+  String peopleInfo='';
+  UpdatePeopleInfoEvent({
+    required this.peopleInfo
+});
+}
+
+class UpRealname{
+  String peopleInforealname='';
+  UpRealname({
+    required this.peopleInforealname
+});
+}
+class UpPhone{
+  String peopleInfophone='';
+  UpPhone({
+    required this.peopleInfophone
+  });
+}
+class UpArea{
+  String peopleInfoarea='';
+  UpArea({
+    required this.peopleInfoarea
+  });
+}
 
 
 

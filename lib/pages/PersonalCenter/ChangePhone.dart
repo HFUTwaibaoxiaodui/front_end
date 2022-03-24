@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/util/toast_util.dart';
-import 'package:random_string/random_string.dart';
+import 'package:random_string/random_string.dart' as PP;
 import 'package:provider/provider.dart';
 import 'package:frontend/util/net/network_util.dart';
 import 'package:provider/provider.dart';
@@ -113,6 +113,7 @@ class _ChangePhoneState extends State<ChangePhone> {
                             return;}
                           else{
                             mInputPhone = _mEtController.text;
+                            eventBus.fire(UpPhone(peopleInfophone: mInputPhone));
                             _update(post);
                           }
                         },
@@ -147,8 +148,18 @@ class _ChangePhoneState extends State<ChangePhone> {
   }
 
   late var post = {
-    "accountId": 1,
+    "accountId": Provider.of<UserInfo>(context,listen: false).accountId,
+    "accountName": "",
+    "accountState": "",
+    "accountType": "",
+    "address": "",
+    "area": "",
+    "currentTime": "",
+    "firstLetter": "",
+    "imagePath": "",
+    "password": "",
     "phone": mInputPhone,
+    "realName": "",
   };
 
 }

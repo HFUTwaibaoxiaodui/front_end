@@ -1,15 +1,25 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:city_pickers/city_pickers.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/global/my_event_bus.dart';
 import 'package:frontend/global/theme.dart';
 import 'package:frontend/global/user_info.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../global/back_end_interface_url.dart';
 import '../../global/constant/constant.dart';
-import 'ChangeAdress.dart';
+import '../../util/net/network_util.dart';
+import '../../util/toast_util.dart';
+import 'ChangeAddress.dart';
 import 'ChangeArea.dart';
 import 'ChangePhone.dart';
 import 'ChangeRealName.dart';
+import 'package:http/http.dart' as Http;
 
 class Personinfo extends StatefulWidget {
   const Personinfo({Key? key}) : super(key: key);
@@ -21,6 +31,9 @@ class Personinfo extends StatefulWidget {
 
 //头像布局
 class SettingHead extends StatelessWidget {
+
+
+
   final VoidCallback? onPressed;
 
   SettingHead({this.onPressed});
@@ -49,7 +62,7 @@ class SettingHead extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: ClipOval(
-                          child: Provider.of<UserInfo>(context).buildImage(context),
+                      child: Provider.of<UserInfo>(context).buildImage(context),
                         ),
                       ),
                       Container(
@@ -79,6 +92,7 @@ class SettingHead extends StatelessWidget {
 
 //普通条目布局
 class SettingCommon extends StatelessWidget {
+
   final VoidCallback? onPressed;
 
   const SettingCommon({this.title, this.content, this.onPressed});
@@ -138,21 +152,151 @@ class SettingCommon extends StatelessWidget {
   }
 }
 
+
+
+final ImagePicker picker = new ImagePicker();
+List _imageList = []; //图片列表
+int _photoIndex = 0; //选择拍照还是相册的索引
+
+List _actionSheet = [
+  {"name": "拍照", "icon": Icon(Icons.camera_alt)},
+  {"name": "相册", "icon": Icon(Icons.photo)}
+];
 //, elevation: 0.5
+
+
+
+
+
+
 class _PersoninfoState extends State<Personinfo> {
-  String area='';
-  String area1='';
-  String area2='';
+
+
+  String _realName = '';
+  String _area = '';
+  String _phone = '';
+  String _address = '';
+
+
+
+  late StreamSubscription _updatepeopleInfoSubscription;
+  late StreamSubscription _upRealName;
+  late StreamSubscription _upPhone;
+  late StreamSubscription _upArea;
+
+
 
   @override
   void initState() {
+    setState(() {
+      getPersonInfo();
+    });
+    // _address = Provider.of<UserInfo>(context).address.toString();
     super.initState();
+    _updatepeopleInfoSubscription = eventBus.on<UpdatePeopleInfoEvent>().listen((event) {
+      setState(() {
+        _address = event.peopleInfo;
+      });
+    });
+    _upRealName = eventBus.on<UpRealname>().listen((event) {
+      setState(() {
+        _realName = event.peopleInforealname;
+      });
+    });
+    _upPhone = eventBus.on<UpPhone>().listen((event) {
+      setState(() {
+        _phone = event.peopleInfophone;
+      });
+    });
+    _upArea = eventBus.on<UpArea>().listen((event) {
+      setState(() {
+        area1 = event.peopleInfoarea;
+      });
+    });
+  }
+  @override
+  void dispose() {
+    _updatepeopleInfoSubscription.cancel();
+    _upRealName.cancel();
+    _upPhone.cancel();
+    _upArea.cancel();
+    super.dispose();
+  }
+
+
+
+  String area1='';
+  String area2='';
+
+
+
+
+
+  //拍照或者相册选取图片，只能单选
+  Future _getImage() async {
+    Navigator.of(context).pop();
+    XFile? image = await picker.pickImage(
+        source: _photoIndex == 0 ? ImageSource.camera : ImageSource.gallery);
+
+    //没有选择图片或者没有拍照
+    if (image != null) {
+      setState(() {
+        _uploadImage(image);
+        _imageList.add(image);
+      });
+    }
+    print("ok!!!");
+    // print(_imageList.toString());
+  }
+
+//获取sheet选择
+  Future _getActionSheet() async {
+
+
+
+    await showModalBottomSheet(
+        context: context,
+        builder: (ctx) {
+          return Container(
+            padding: EdgeInsets.all(10.0),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: _actionSheet.length,
+              itemExtent: 50.0,
+              itemBuilder: (innerCtx, i) {
+                return ListTile(
+                  title: Text(_actionSheet[i]["name"]),
+                  leading: _actionSheet[i]["icon"],
+                  onTap: () {
+                    setState(() {
+                      _photoIndex = i;
+                    });
+                    _getImage();
+                  },
+                );
+              },
+            ),
+          );
+        });
+  }
+  Dio _dio = Dio();
+  List _imageString = [];
+
+  //上传图片到服务器
+  _uploadImage(XFile _image) async {
+    FormData formData = FormData.fromMap({
+      "pic": await MultipartFile.fromFile(_image!.path, filename:"imageName.png"),
+    });
+    var response = await _dio.post(uploadImage, data: formData);
+    _imageString.add("http://121.40.130.17:7777/images/${response}");
+    print(_imageString);
+    print("ok!");
 
   }
 
   @override
   Widget build(BuildContext context) {
-
+    print('========1'+_realName.length.toString()+_phone.length.toString()+_address.length.toString()+_area+'========');
     return Scaffold(
             appBar: AppBar(
                 title: const Text(
@@ -165,44 +309,26 @@ class _PersoninfoState extends State<Personinfo> {
               color: const Color(0xffF2F2F2),
               child: ListView(
                 children: <Widget>[
-                  SettingHead(onPressed: () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return Container();
-                          // return HeadChooseWidget(
-                          //     chooseImgCallBack: (File mHeadFile) {
-                          //       FormData formData = FormData.fromMap({
-                          //         "userId": UserUtil.getUserInfo().id,
-                          //         "headFile": MultipartFile.fromFileSync(mHeadFile.path)
-                          //       });
-                          //       request(ServiceUrl.updateHead, formData: formData)
-                          //           .then((val) {
-                          //         int code = val['status'];
-                          //         if (code == 200) {
-                          //           String mUrl = val['data'];
-                          //           print("返回的头像的url:${mUrl}");
-                          //           UserUtil.saveUserHeadUrl(mUrl);
-                          //           ToastUtil.show('提交成功!');
-                          //           setState(() {});
-                          //         } else {
-                          //           String msg = val['msg'];
-                          //           ToastUtil.show(msg);
-                          //         }
-                          //       });
-                          //     });
-                        });
-                  }),
+                  SettingHead(
+                    onPressed: () {
+                      _getActionSheet();
+                      for (var element in _imageList) {
+                      _uploadImage(element);
+                      }
+                    }
+
+                  ),
                   SettingCommon(
-                      title: "账户名",
-                      content: Provider.of<UserInfo>(context).accountId.toString(),
+                      title: "账户id",
+                      content: Provider.of<UserInfo>(context,listen: false).accountId.toString(),
                       onPressed: () {
 
                         // Routes.navigateTo(context, '${Routes.changeNickNamePage}');
                       }),
                   SettingCommon(
                       title: "用户名称",
-                      content: Provider.of<UserInfo>(context).realName,
+                      // content: Provider.of<UserInfo>(context).realName,
+                      content: _realName,
                       onPressed: () {
                         Navigator.of(context).push(
                             CupertinoPageRoute(builder: (BuildContext context){
@@ -212,27 +338,44 @@ class _PersoninfoState extends State<Personinfo> {
 
                   SettingCommon(
                       title: "地区",
-                      content: Provider.of<UserInfo>(context).area,
-                      onPressed: () {
-                        _bottomSheet(context);
-                        // Navigator.of(context).push(
-                        //     CupertinoPageRoute(builder: (BuildContext context){
-                        //       return citypicker();
-                        //     })
-                        // );
+                      content: area1.length>0 ? area1:Provider.of<UserInfo>(context,listen: false).area,
+                      onPressed:() {
+                        CityPickers.showCityPicker(context: context).then((value){
+                          setState(() {
+                            _area = value!.provinceName! + ' ' + value.cityName! + ' ' + value.areaName!;
+                            _updateArea({
+                              "accountId": Provider.of<UserInfo>(context,listen: false).accountId,
+                              "accountName": "",
+                              "accountState": "",
+                              "accountType": "",
+                              "address": "",
+                              "area": _area,
+                              "currentTime": "",
+                              "firstLetter": "",
+                              "imagePath": "",
+                              "password": "",
+                              "phone": "",
+                              "realName": "",
+                            });
+                          });
+
+                          eventBus.fire(UpArea(peopleInfoarea: _area));
+                        });
+
                       }),
                   SettingCommon(
                       title: "具体所在地",
-                      content: Provider.of<UserInfo>(context).address,
+                      content: _address.isEmpty ? Provider.of<UserInfo>(context,listen: false).address : _address,
                       onPressed: () {
                         Navigator.of(context).push(
                             CupertinoPageRoute(builder: (BuildContext context){
-                              return ChangeAdress();})
+                              return Changeaddress();})
                         );
                       }),
                   SettingCommon(
                       title: "手机号",
-                      content: Provider.of<UserInfo>(context).phone,
+                      // content: Provider.of<UserInfo>(context).phone,
+                      content: _phone.isEmpty ? Provider.of<UserInfo>(context,listen: false).phone : _phone,
                       onPressed: () {
                         Navigator.of(context).push(
                             CupertinoPageRoute(builder: (BuildContext context){
@@ -241,7 +384,7 @@ class _PersoninfoState extends State<Personinfo> {
                       }),
                   SettingCommon(
                       title: "状态",
-                      content: Provider.of<UserInfo>(context).accountState,
+                      content: Provider.of<UserInfo>(context,listen: false).accountState,
                       onPressed: () {
                         // ToastUtil.show('暂未开发!');
                       }),
@@ -250,107 +393,62 @@ class _PersoninfoState extends State<Personinfo> {
                     color: Color(0xffF2F2F2),
                     //  margin: EdgeInsets.only(left: 60),
                   ),
-                  // SettingCommon(
-                  //   title: "意见反馈",
-                  //   content: "",
-                  //   onPressed: () {
-                  //     // Routes.navigateTo(context, '${Routes.feedbackPage}');
-                  //   },
-                  // ),
-                  // SettingCommon(title: "关于微博", content: ""),
-                  // SettingCommon(title: "清理缓存", content: ""),
                   Container(
                     height: 30,
                     color: Color(0xffF2F2F2),
                     //  margin: EdgeInsets.only(left: 60),
                   ),
-                  // Material(
-                  //   color: Colors.white,
-                  //   child: InkWell(
-                  //       onTap: () {
-                  //         //Routes  .navigateTo(context, '${Routes.settingPage}');
-                  //         showDialog(
-                  //           context: context,
-                  //           barrierDismissible: true, // user must tap button!
-                  //           builder: (BuildContext context) {
-                  //             return AlertDialog(
-                  //               content: Text('退出登录?'),
-                  //               actions: <Widget>[
-                  //                 FlatButton(
-                  //                   child: Text('确定'),
-                  //                   onPressed: () {
-                  //                     // UserUtil.loginout();
-                  //                     // Navigator.of(context).pop();
-                  //                     // Routes.navigateTo(
-                  //                     //     context, '${Routes.loginPage}',
-                  //                     //     clearStack: true,
-                  //                     //     transition: TransitionType.fadeIn);
-                  //                   },
-                  //                 ),
-                  //                 FlatButton(
-                  //                   child: Text('取消'),
-                  //                   onPressed: () {
-                  //                     Navigator.of(context).pop();
-                  //                   },
-                  //                 ),
-                  //               ],
-                  //               backgroundColor: Colors.white,
-                  //               elevation: 20,
-                  //               // 设置成 圆角
-                  //               shape: RoundedRectangleBorder(
-                  //                   borderRadius: BorderRadius.circular(10)),
-                  //             );
-                  //           },
-                  //         );
-                  //       },
-                  //       child: Container(
-                  //         padding: const EdgeInsets.symmetric(
-                  //           vertical: 15.0,
-                  //         ),
-                  //         child: const Center(
-                  //           child: Text('退出',
-                  //               style: TextStyle(fontSize: 14, color: Colors.red)),
-                  //         ),
-                  //       )),
-                  // ),
                 ],
               ),
             ),
           );
   }
-  Future<void> _bottomSheet(BuildContext context) async {
-    return showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return buildcitypicker();
-      },
-    );
+  void _updateArea(var post) async{
+    var addput = await Http.put(
+        Uri.parse(updateInformation),
+        headers: {"content-type" : "application/json"},
+        body: json.encode(post)
+    ).then((value){
+      ToastUtil.show('修改成功!');
+      // Navigator.of(context).pop(context);
+    });
   }
-  Widget buildcitypicker(){
-    return Container(
-      height: 400,
-      child: InkWell(
-        child: Row(
-          children: <Widget>[
-            Icon(Icons.add_location),
-            this.area.length>0?Text("$area",style: const TextStyle(fontSize: 13,
-                color: Colors.black54
-            ),):Text("省/市/区",style: TextStyle(fontSize: 13,
-                color: Colors.black54))
-          ],
-        ),
-        onTap: () async{
-          Result? result = await CityPickers.showCityPicker(
-              context: context,
-              cancelWidget: Text("取消",style: TextStyle(color: Colors.black),),
-              confirmWidget: Text("确定",style: TextStyle(color: Colors.black),)
-          );
-          setState(() {
-            this.area="${result?.provinceName}/${result?.cityName}/${result?.areaName}";
-          });
 
-        },
-      ),
-    );
+  late var post = {
+    "accountId": Provider.of<UserInfo>(context,listen: false).accountId,
+    "accountName": "",
+    "accountState": "",
+    "accountType": "",
+    "address": "",
+    "area": _area,
+    "currentTime": "",
+    "firstLetter": "",
+    "imagePath": "",
+    "password": "",
+    "phone": "",
+    "realName": "",
+  };
+
+  void getPersonInfo() async{
+    HttpManager().get(selectAccountById, args: {'accountId' : Provider.of<UserInfo>(context,listen: false).accountId}).then((value){
+      // _accountId = value['accountId'];
+      // _accountType = value['accountType'];
+      // _imagePath = value['imagePath'];
+      _realName = value['realName'];
+      _phone = value['phone'];
+      _address = value['address'];
+      _area = value['area'];
+      // _currentTime = value['currentTime'];
+      // _accountState = value['accountState'];
+      // _firstLetter = value['firstLetter'];
+      // _accountName = value['accountName'];
+      print('========2'+_realName+_phone+_address+_area+'========');
+
+
+    });
   }
+
+
+
+
 }

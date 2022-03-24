@@ -30,6 +30,7 @@ class _SelectPeoplesPageState extends State<SelectPeoplesPage> {
 
   late List<dynamic> list;
 
+
   getinfo() async {
     Response response = await dio.get('http://121.40.130.17:9090/account/selectAllInformation');
     print(response.data);
@@ -59,6 +60,11 @@ class _SelectPeoplesPageState extends State<SelectPeoplesPage> {
         }
       }
     }
+
+    setState(() {
+
+    });
+
     print(_listDatas);
   }
   @override
@@ -70,29 +76,12 @@ class _SelectPeoplesPageState extends State<SelectPeoplesPage> {
     _scrollController = ScrollController();
   }
 
-  final List<Friends> _headerData = [
-    // Friends(imageUrl: 'assets/images/新的朋友.png', name: '添加人员'),
-    // Friends(imageUrl: 'assets/images/群聊.png', name: '选择人员'),
-    // Friends(imageUrl: 'assets/images/标签.png', name: '收藏'),
-    // Friends(imageUrl: 'assets/images/公众号.png', name: '群组'),
-  ];
 
   Widget _itemForRow(BuildContext context, int index) {
-//    系统cell
-    if (index < _headerData.length) {
-      return _FriendsCell(
-        imageAssets: _headerData[index].imageUrl!,
-        name: _headerData[index].name!,
-      );
-    }
-    //显示剩下的cell
-    //如果当前和上一个cell的indexLetter一样，就不显示
-    bool _hideIndexLetter = (index - 4 > 0 &&
-        _listDatas[index - 4].indexLetter == _listDatas[index - 5].indexLetter);
     return _FriendsCell(
-      imageUrl: _listDatas[index - 4].imageUrl!,
-      name: _listDatas[index - 4].name!,
-      groupTitle: _hideIndexLetter ? null : _listDatas[index - 4].indexLetter!,
+      imageUrl: _listDatas[index].imageUrl!,
+      name: _listDatas[index].name!,
+      groupTitle: _listDatas[index].indexLetter!,
     );
   }
 
@@ -101,7 +90,7 @@ class _SelectPeoplesPageState extends State<SelectPeoplesPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.cyan,
-        title: Text('人员管理',style: TextStyle(fontSize: 14),),
+        title: Text('人员选择',style: TextStyle(fontSize: 14),),
         actions: <Widget>[
           GestureDetector(
             child: Container(
@@ -128,21 +117,55 @@ class _SelectPeoplesPageState extends State<SelectPeoplesPage> {
               color: WeChatThemColor,
               child: ListView.builder(
                 controller: _scrollController,
-                itemCount: _listDatas.length + _headerData.length,
+                itemCount: _listDatas.length,
                 itemBuilder: _itemForRow,
               )), //列表
-          // IndexBar(
-          //   indexBarCallBack: (String str) {
-          //     if (_groupOffsetMap[str] != null) {
-          //       _scrollController.animateTo(_groupOffsetMap[str],
-          //           duration: Duration(milliseconds: 1), curve: Curves.easeIn);
-          //     }
-          //   },
-          // ), //悬浮检索控件
         ],
       ),
+      bottomNavigationBar: ImmediatelyChange,
     );
   }
+  //底部的立即兑换
+  Widget ImmediatelyChange = Container(
+    height: 50.0,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Container(
+            height: 50.0,
+            color: Colors.blue,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '取消',
+                  style: TextStyle(color: Colors.white,fontSize: 15.0),
+                )
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Container(
+            height: 50.0,
+            color: Colors.cyan,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '确定',
+                  style: TextStyle(color: Colors.white,fontSize: 15.0),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class _FriendsCell extends StatelessWidget {
@@ -171,10 +194,6 @@ class _FriendsCell extends StatelessWidget {
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: (){
-              print('点击了');
-              Navigator.of(context).push(
-                  CupertinoPageRoute(builder: (BuildContext context){return PeopleDitails();})
-              );
             },
             child: Row(
               children: <Widget>[
@@ -226,83 +245,3 @@ class _FriendsCell extends StatelessWidget {
   }
 }
 
-class _HeadCell extends StatelessWidget {
-  final String? imageUrl;
-  final String name;
-  final String? groupTitle;
-  final String? imageAssets;
-
-  const _HeadCell(
-      {this.imageUrl, required this.name, this.imageAssets, this.groupTitle}); //首字母大写
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(left: 10),
-          height: groupTitle != null ? 30 : 0,
-          color: Color.fromRGBO(1, 1, 1, 0.0),
-          child: groupTitle != null ? Text(groupTitle ?? 'null', style: TextStyle(fontSize: 13, color: Colors.grey)) : null,
-        ), //组头
-        Material(
-          color: Colors.white,
-          child: InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onTap: (){
-              print('点击了');
-              Navigator.of(context).push(
-                  CupertinoPageRoute(builder: (BuildContext context){return PeopleDitails();})
-              );
-            },
-            child: Row(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.all(10),
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6.0),
-                      image: DecorationImage(
-                        image: _getImage(),
-                      )),
-                ), //图片
-                Container(
-                  child: Text(
-                    name,
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ), //昵称
-                Container(
-
-                ),
-              ],
-            ),
-          ),
-        ), //通讯录组内容
-        Container(
-          height: 0.5,
-          color: WeChatThemColor,
-          child: Row(
-            children: <Widget>[
-              Container(
-                width: 50,
-                color: Colors.white,
-              )
-            ],
-          ),
-        ) //分割线
-      ],
-    );
-  }
-
-  _getImage() {
-    if (imageUrl != null) {
-      return NetworkImage(imageUrl!);
-    } else {
-      return AssetImage(imageAssets!);
-    }
-  }
-}
