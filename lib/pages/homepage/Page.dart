@@ -122,4 +122,3 @@ class _IndexState extends State<IndexPage> {
     }
   }
 }
-
