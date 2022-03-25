@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
    <application
-        android:label="frontend"
+        android:label="易巡检"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
