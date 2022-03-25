@@ -672,7 +672,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Padding(
               padding: const EdgeInsets.all(5),
-              child: Provider.of<UserInfo>(context, listen: false).accountType == 'USER' ?
+              child: Provider.of<UserInfo>(context, listen: false).accountType != 'USER' ?
                 GestureDetector(
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context){

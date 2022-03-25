@@ -141,7 +141,7 @@ class _IndexState extends State<IndexPage> {
 
     _sort = const BottomNavigationBarItem(
       // backgroundColor: Colors.red,
-      icon: Icon(Icons.person),
+      icon: Icon(Icons.search),
       label: "快捷询单",
     );
 

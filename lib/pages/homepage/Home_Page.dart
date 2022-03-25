@@ -38,7 +38,8 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
     '待服务',
     '服务中',
     '待评价',
-    '已完成'
+    '已完成',
+    '异常'
   ];
 
   @override
