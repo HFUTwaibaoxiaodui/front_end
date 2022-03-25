@@ -31,9 +31,7 @@ class Personinfo extends StatefulWidget {
 
 //头像布局
 class SettingHead extends StatelessWidget {
-
-
-
+  
   final VoidCallback? onPressed;
 
   SettingHead({this.onPressed});
@@ -155,7 +153,7 @@ class SettingCommon extends StatelessWidget {
 
 
 final ImagePicker picker = new ImagePicker();
-List _imageList = []; //图片列表
+XFile? imageChoose; //图片列表
 int _photoIndex = 0; //选择拍照还是相册的索引
 
 List _actionSheet = [
@@ -165,26 +163,20 @@ List _actionSheet = [
 //, elevation: 0.5
 
 
-
-
-
-
 class _PersoninfoState extends State<Personinfo> {
-
-
   String _realName = '';
   String _area = '';
   String _phone = '';
   String _address = '';
-
-
-
+  String _imagePath = '';
+  
   late StreamSubscription _updatepeopleInfoSubscription;
   late StreamSubscription _upRealName;
   late StreamSubscription _upPhone;
   late StreamSubscription _upArea;
-
-
+  
+  Dio _dio = Dio();
+  String _imageString = "";
 
   @override
   void initState() {
@@ -223,37 +215,23 @@ class _PersoninfoState extends State<Personinfo> {
     super.dispose();
   }
 
-
-
   String area1='';
   String area2='';
-
-
-
-
 
   //拍照或者相册选取图片，只能单选
   Future _getImage() async {
     Navigator.of(context).pop();
-    XFile? image = await picker.pickImage(
-        source: _photoIndex == 0 ? ImageSource.camera : ImageSource.gallery);
-
+    var _image = await picker.pickImage(source: _photoIndex == 0 ? ImageSource.camera : ImageSource.gallery);
     //没有选择图片或者没有拍照
-    if (image != null) {
+    if (_image != null) {
       setState(() {
-        _uploadImage(image);
-        _imageList.add(image);
+        imageChoose = _image;
       });
     }
-    print("ok!!!");
-    // print(_imageList.toString());
   }
 
 //获取sheet选择
   Future _getActionSheet() async {
-
-
-
     await showModalBottomSheet(
         context: context,
         builder: (ctx) {
@@ -279,19 +257,20 @@ class _PersoninfoState extends State<Personinfo> {
           );
         });
   }
-  Dio _dio = Dio();
-  List _imageString = [];
+
 
   //上传图片到服务器
   _uploadImage(XFile _image) async {
     FormData formData = FormData.fromMap({
-      "pic": await MultipartFile.fromFile(_image!.path, filename:"imageName.png"),
+      "pic": await MultipartFile.fromFile(_image.path, filename:"imageName.png"),
     });
-    var response = await _dio.post(uploadImage, data: formData);
-    _imageString.add("http://121.40.130.17:7777/images/${response}");
-    print(_imageString);
-    print("ok!");
-
+    _dio.post(uploadImage, data: formData).then((value){
+      setState(() {
+        _imageString ="http://121.40.130.17:7777/images/${value}";
+        Provider.of<UserInfo>(context, listen: false).imagePath = _imageString;
+      });
+      print(_imageString);
+    });
   }
 
   @override
@@ -311,12 +290,19 @@ class _PersoninfoState extends State<Personinfo> {
                 children: <Widget>[
                   SettingHead(
                     onPressed: () {
-                      _getActionSheet();
-                      for (var element in _imageList) {
-                      _uploadImage(element);
-                      }
+                        _getActionSheet();
+                        _uploadImage(imageChoose!);
+                        HttpManager().put(
+                          updateInformation,
+                          args: {
+                            'accountId': Provider.of<UserInfo>(context, listen: false).accountId,
+                            'imagePath': _imageString
+                          }
+                        );
+                        setState(() {
+                          getPersonInfo();
+                        });
                     }
-
                   ),
                   SettingCommon(
                       title: "账户id",
@@ -338,7 +324,8 @@ class _PersoninfoState extends State<Personinfo> {
 
                   SettingCommon(
                       title: "地区",
-                      content: area1.length>0 ? area1:Provider.of<UserInfo>(context,listen: false).area,
+                      // content: area1.length>0 ? area1:Provider.of<UserInfo>(context,listen: false).area,
+                      content: area1.length>0 ? area1: _area,
                       onPressed:() {
                         CityPickers.showCityPicker(context: context).then((value){
                           setState(() {
@@ -431,24 +418,14 @@ class _PersoninfoState extends State<Personinfo> {
 
   void getPersonInfo() async{
     HttpManager().get(selectAccountById, args: {'accountId' : Provider.of<UserInfo>(context,listen: false).accountId}).then((value){
-      // _accountId = value['accountId'];
-      // _accountType = value['accountType'];
-      // _imagePath = value['imagePath'];
-      _realName = value['realName'];
-      _phone = value['phone'];
-      _address = value['address'];
-      _area = value['area'];
-      // _currentTime = value['currentTime'];
-      // _accountState = value['accountState'];
-      // _firstLetter = value['firstLetter'];
-      // _accountName = value['accountName'];
+      setState(() {
+        _imagePath = value['imagePath'];
+        _realName = value['realName'];
+        _phone = value['phone'];
+        _address = value['address'];
+        _area = value['area'];
+      });
       print('========2'+_realName+_phone+_address+_area+'========');
-
-
     });
   }
-
-
-
-
 }

@@ -164,6 +164,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "flutter_pickers",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/flutter_pickers-2.1.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_plugin_android_lifecycle",
       "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/flutter_plugin_android_lifecycle-2.0.5",
       "packageUri": "lib/",
@@ -644,7 +650,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-23T01:27:02.867377Z",
+  "generated": "2022-03-25T01:23:00.593521Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }
