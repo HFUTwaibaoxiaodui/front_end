@@ -292,6 +292,9 @@ class _PersoninfoState extends State<Personinfo> {
                     onPressed: () {
                         _getActionSheet();
                         _uploadImage(imageChoose!);
+                        setState(() {
+                          getPersonInfo();
+                        });
                         HttpManager().put(
                           updateInformation,
                           args: {
@@ -299,9 +302,6 @@ class _PersoninfoState extends State<Personinfo> {
                             'imagePath': _imageString
                           }
                         );
-                        setState(() {
-                          getPersonInfo();
-                        });
                     }
                   ),
                   SettingCommon(

@@ -1,4 +1,4 @@
-const String serverIp = '192.168.43.31';
+const String serverIp = '121.40.130.17';
 const String serverPort = '9090';
 const String defaultImagePath = 'http://121.40.130.17:7777/images/cat.jpeg';
 
@@ -20,10 +20,8 @@ final String sendMessage = generateURL('/JPush/sendMessage');
 final String updateInformation = generateURL('/account/updateinformation');
 final String uploadImage = generateURL('/api/img/uploadImage');
 
-
 final String addPatrolOrderWorkerEdit = generateURL('/PatrolOrderWorkerEdit/insert');
 final String addPatrolOrder = generateURL('/PatrolOrder/insert');
-final String uploadImage = generateURL('/api/img/uploadImage');
 
 String generateURL(String path) {
   return 'http://' + serverIp + ':' + serverPort + path;
