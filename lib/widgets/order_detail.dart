@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:date_format/date_format.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:frontend/global/user_info.dart';
@@ -61,9 +62,30 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
   late StreamSubscription _rebuildOrderDetail;
   Map<String, dynamic> _evaluate = {};
 
+  Map<String, dynamic> _content = {};
+  List <Object> listtest = [];
+
+
+  late TextEditingController _inspectSite; //站点名称
+  late TextEditingController _inspectCategory; //巡检类别
+  late TextEditingController _inspectContent;  //巡检内容
+  late TextEditingController _inspectExeption; //巡检结果
+
+
   @override
   void initState() {
     super.initState();
+    HttpManager().get(findByOrderId, args: {'orderId': widget.id}).then((value) {
+      setState(() {
+        _content = value[0];
+        print(_content);
+      });
+    });
+    _inspectSite = TextEditingController();
+    _inspectCategory = TextEditingController();
+    _inspectContent = TextEditingController();
+    _inspectExeption = TextEditingController();
+    _inspectSite.text = "";
     _loadData();
     tabController = TabController(length: _tabValues.length, vsync: this, initialIndex: 0);
     pageController = PageController(initialPage: _currentIndex);
@@ -125,6 +147,12 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
     tabController.dispose();
     pageController.dispose();
     _refreshSubscription.cancel();
+
+    _inspectSite.dispose();
+    _inspectCategory.dispose();
+    _inspectContent.dispose();
+    _inspectExeption.dispose();
+
     super.dispose();
   }
 
@@ -341,6 +369,65 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
         ],
       );
     });
+  }
+
+
+  Widget _buildOrderContent() {
+    return ListView(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Expanded(
+                child: ListTile(title: Text('站点名称')),flex: 3),
+            Expanded(child: ListTile(
+              // contentPadding: const EdgeInsets.only(top: 10),
+              title: Text(
+                _inspectSite.text=_content['siteName'] == null ? "暂无" : _content['siteName'],
+              ),
+            ),flex: 7),
+          ],
+        ),  //站点名称
+        Divider(thickness: 0.5, color: Colors.grey.shade400),
+        Row(
+          children: [
+            const Expanded(child: ListTile(title: Text('巡检类别')),flex: 3),
+            Expanded(child: ListTile(
+              title: Text(
+                _inspectCategory.text=_content['inspectionCategory'] == null ? "暂无" : _content['inspectionCategory'],
+              ),
+            ),flex: 7),
+          ],
+        ),  //巡检类别
+        Divider(thickness: 0.5, color: Colors.grey.shade400),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Expanded(
+                child: ListTile(title: Text('巡检内容')),flex: 3),
+            Expanded(child: ListTile(
+              title: Text(
+                _inspectContent.text=_content['inspectionContent'] == null ? "暂无" : _content['inspectionContent'],
+              ),
+            ),flex: 7),
+          ],
+        ),  //巡检内容
+        Divider(thickness: 0.5, color: Colors.grey.shade400),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Expanded(
+                child: ListTile(title: Text('检查结果')),flex: 3),
+            Expanded(child: ListTile(
+              title: Text(
+                _inspectExeption.text=_content['inspectionResult'] == null ? "暂无" : _content['inspectionResult'],
+              ),
+            ),flex: 7),
+          ],
+        ),  //检查结果
+
+      ],
+    );
   }
 
   void _initTabState() {
@@ -701,7 +788,8 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
   Widget _buildOrderDetail() {
     _pages.add(_buildOrderAttributes());
     _pages.add(_buildOperationProgress());
-    _pages.add(Container(color: Colors.green));
+    // _pages.add(Container(color: Colors.green));
+    _pages.add(_buildOrderContent());
 
     return Container (
       // height: MediaQuery.of(context).size.height,
