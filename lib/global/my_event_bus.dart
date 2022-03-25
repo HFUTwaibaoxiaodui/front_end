@@ -15,4 +15,31 @@ class UpdateOrderNumEvent {
 class UpdateExceptionHandlePage{}
 class RefreshDifferentStateOrderCount{}
 
+class UpdatePeopleInfoEvent{
+  String peopleInfo='';
+  UpdatePeopleInfoEvent({
+    required this.peopleInfo
+});
+}
+
+class UpRealname{
+  String peopleInforealname='';
+  UpRealname({
+    required this.peopleInforealname
+});
+}
+class UpPhone{
+  String peopleInfophone='';
+  UpPhone({
+    required this.peopleInfophone
+  });
+}
+class UpArea{
+  String peopleInfoarea='';
+  UpArea({
+    required this.peopleInfoarea
+  });
+}
+
+
 
