@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../global/back_end_interface_url.dart';
 import '../global/my_event_bus.dart';
+import '../global/user_info.dart';
 import '../util/net/network_util.dart';
+import 'package:provider/provider.dart';
 
 class OrderEvaluate extends StatefulWidget {
 
   int id;
+  int workerId;
   String name;
 
-  OrderEvaluate({Key? key, required this.id, required this.name}) : super(key: key);
+  OrderEvaluate({Key? key, required this.id, required this.name, required this.workerId}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => OrderEvaluateState();
@@ -202,7 +205,17 @@ class OrderEvaluateState extends State<OrderEvaluate> {
                               }
                             );
 
-                            String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                            HttpManager().post(
+                                sendMessage,
+                                args: {
+                                  'alias': widget.workerId,
+                                  'message': '你的服务已经得到评价',
+                                  'name': Provider.of<UserInfo>(context, listen:false).realName,
+                                  'orderId': widget.id
+                                }
+                            );
+
+                            String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
                             HttpManager().post(
                                 addOperationLog,
                                 args: {

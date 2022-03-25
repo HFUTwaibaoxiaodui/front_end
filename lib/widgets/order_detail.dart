@@ -15,7 +15,6 @@ import '../global/back_end_interface_url.dart';
 import '../global/my_event_bus.dart';
 import '../global/state_label_colors.dart';
 import '../views/edit_work_order.dart';
-import 'order_list.dart';
 import '../models/operation.dart';
 import '../pages/exception_report.dart';
 import '../util/net/network_util.dart';
@@ -96,6 +95,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
             return ExceptionReport(
               id: widget.id,
               lastOrderState: _order!.orderState,
+              creatorId: _order!.creatorId,
             );
           }
           ));
@@ -398,7 +398,16 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                     printWithDebug('验证成功');
                     /// 状态由待抢单转为待服务
                     HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '服务中'});
-                    String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                    HttpManager().post(
+                        sendMessage,
+                        args: {
+                          'alias': _order!.creatorId.toString(),
+                          'message': '你有一份工单开始服务',
+                          'name': Provider.of<UserInfo>(context, listen:false).realName,
+                          'orderId': _order!.id
+                        }
+                    );
+                    String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
                     HttpManager().post(
                         addOperationLog,
                         args: {
@@ -516,7 +525,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                                   'workerId': Provider.of<UserInfo>(context, listen: false).accountId
                                 }
                               );
-                              String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                              String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
                               HttpManager().post(
                                   addOperationLog,
                                   args: {
@@ -574,7 +583,8 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context){
                     return ExceptionHandle(
-                      id: widget.id,
+                      orderId: widget.id,
+                      workerId: _order!.workerId!,
                     );
                   }));
                 },
@@ -602,7 +612,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
               ) :
                 GestureDetector(
                 onTap: (){
-                  Navigator.of(context).pushNamed('/order_evaluate', arguments: {'id': widget.id, 'name': _order!.creatorName!});
+                  Navigator.of(context).pushNamed('/order_evaluate', arguments: {'id': widget.id, 'name': _order!.creatorName!, 'workerId':_order!.workerId});
                 },
                 child: Container(
                   color: Colors.cyanAccent.shade700,

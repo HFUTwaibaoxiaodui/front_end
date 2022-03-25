@@ -219,15 +219,12 @@ class _PersoninfoState extends State<Personinfo> {
   String area2='';
 
   //拍照或者相册选取图片，只能单选
-  Future _getImage() async {
-    Navigator.of(context).pop();
-    var _image = await picker.pickImage(source: _photoIndex == 0 ? ImageSource.camera : ImageSource.gallery);
-    //没有选择图片或者没有拍照
-    if (_image != null) {
-      setState(() {
-        imageChoose = _image;
+  void _getImage() {
+    picker.pickImage(source: _photoIndex == 0 ? ImageSource.camera : ImageSource.gallery).then((value){
+      _uploadImage(value!).then((value){
+        Navigator.of(context).pop();
       });
-    }
+    });
   }
 
 //获取sheet选择
@@ -248,8 +245,8 @@ class _PersoninfoState extends State<Personinfo> {
                   onTap: () {
                     setState(() {
                       _photoIndex = i;
+                      _getImage();
                     });
-                    _getImage();
                   },
                 );
               },
@@ -260,7 +257,7 @@ class _PersoninfoState extends State<Personinfo> {
 
 
   //上传图片到服务器
-  _uploadImage(XFile _image) async {
+   Future _uploadImage(XFile _image) async {
     FormData formData = FormData.fromMap({
       "pic": await MultipartFile.fromFile(_image.path, filename:"imageName.png"),
     });
@@ -268,8 +265,16 @@ class _PersoninfoState extends State<Personinfo> {
       setState(() {
         _imageString ="http://121.40.130.17:7777/images/${value}";
         Provider.of<UserInfo>(context, listen: false).imagePath = _imageString;
+        HttpManager().put(
+            updateInformation,
+            args: {
+              'accountId': Provider.of<UserInfo>(context, listen: false).accountId,
+              'imagePath': _imageString
+            });
+        setState(() {
+          getPersonInfo();
+        });
       });
-      print(_imageString);
     });
   }
 
@@ -291,17 +296,6 @@ class _PersoninfoState extends State<Personinfo> {
                   SettingHead(
                     onPressed: () {
                         _getActionSheet();
-                        _uploadImage(imageChoose!);
-                        setState(() {
-                          getPersonInfo();
-                        });
-                        HttpManager().put(
-                          updateInformation,
-                          args: {
-                            'accountId': Provider.of<UserInfo>(context, listen: false).accountId,
-                            'imagePath': _imageString
-                          }
-                        );
                     }
                   ),
                   SettingCommon(

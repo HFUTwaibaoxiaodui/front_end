@@ -40,10 +40,8 @@ public class CalculateDistanceActivity{
 
     private final AMapLocationListener locationListener = location -> {
         if (null != location) {
-            latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            float _dis = AMapUtils.calculateLineDistance(latLng, new LatLng(latitude, longitude));
             if(_listener!=null){
-                _listener.distance(_dis);
+                _listener.distance(location.getLatitude(), location.getLongitude());
             }
         }
     };

@@ -15,8 +15,9 @@ class ExceptionReport extends StatefulWidget {
 
   int id;
   String lastOrderState;
+  int creatorId;
 
-  ExceptionReport({Key? key, required this.id, required this.lastOrderState}) : super(key: key);
+  ExceptionReport({Key? key, required this.id, required this.lastOrderState, required this.creatorId}) : super(key: key);
 
   @override
   State<StatefulWidget> createState()  => ExceptionReportState();
@@ -195,7 +196,7 @@ class ExceptionReportState extends State<ExceptionReport> {
                             Scaffold.of(context).showSnackBar(snackBar);
                           } else {
                             HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '异常'});
-                            String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                            String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
                             HttpManager().post(submitException,
                                 args: {
                                   'exceptionClass': _exceptionClass.text,
@@ -203,6 +204,15 @@ class ExceptionReportState extends State<ExceptionReport> {
                                   'orderId': widget.id,
                                   'submitTime': formattedDate,
                                   'lastOrderState': widget.lastOrderState
+                                }
+                            );
+                            HttpManager().post(
+                                sendMessage,
+                                args: {
+                                  'alias': widget.creatorId.toString(),
+                                  'message': '你有一份工单出现异常',
+                                  'name': Provider.of<UserInfo>(context, listen:false).realName,
+                                  'orderId': widget.id
                                 }
                             );
                             HttpManager().post(

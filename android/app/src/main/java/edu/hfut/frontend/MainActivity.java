@@ -10,6 +10,9 @@ import androidx.annotation.Nullable;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.hfut.frontend.activities.AddressPickActivity;
 import edu.hfut.frontend.activities.CalculateDistanceActivity;
 import edu.hfut.frontend.activities.NavigatorActivity;
@@ -56,8 +59,11 @@ public class MainActivity extends FlutterActivity {
                                 new CalculateDistanceActivity().getCurrentDistance(latitude, longitude,
                                         MainActivity.this, new DistanceListener() {
                                             @Override
-                                            public void distance(float _dis) {
-                                                MainActivity.mResult.success(_dis);
+                                            public void distance(double latitude, double longitude) {
+                                                Map<String, Object> resultMap = new HashMap<>();
+                                                resultMap.put("longitude", longitude);
+                                                resultMap.put("latitude", latitude);
+                                                MainActivity.mResult.success(resultMap);
                                             }
                                         });
                             }

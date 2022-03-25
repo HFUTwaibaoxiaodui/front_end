@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/global/back_end_interface_url.dart';
-import 'package:frontend/util/debug_print.dart';
 import 'package:frontend/util/net/network_util.dart';
 import 'package:frontend/widgets/order_card.dart';
 import '../global/future_build.dart';
@@ -29,6 +27,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
   late Future _orderList;
   late StreamSubscription _initSubscription;
   late StreamSubscription _updateTabViewSubscription;
+  List<Order>? _readyToSort;
 
   @override
   void initState() {
@@ -84,6 +83,8 @@ class _OrderListWidgetState extends State<OrderListWidget> {
     if (widget.withState == null && widget.withWorkerId == null && widget.withOrderName == null) {
       eventBus.fire(UpdateOrderNumEvent(num: _orderList.length));
     }
+
+    _readyToSort = _orderList;
 
     return _orderList;
   }

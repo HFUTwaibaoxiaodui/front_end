@@ -1,3 +1,4 @@
+import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/util/android_activity_visitor.dart';
 
@@ -24,7 +25,9 @@ class _InitMapState extends State<InitMap> {
             onPressed: () {
               AndroidActivityVisitor.getDistance().then((value){
                 setState(() {
-                  distance = value;
+                  print(value);
+                  print(value['latitude']);
+                  print(value['longitude']);
                 });
               });
             },

@@ -15,9 +15,15 @@ import '../widgets/order_list.dart';
 
 class ExceptionHandle extends StatefulWidget {
 
-  int id;
+  int orderId;
+  int workerId;
 
-  ExceptionHandle({Key? key, required this.id}) : super(key: key);
+  ExceptionHandle({
+    Key? key,
+    required this.orderId,
+    required this.workerId,
+
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState()  => ExceptionHandleState();
@@ -60,7 +66,7 @@ class ExceptionHandleState extends State<ExceptionHandle> {
     HttpManager().get(
       getExceptionMessageById,
       args: {
-        'orderId': widget.id
+        'orderId': widget.orderId
       }
     ).then((value){
        setState(() {
@@ -289,17 +295,26 @@ class ExceptionHandleState extends State<ExceptionHandle> {
                               HttpManager().put(
                                 updateExceptionSolveState,
                                 args: {
-                                  'orderId': widget.id
+                                  'orderId': widget.orderId
                                 }
                               );
                               switch (_handleOption.text) {
                                 case "取消工单":
-                                  HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '已取消'});
-                                  String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                                  HttpManager().put(updateOrderState, args: {'orderId': widget.orderId, 'orderState': '已取消'});
+                                  HttpManager().post(
+                                      sendMessage,
+                                      args: {
+                                        'alias': widget.workerId,
+                                        'message': '你有一份异常工单被管理员取消',
+                                        'name': Provider.of<UserInfo>(context, listen:false).realName,
+                                        'orderId': widget.orderId
+                                      }
+                                  );
+                                  String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
                                   HttpManager().post(
                                       addOperationLog,
                                       args: {
-                                        'orderId': widget.id,
+                                        'orderId': widget.orderId.toString(),
                                         'operationTime': formattedDate,
                                         'operationName': '异常处理',
                                         'description':
@@ -321,12 +336,21 @@ class ExceptionHandleState extends State<ExceptionHandle> {
                                   });
                                   break;
                                 case "驳回请求":
-                                  HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': _lastOrderState});
-                                  String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                                  HttpManager().put(updateOrderState, args: {'orderId': widget.orderId, 'orderState': _lastOrderState});
+                                  String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                                  HttpManager().post(
+                                      sendMessage,
+                                      args: {
+                                        'alias': widget.workerId,
+                                        'message': '你的异常请求被驳回',
+                                        'name': Provider.of<UserInfo>(context, listen:false).realName,
+                                        'orderId': widget.orderId
+                                      }
+                                  );
                                   HttpManager().post(
                                       addOperationLog,
                                       args: {
-                                        'orderId': widget.id,
+                                        'orderId': widget.orderId,
                                         'operationTime': formattedDate,
                                         'operationName': '异常处理',
                                         'description':

@@ -159,7 +159,7 @@ class _Messagepage extends State<MessagePage>{
   }
   getTimeStr() {
     var now = DateTime.now();
-    var format = [yyyy, '-', mm, '-', dd, " ", HH, ":", mm, ":", ss];
+    var format = [yyyy, '-', MM, '-', dd, " ", HH, ":", MM, ":", ss];
     //打印时间 格式
     var time = formatDate(now, format);
     return time;

@@ -5,6 +5,8 @@ class Order {
   int id;
   /// 创建者id
   int creatorId;
+  /// 巡检人员id
+  int? workerId;
   /// 工单标题
   String? orderTitle;
   /// 工单创建者名称
@@ -35,6 +37,7 @@ class Order {
   Order({
     required this.id,
     required this.creatorId,
+    this.workerId,
     this.orderTitle,
     this.creatorName,
     this.orderAddress,
@@ -63,6 +66,7 @@ class Order {
     return Order(
       id: json['orderId'],
       creatorId: json['creatorId'],
+      workerId: json['workerId'],
       orderTitle: json['orderTitle'],
       creatorName: json['creatorName'],
       orderAddress: json['orderAddress'],

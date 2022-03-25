@@ -17,7 +17,6 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexState extends State<IndexPage> {
-  late String counter;
 
   late final List<Widget> _pages;
 
@@ -33,34 +32,33 @@ class _IndexState extends State<IndexPage> {
   void initState() {
     super.initState();
     currentIndex = 0;
-    counter='12';
 
     _home = BottomNavigationBarItem(
       icon: Stack(
         children: <Widget>[
           const Icon(Icons.home),
-          Positioned(
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.all(1),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              constraints: const BoxConstraints(
-                minHeight: 12,
-                minWidth: 12,
-              ),
-              child: Text(
-                counter,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 8,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
+          // Positioned(
+          //   right: 0,
+          //   child: Container(
+          //     padding: const EdgeInsets.all(1),
+          //     decoration: BoxDecoration(
+          //       color: Colors.red,
+          //       borderRadius: BorderRadius.circular(6),
+          //     ),
+          //     constraints: const BoxConstraints(
+          //       minHeight: 12,
+          //       minWidth: 12,
+          //     ),
+          //     child: Text(
+          //       counter,
+          //       style: const TextStyle(
+          //         color: Colors.white,
+          //         fontSize: 8,
+          //       ),
+          //       textAlign: TextAlign.center,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
       // icon: Icon(Icons.home),
