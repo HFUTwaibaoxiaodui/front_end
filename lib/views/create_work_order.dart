@@ -7,6 +7,7 @@ import 'dart:async';
 
 import '../global/back_end_interface_url.dart';
 import '../global/user_info.dart';
+import '../util/android_activity_visitor.dart';
 import '../util/net/network_util.dart';
 import 'OrderSelectPeople.dart';
 
@@ -23,6 +24,9 @@ class CreateOrderState extends State<CreateOrder> {
   late TextEditingController _inspectContent;  //工单内容
   late TextEditingController _inspectWorker;  //工单人员
   late TextEditingController _inspectAddress;  //工单地址
+  double? latitude;
+  double? longitude;
+
   String _selecting = "";
 
 
@@ -175,6 +179,19 @@ class CreateOrderState extends State<CreateOrder> {
                                       ),
                                       maxLines: 1,
                                       // maxLength: 50,
+                                    ),
+                                    trailing: GestureDetector(
+                                      onTap: (){
+                                        AndroidActivityVisitor.pickAddress().then((value){
+                                          setState(() {
+                                            print(value);
+                                            _inspectAddress.text = value['address'];
+                                            latitude = value['latitude'];
+                                            longitude = value['longitude'];
+                                          });
+                                        });
+                                      },
+                                      child: const Icon(Icons.keyboard_arrow_right),
                                     ),
                                   ),flex: 7),
                                 ],
@@ -347,6 +364,8 @@ class CreateOrderState extends State<CreateOrder> {
                                           'creatorId': 1,
                                           'orderTitle': _inspectTitle.text,
                                           'orderAddress':_inspectAddress.text,
+                                          'latitude': latitude,
+                                          'longitude': longitude,
                                           'orderDescription':_inspectContent.text,
                                           // 'workerId':'',
                                           'orderState':"待抢单",
@@ -363,8 +382,10 @@ class CreateOrderState extends State<CreateOrder> {
                                           'creatorId': 1,
                                           'orderTitle': _inspectTitle.text,
                                           'orderDescription':_inspectContent.text,
-                                          'orderState' :"待抢单",
+                                          'orderState' :"待服务",
                                           'orderAddress' : _inspectAddress.text,
+                                          'latitude': latitude,
+                                          'longitude': longitude,
                                           'planStartTime':realDate1,
                                           'planEndTime':realDate2,
                                     }

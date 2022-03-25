@@ -23,6 +23,12 @@ class Order {
   String? area;
   /// 工单描述
   String? description;
+  /// 工单开始时间
+  String? startTime;
+  /// 工单结束时间
+  String? endTime;
+
+  String? workerName;
 
   List<Operation>? operationList;
 
@@ -38,7 +44,10 @@ class Order {
     this.phoneNum,
     this.area,
     this.description,
-    this.operationList
+    this.startTime,
+    this.endTime,
+    this.operationList,
+    this.workerName
   });
 
   static Order fromJson(Map<String, dynamic> json) {
@@ -63,6 +72,9 @@ class Order {
       phoneNum: json['phone'],
       area: json['area'],
       description: json['orderDescription'],
+      startTime: json['planStartTime'],
+      endTime: json['planEndTime'],
+      workerName: json['workerName'],
       operationList: operationLogList
     );
   }

@@ -84,10 +84,10 @@ class _IndexState extends State<IndexPage> {
 
     if (Provider.of<UserInfo>(context, listen: false).accountType == 'ADMIN') {
       _bottomItems = [_home, _orders, _application, _mine];
-      _pages = [HomePage(),WorkOrderPage(),ApplyPage(),MinePage()];
+      _pages = [HomePage(), WorkOrderPage(),ApplyPage(),MinePage()];
     } else {
-      _bottomItems = [_home, _orders, _mine];
-      _pages = [HomePage(),WorkOrderPage(), MinePage()];
+      _bottomItems = [_home,  _mine];
+      _pages = [HomePage(), MinePage()];
     }
   }
 

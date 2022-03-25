@@ -390,7 +390,7 @@
             android:label="@string/province_hole_demo"
             android:screenOrientation="portrait" />
 
-
+        <activity android:name=".activities.NavigatorActivity"/>
 
         <activity android:name=".MainMapActivity"/>
 

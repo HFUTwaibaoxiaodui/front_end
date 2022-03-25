@@ -37,7 +37,6 @@ class _InitMapState extends State<InitMap> {
               AndroidActivityVisitor.pickAddress().then((value){
                 setState(() {
                   title = value['address'];
-                  print(value);
                 });
               });
             },

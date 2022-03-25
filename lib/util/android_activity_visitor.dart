@@ -16,4 +16,8 @@ class AndroidActivityVisitor {
   static Future pickAddress() async {
     return await _channel.invokeMethod('pickAddress');
   }
+
+  static Future navigate(String address) async {
+    return await _channel.invokeMethod('navigate', address);
+  }
 }

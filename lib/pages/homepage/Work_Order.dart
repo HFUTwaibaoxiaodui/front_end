@@ -63,7 +63,6 @@ class _WorkOrderPage extends State<WorkOrderPage> {
   }
 
   final List<String> _titleItems = [
-    '我创建的工单',
     '待分配工单',
     '待抢单工单',
     '待服务工单',
@@ -71,10 +70,10 @@ class _WorkOrderPage extends State<WorkOrderPage> {
     '待评论工单',
     '已取消工单',
     '异常工单',
+    '已完成工单'
   ];
 
   final List<String> _titleState = [
-    '我创建',
     '待分配',
     '待抢单',
     '待服务',
@@ -82,6 +81,7 @@ class _WorkOrderPage extends State<WorkOrderPage> {
     '待评论',
     '已取消',
     '异常',
+    '已完成'
   ];
 
   @override

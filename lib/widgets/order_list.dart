@@ -34,6 +34,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
   void initState() {
     super.initState();
     _initOrderList();
+
     _initSubscription = eventBus.on<InitOrderListEvent>().listen((event) {
       _initOrderList();
     });
@@ -41,6 +42,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
     _updateTabViewSubscription = eventBus.on<UpdateTabViewEvent>().listen((event) {
       setState(() {
         widget.withState = event.state;
+        widget.withWorkerId = event.workerId;
       });
     });
   }
@@ -79,7 +81,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
       });
     }
 
-    if (_isAllNull()) {
+    if (widget.withState == null && widget.withWorkerId == null && widget.withOrderName == null) {
       eventBus.fire(UpdateOrderNumEvent(num: _orderList.length));
     }
 

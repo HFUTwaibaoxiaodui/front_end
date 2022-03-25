@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:provider/provider.dart';
 import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:image_picker/image_picker.dart';
 import '../global/back_end_interface_url.dart';
 import '../global/my_event_bus.dart';
+import '../global/user_info.dart';
 import '../util/debug_print.dart';
 import '../util/net/network_util.dart';
 
@@ -475,18 +476,9 @@ class EditOrderState extends State<EditOrder> {
                                       'orderId': widget.id,
                                       'operationTime': formattedDate,
                                       'operationName': '填写回单',
-                                      'description': '【我】已经完成服务任务'
+                                      'description': '【' + Provider.of<UserInfo>(context, listen: false).realName! + '】已经完成服务任务'
                                     }
                                 ).then((value){
-                                  /// 提示用户抢单成功
-                                  // Fluttertoast.showToast(
-                                  //     msg: "抢单成功",
-                                  //     toastLength: Toast.LENGTH_SHORT,
-                                  //     gravity: ToastGravity.CENTER,
-                                  //     backgroundColor: Colors.green,
-                                  //     textColor: Colors.white,
-                                  //     fontSize: 16.0
-                                  // );
                                   eventBus.fire(RefreshOrderDetailEvent());
                                   eventBus.fire(InitOrderListEvent());
                                   /// 返回上一个界面

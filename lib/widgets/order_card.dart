@@ -61,14 +61,19 @@ class OrderCard extends StatefulWidget {
                         padding: EdgeInsets.only(right: 10),
                         child: Icon(Icons.place, color: Colors.grey)
                     ),
-                    Text(
-                        order.orderAddress ?? 'null',
-                        maxLines: 2,
-                        style: const TextStyle (
-                            color: Colors.grey,
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 12
-                        )
+
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Text(
+                          order.orderAddress ?? 'null',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle (
+                              color: Colors.grey,
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 12
+                          )
+                      ),
                     )
                   ],
                 ),

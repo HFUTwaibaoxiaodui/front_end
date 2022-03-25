@@ -9,9 +9,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.navi.CheckPermissionsActivity;
 
-import edu.hfut.frontend.MainActivity;
 import edu.hfut.frontend.listeren.DistanceListener;
 
 public class CalculateDistanceActivity{

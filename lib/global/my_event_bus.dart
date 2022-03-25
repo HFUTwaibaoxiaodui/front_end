@@ -6,7 +6,8 @@ class RefreshOrderDetailEvent {}
 class InitOrderListEvent {}
 class UpdateTabViewEvent {
   String state;
-  UpdateTabViewEvent({required this.state});
+  int? workerId;
+  UpdateTabViewEvent({required this.state, this.workerId});
 }
 class UpdateOrderNumEvent {
   int num;
@@ -14,6 +15,7 @@ class UpdateOrderNumEvent {
 }
 class UpdateExceptionHandlePage{}
 class RefreshDifferentStateOrderCount{}
+class ReBuildOrderDetail{}
 
 class UpdatePeopleInfoEvent{
   String peopleInfo='';

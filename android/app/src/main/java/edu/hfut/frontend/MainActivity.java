@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import edu.hfut.frontend.activities.AddressPickActivity;
 import edu.hfut.frontend.activities.CalculateDistanceActivity;
+import edu.hfut.frontend.activities.NavigatorActivity;
 import edu.hfut.frontend.listeren.DistanceListener;
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -47,9 +48,7 @@ public class MainActivity extends FlutterActivity {
                                 latitude = obj.getDouble("latitude");
                                 longitude = obj.getDouble("longitude");
                             }catch (Exception e){
-
                             }
-
                             if(latitude==0.0 || longitude==0.0){
                                 MainActivity.mResult.success("传参出错");
                             } else {
@@ -61,14 +60,19 @@ public class MainActivity extends FlutterActivity {
                                                 MainActivity.mResult.success(_dis);
                                             }
                                         });
-
                             }
-
-
                             break;
                         case "pickAddress":
                             intent = new Intent(MainActivity.this, AddressPickActivity.class);
                             startActivity(intent);
+                            break;
+                        case "navigate":
+                            System.out.println(123123);
+                            intent = new Intent(MainActivity.this, NavigatorActivity.class);
+                            System.out.println(call.arguments.toString());
+                            intent.putExtra("address", call.arguments.toString());
+                            startActivity(intent);
+                            break;
                     }
 
                 }

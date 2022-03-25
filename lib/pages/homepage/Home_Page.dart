@@ -30,7 +30,8 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
 
   late TabController _tabController;
   late StreamSubscription _updateOrderSubscription;
-
+  String _currentState = '待抢单';
+  late int _workerId;
 
   final List<String> _tabValues = [
     '待抢单',
@@ -39,8 +40,6 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
     '待评价',
     '已完成'
   ];
-
- final String _initState = '待抢单';
 
   @override
   void initState() {
@@ -74,15 +73,20 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
             indicatorColor: mainColor,
             indicatorSize: TabBarIndicatorSize.tab,
             onTap: (int index) {
-              eventBus.fire(UpdateTabViewEvent(state: _tabValues[index]));
-              eventBus.fire(InitOrderListEvent());
+              setState(() {
+                _currentState = _tabValues[index];
+                eventBus.fire(UpdateTabViewEvent(
+                  state: _currentState,
+                  workerId: _currentState == '待抢单' ? null : Provider.of<UserInfo>(context, listen: false).accountId
+                ));
+                eventBus.fire(InitOrderListEvent());
+              });
             },
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.58,
-            child: OrderListWidget(
-              withState: _initState,
-            ),
+            child:
+              OrderListWidget(withState: _currentState)
           ),
         ],
       );
@@ -98,7 +102,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.58,
             child: OrderListWidget(
-              withState: null,
+              withCreatorId: Provider.of<UserInfo>(context, listen: false).accountId,
             ),
           ),
         ],
@@ -108,6 +112,9 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+
+    _workerId = Provider.of<UserInfo>(context, listen: false).accountId!;
+
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(child: const Icon(Icons.swap_horiz),onTap: (){

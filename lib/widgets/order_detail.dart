@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:frontend/global/user_info.dart';
 import 'package:frontend/pages/exception_handle.dart';
+import 'package:frontend/util/android_activity_visitor.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:frontend/util/debug_print.dart';
@@ -54,7 +55,9 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
   late final PopupMenuItem<String> cancel;
 
   StateSetter? _orderOperationSetter;
+  StateSetter? _orderAttributesSetter;
   late StreamSubscription _refreshSubscription;
+  late StreamSubscription _rebuildOrderDetail;
   Map<String, dynamic> _evaluate = {};
 
   @override
@@ -65,7 +68,14 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
     pageController = PageController(initialPage: _currentIndex);
 
     _refreshSubscription = eventBus.on<RefreshOrderDetailEvent>().listen((event) {
-      _refreshOrderDetail();
+      setState(() {
+        _refreshOrderDetail();
+      });
+    });
+
+    _rebuildOrderDetail = eventBus.on<ReBuildOrderDetail>().listen((event) {
+      setState(() {
+      });
     });
 
     reassignment = PopupMenuItem<String>(
@@ -205,16 +215,24 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                          _order!.orderAddress ?? 'null',
-                          maxLines: 2,
-                          style: const TextStyle (
-                              color: Colors.grey,
-                              overflow: TextOverflow.ellipsis,
-                              fontSize: 12
-                          )
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Text(
+                            _order!.orderAddress ?? 'null',
+                            maxLines: 1,
+                            style: const TextStyle (
+                                color: Colors.grey,
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 12
+                            )
+                        ),
                       ),
-                      const Icon(Icons.where_to_vote, color: Colors.blue)
+                      GestureDetector(
+                        onTap: (){
+                          AndroidActivityVisitor.navigate(_order!.orderAddress!);
+                        },
+                        child: const Icon(Icons.where_to_vote, color: Colors.blue),
+                      )
                     ],
                   )
                 ),
@@ -301,18 +319,23 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
   }
 
   Widget _buildOrderAttributes() {
-    return ListView(
-      children: [
-        ListTile(title: const Text('工单创建人'), subtitle: Text(_order!.creatorName ?? 'null')),
-        ListTile(title: const Text('创建练习电话'), subtitle: Text(_order!.phoneNum ?? 'null')),
-        ListTile(title: const Text('工单详细地址'), subtitle: Text(_order!.orderAddress ?? 'null')),
-        ListTile(title: const Text('工单创建时间'), subtitle: Text(_order!.createTime ?? 'null')),
-        ListTile(title: const Text('工单创建时间'), subtitle: Text(_order!.createTime ?? 'null')),
-        ListTile(title: const Text('工单创建时间'), subtitle: Text(_order!.createTime ?? 'null')),
-        ListTile(title: const Text('工单创建时间'), subtitle: Text(_order!.createTime ?? 'null')),
-        // Container(height: 200, decoration: BoxDecoration(image: DecorationImage(image: MemoryImage(_qrcodeBytes!)))),
-      ],
-    );
+    return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      _orderAttributesSetter = setState;
+      return ListView(
+        children: [
+          ListTile(title: const Text('工单标题'), subtitle: Text(_order!.orderTitle ?? '')),
+          ListTile(title: const Text('工单描述'), subtitle: Text(_order!.description ?? '')),
+          ListTile(title: const Text('工单编号'), subtitle: Text(_order!.orderCode ?? '无')),
+          ListTile(title: const Text('工单创建人'), subtitle: Text(_order!.creatorName ?? 'null')),
+          ListTile(title: const Text('工单巡检员'), subtitle: Text(_order!.workerName ?? '无')),
+          ListTile(title: const Text('创建练习电话'), subtitle: Text(_order!.phoneNum ?? '无')),
+          ListTile(title: const Text('工单详细地址'), subtitle: Text(_order!.orderAddress ?? '无')),
+          ListTile(title: const Text('工单结束时间'), subtitle: Text(_order!.createTime ?? '无')),
+          ListTile(title: const Text('工单创建时间'), subtitle: Text(_order!.createTime ?? '无')),
+          // Container(height: 200, decoration: BoxDecoration(image: DecorationImage(image: MemoryImage(_qrcodeBytes!)))),
+        ],
+      );
+    });
   }
 
   void _initTabState() {
@@ -382,7 +405,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                           'orderId': _order!.id,
                           'operationTime': formattedDate,
                           'operationName': '开始服务',
-                          'description': '【我】已开始服务'
+                          'description': '【' + Provider.of<UserInfo>(context, listen: false).realName! +'】已开始服务'
                         }
                     ).then((value) {
                       Fluttertoast.showToast(
@@ -486,6 +509,13 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                                     'orderId': _order!.id
                                   }
                               );
+                              HttpManager().put(
+                                updateWorker,
+                                args: {
+                                  'orderId': _order!.id,
+                                  'workerId': Provider.of<UserInfo>(context, listen: false).accountId
+                                }
+                              );
                               String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
                               HttpManager().post(
                                   addOperationLog,
@@ -493,7 +523,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                                     'orderId': _order!.id,
                                     'operationTime': formattedDate,
                                     'operationName': '抢单',
-                                    'description': '【我】已抢得【' + _order!.creatorName! + '】创建的工单'
+                                    'description': '【' + Provider.of<UserInfo>(context, listen: false).realName! + '】已抢得【' + _order!.creatorName! + '】创建的工单'
                                   }
                               ).then((value){
                                 /// 提示用户抢单成功
@@ -506,9 +536,10 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                                     fontSize: 16.0
                                 );
                                 _initTabState();
-                                _refreshOrderDetail();
                                 eventBus.fire(RefreshDifferentStateOrderCount());
+                                eventBus.fire(RefreshOrderDetailEvent());
                                 eventBus.fire(InitOrderListEvent());
+                                eventBus.fire(ReBuildOrderDetail());
                                 /// 返回上一个界面
                                 Navigator.of(context).pop();
                               });
