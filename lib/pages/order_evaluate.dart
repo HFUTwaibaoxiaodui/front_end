@@ -215,7 +215,7 @@ class OrderEvaluateState extends State<OrderEvaluate> {
                                 }
                             );
 
-                            String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                            String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
                             HttpManager().post(
                                 addOperationLog,
                                 args: {

@@ -353,8 +353,8 @@ class CreateOrderState extends State<CreateOrder> {
                                       selectedTime2.minute,
                                       0
                                   );
-                                  String realDate1 = formatDate(datetime1,  [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
-                                  String realDate2 = formatDate(datetime2,  [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                                  String realDate1 = formatDate(datetime1,  [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                                  String realDate2 = formatDate(datetime2,  [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
 
                                   if(_inspectWorker.text==''){
                                     HttpManager().post(

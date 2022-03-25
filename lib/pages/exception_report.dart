@@ -196,7 +196,7 @@ class ExceptionReportState extends State<ExceptionReport> {
                             Scaffold.of(context).showSnackBar(snackBar);
                           } else {
                             HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '异常'});
-                            String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                            String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
                             HttpManager().post(submitException,
                                 args: {
                                   'exceptionClass': _exceptionClass.text,

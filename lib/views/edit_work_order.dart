@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:provider/provider.dart';
+
 import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +10,6 @@ import 'dart:async';
 import 'package:image_picker/image_picker.dart';
 import '../global/back_end_interface_url.dart';
 import '../global/my_event_bus.dart';
-import '../global/user_info.dart';
 import '../util/debug_print.dart';
 import '../util/net/network_util.dart';
 
@@ -187,318 +186,326 @@ class EditOrderState extends State<EditOrder> {
             return
               ListView(
                 children: [
-              Container(
-              color: Colors.grey.shade300,
-                child: Column(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.80,
-                      color: Colors.white,
-                      child: ListView(
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  Container(
+                    color: Colors.grey.shade300,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.80,
+                          color: Colors.white,
+                          child: ListView(
                             children: [
-                              const Expanded(
-                                  child: ListTile(title: Text('站点名称')),flex: 3),
-                              Expanded(child: ListTile(
-                                // contentPadding: const EdgeInsets.only(top: 10),
-                                title: TextField(
-                                  controller: _inspectSite,
-                                  decoration: const InputDecoration.collapsed(
-                                    hintStyle: TextStyle(color: CupertinoColors.inactiveGray),
-                                    hintText: "请输入站点名称（必填）",
-                                    border: InputBorder.none,
-                                  ),
-                                  maxLines: 1,
-                                  // maxLength: 50,
-                                ),
-                              ),flex: 7),
-                            ],
-                          ),  //站点名称
-                          Divider(thickness: 0.5, color: Colors.grey.shade400),
-                          Row(
-                            children: [
-                              const Expanded(child: ListTile(title: Text('巡检类别')),flex: 2),
-                              Expanded(child: TextField(
-                                controller: _inspectCategory,
-                                enabled: false,
-                                decoration: const InputDecoration.collapsed(
-                                  hintText: "请选择巡检类别（必填）",
-                                  border: InputBorder.none,
-                                ),
-                              ),flex: 3),
-                              Expanded(child: ListTile(
-                                title: const Icon(Icons.keyboard_arrow_right),
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return StatefulBuilder(
-                                          builder: (BuildContext context, void Function(void Function()) setState) {
-                                            return AlertDialog(
-                                              title: const Text('巡检类别'),
-                                              content: Container(
-                                                height: MediaQuery.of(context).size.height * 0.18,
-                                                child:  Column(
-                                                  children: [
-                                                    RadioListTile<String>(
-                                                        value: "设备类",
-                                                        title: const Text("设备类"),
-                                                        groupValue: _selecting,
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            _selecting = value!;
-                                                          });
-                                                        }
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Expanded(
+                                      child: ListTile(title: Text('站点名称')),flex: 3),
+                                  Expanded(child: ListTile(
+                                    // contentPadding: const EdgeInsets.only(top: 10),
+                                    title: TextField(
+                                      controller: _inspectSite,
+                                      decoration: const InputDecoration.collapsed(
+                                        hintStyle: TextStyle(color: CupertinoColors.inactiveGray),
+                                        hintText: "请输入站点名称（必填）",
+                                        border: InputBorder.none,
+                                      ),
+                                      maxLines: 1,
+                                      // maxLength: 50,
+                                    ),
+                                  ),flex: 7),
+                                ],
+                              ),  //站点名称
+                              Divider(thickness: 0.5, color: Colors.grey.shade400),
+                              Row(
+                                children: [
+                                  const Expanded(child: ListTile(title: Text('巡检类别')),flex: 2),
+                                  Expanded(child: TextField(
+                                    controller: _inspectCategory,
+                                    enabled: false,
+                                    decoration: const InputDecoration.collapsed(
+                                      hintText: "请选择巡检类别（必填）",
+                                      border: InputBorder.none,
+                                    ),
+                                  ),flex: 3),
+                                  Expanded(child: ListTile(
+                                    title: const Icon(Icons.keyboard_arrow_right),
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return StatefulBuilder(
+                                              builder: (BuildContext context, void Function(void Function()) setState) {
+                                                return AlertDialog(
+                                                  title: const Text('巡检类别'),
+                                                  content: Container(
+                                                    height: MediaQuery.of(context).size.height * 0.18,
+                                                    child:  Column(
+                                                      children: [
+                                                        RadioListTile<String>(
+                                                            value: "设备类",
+                                                            title: const Text("设备类"),
+                                                            groupValue: _selecting,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _selecting = value!;
+                                                              });
+                                                            }
+                                                        ),
+                                                        RadioListTile<String>(
+                                                          value: "环境类",
+                                                          title: const Text("环境类"),
+                                                          groupValue: _selecting,
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              _selecting = value!;
+                                                            });
+                                                          },
+                                                        ),
+                                                      ],
                                                     ),
-                                                    RadioListTile<String>(
-                                                      value: "环境类",
-                                                      title: const Text("环境类"),
-                                                      groupValue: _selecting,
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          _selecting = value!;
-                                                        });
-                                                      },
-                                                    ),
+                                                  ),
+                                                  actions: <Widget>[
+                                                    TextButton(child: const Text('取消'),onPressed: (){
+                                                      Navigator.of(context).pop();
+                                                    }),
+                                                    TextButton(child: const Text('确认'),onPressed: (){
+                                                      _inspectCategory.text = _selecting;
+                                                      Navigator.of(context).pop();
+                                                    },),
                                                   ],
-                                                ),
-                                              ),
-                                              actions: <Widget>[
-                                                TextButton(child: const Text('取消'),onPressed: (){
-                                                  Navigator.of(context).pop();
-                                                }),
-                                                TextButton(child: const Text('确认'),onPressed: (){
-                                                  _inspectCategory.text = _selecting;
-                                                  Navigator.of(context).pop();
-                                                },),
-                                              ],
+                                                );
+                                              },
                                             );
-                                          },
-                                        );
+                                          }
+                                      );
+                                    },
+                                  )
+                                      ,flex: 1),
+                                ],
+                              ),  //巡检类别
+                              Divider(thickness: 0.5, color: Colors.grey.shade400),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Expanded(
+                                      child: ListTile(title: Text('巡检内容')),flex: 2),
+                                  Expanded(child: ListTile(
+                                    contentPadding: const EdgeInsets.only(top: 10),
+                                    title: TextField(
+                                      controller: _inspectContent,
+                                      decoration: const InputDecoration.collapsed(
+                                        hintStyle: TextStyle(color: CupertinoColors.inactiveGray),
+                                        hintText: "请填写巡检内容",
+                                        border: InputBorder.none,
+                                      ),
+                                      maxLines: 3,
+                                      maxLength: 100,
+                                    ),
+                                  ),flex: 3),
+                                  Expanded(child: Container(),flex: 1),
+                                ],
+                              ),  //巡检内容
+                              Divider(thickness: 0.5, color: Colors.grey.shade400),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Expanded(
+                                      child: ListTile(title: Text('检查结果')),flex: 2),
+                                  Expanded(child: ListTile(
+                                    contentPadding: const EdgeInsets.only(top: 14),
+                                    title: TextField(
+                                      controller: _inspectExeption,
+                                      decoration: const InputDecoration.collapsed(
+                                        hintStyle: TextStyle(color: CupertinoColors.inactiveGray),
+                                        hintText: "请填写检查结果",
+                                        border: InputBorder.none,
+                                      ),
+                                      maxLines: 4,
+                                      maxLength: 300,
+                                    ),
+                                  ),flex: 3),
+                                  Expanded(child: Container(),flex: 1),
+                                ],
+                              ),  //检查结果
+                              Divider(thickness: 0.5, color: Colors.grey.shade400),
+                              Row(
+                                  children:[
+                                    RaisedButton(
+                                      child: Text("上传照片"),
+                                      onPressed: () => _getActionSheet(),
+                                    ),
+                                    SizedBox(width: 8,),
+                                    // Text("照片列表"),
+                                    _imageList.isNotEmpty
+                                        ? Wrap(
+                                      spacing: 5.0,
+                                      children: _getImageList(),
+                                    )
+                                        : Text("上传两张照片，包括巡检前、后照片", style: TextStyle( fontSize: 15))
+                                  ]
+                              ),  //上传照片
+                              Divider(thickness: 0.5, color: Colors.grey.shade400),
+                              Row(
+                                  children:[
+                                    SizedBox(width: 10,),
+                                    Text("开始时间"),
+                                    SizedBox(width: 40,),
+                                    InkWell(
+                                      onTap: _selectDate1,
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text(DateFormat.yMMMMd().format(selectedDate1)),
+                                          Icon(Icons.arrow_drop_down),
+                                        ],
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: _selectTime1,
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text(selectedTime1.format(context)),
+                                          Icon(Icons.arrow_drop_down),
+                                        ],
+                                      ),
+                                    ),
+                                  ]
+                              ),  //开始时间
+                              Divider(thickness: 0.5, color: Colors.grey.shade400),
+                              Row(
+                                  children:[
+                                    SizedBox(width: 10,),
+                                    Text("结束时间"),
+                                    SizedBox(width: 40,),
+                                    InkWell(
+                                      onTap: _selectDate2,
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text(DateFormat.yMMMMd().format(selectedDate2)),
+                                          Icon(Icons.arrow_drop_down),
+                                        ],
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: _selectTime2,
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text(selectedTime2.format(context)),
+                                          Icon(Icons.arrow_drop_down),
+                                        ],
+                                      ),
+                                    ),
+                                  ]
+                              ),    //结束时间
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.08,
+                          // padding: const EdgeInsets.all(10),
+                          child: Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                SnackBar snackBar;
+                                if (_inspectSite.text == "") {
+                                  snackBar = const SnackBar(
+                                    duration: Duration(seconds: 1),
+                                    backgroundColor: Colors.red,
+                                    content: Text('站点名称不能为空!'),
+                                  );
+                                  Scaffold.of(context).showSnackBar(snackBar);
+                                }else if (_inspectCategory.text == "") {
+                                  snackBar = const SnackBar(
+                                    duration: Duration(seconds: 1),
+                                    backgroundColor: Colors.red,
+                                    content: Text('巡检类别不能为空!'),
+                                  );
+                                  Scaffold.of(context).showSnackBar(snackBar);
+                                } else if (_inspectContent.text == "") {
+                                  snackBar = const SnackBar(
+                                    duration: Duration(seconds: 1),
+                                    backgroundColor: Colors.red,
+                                    content: Text('请填写巡检内容!'),
+                                  );
+                                  Scaffold.of(context).showSnackBar(snackBar);
+                                } else {
+                                  for (var element in _imageList) {
+                                    _uploadImage(element);
+                                  }
+//2022-03-14 17:00:00
+                                  HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '待评价'});
+                                  String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
+
+                                  DateTime datetime1 = DateTime(
+                                      selectedDate1.year,
+                                      selectedDate1.month,
+                                      selectedDate1.day,
+                                      selectedTime1.hour,
+                                      selectedTime1.minute,
+                                      0
+                                  );
+                                  DateTime datetime2 = DateTime(
+                                      selectedDate2.year,
+                                      selectedDate2.month,
+                                      selectedDate2.day,
+                                      selectedTime2.hour,
+                                      selectedTime2.minute,
+                                      0
+                                  );
+                                  String realDate1 = formatDate(datetime1,  [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                                  String realDate2 = formatDate(datetime2,  [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
+
+                                  HttpManager().post(
+                                      addPatrolOrderWorkerEdit,
+                                      args: {
+                                        'orderId': widget.id,
+                                        'siteName': _inspectSite.text,
+                                        'inspectionCategory': _inspectCategory.text,
+                                        'inspectionContent': _inspectContent.text,
+                                        'inspectionResult': _inspectExeption.text,
+                                        'beginTime': realDate1,
+                                        'endTime': realDate2,
+                                        'photo1': _imageString[0],
+                                        'photo2': _imageString[1],
                                       }
                                   );
-                                },
-                              )
-                                  ,flex: 1),
-                            ],
-                          ),  //巡检类别
-                          Divider(thickness: 0.5, color: Colors.grey.shade400),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Expanded(
-                                  child: ListTile(title: Text('巡检内容')),flex: 2),
-                              Expanded(child: ListTile(
-                                contentPadding: const EdgeInsets.only(top: 10),
-                                title: TextField(
-                                  controller: _inspectContent,
-                                  decoration: const InputDecoration.collapsed(
-                                    hintStyle: TextStyle(color: CupertinoColors.inactiveGray),
-                                    hintText: "请填写巡检内容",
-                                    border: InputBorder.none,
-                                  ),
-                                  maxLines: 3,
-                                  maxLength: 100,
-                                ),
-                              ),flex: 3),
-                              Expanded(child: Container(),flex: 1),
-                            ],
-                          ),  //巡检内容
-                          Divider(thickness: 0.5, color: Colors.grey.shade400),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Expanded(
-                                  child: ListTile(title: Text('检查结果')),flex: 2),
-                              Expanded(child: ListTile(
-                                contentPadding: const EdgeInsets.only(top: 14),
-                                title: TextField(
-                                  controller: _inspectExeption,
-                                  decoration: const InputDecoration.collapsed(
-                                    hintStyle: TextStyle(color: CupertinoColors.inactiveGray),
-                                    hintText: "请填写检查结果",
-                                    border: InputBorder.none,
-                                  ),
-                                  maxLines: 4,
-                                  maxLength: 300,
-                                ),
-                              ),flex: 3),
-                              Expanded(child: Container(),flex: 1),
-                            ],
-                          ),  //检查结果
-                          Divider(thickness: 0.5, color: Colors.grey.shade400),
-                          Row(
-                              children:[
-                                RaisedButton(
-                                  child: Text("上传照片"),
-                                  onPressed: () => _getActionSheet(),
-                                ),
-                                SizedBox(width: 8,),
-                                // Text("照片列表"),
-                                _imageList.isNotEmpty
-                                    ? Wrap(
-                                  spacing: 5.0,
-                                  children: _getImageList(),
-                                )
-                                    : Text("上传两张照片，包括巡检前、后照片", style: TextStyle( fontSize: 15))
-                              ]
-                          ),  //上传照片
-                          Divider(thickness: 0.5, color: Colors.grey.shade400),
-                          Row(
-                              children:[
-                                SizedBox(width: 10,),
-                                Text("开始时间"),
-                                SizedBox(width: 40,),
-                                InkWell(
-                                  onTap: _selectDate1,
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text(DateFormat.yMMMMd().format(selectedDate1)),
-                                      Icon(Icons.arrow_drop_down),
-                                    ],
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: _selectTime1,
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text(selectedTime1.format(context)),
-                                      Icon(Icons.arrow_drop_down),
-                                    ],
-                                  ),
-                                ),
-                              ]
-                          ),  //开始时间
-                          Divider(thickness: 0.5, color: Colors.grey.shade400),
-                          Row(
-                              children:[
-                                SizedBox(width: 10,),
-                                Text("结束时间"),
-                                SizedBox(width: 40,),
-                                InkWell(
-                                  onTap: _selectDate2,
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text(DateFormat.yMMMMd().format(selectedDate2)),
-                                      Icon(Icons.arrow_drop_down),
-                                    ],
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: _selectTime2,
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text(selectedTime2.format(context)),
-                                      Icon(Icons.arrow_drop_down),
-                                    ],
-                                  ),
-                                ),
-                              ]
-                          ),    //结束时间
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.08,
-                      // padding: const EdgeInsets.all(10),
-                      child: Center(
-                        child: GestureDetector(
-                            onTap: () {
-                              SnackBar snackBar;
-                              if (_inspectSite.text == "") {
-                                snackBar = const SnackBar(
-                                  duration: Duration(seconds: 1),
-                                  backgroundColor: Colors.red,
-                                  content: Text('站点名称不能为空!'),
-                                );
-                                Scaffold.of(context).showSnackBar(snackBar);
-                              }else if (_inspectCategory.text == "") {
-                                snackBar = const SnackBar(
-                                  duration: Duration(seconds: 1),
-                                  backgroundColor: Colors.red,
-                                  content: Text('巡检类别不能为空!'),
-                                );
-                                Scaffold.of(context).showSnackBar(snackBar);
-                              } else if (_inspectContent.text == "") {
-                                snackBar = const SnackBar(
-                                  duration: Duration(seconds: 1),
-                                  backgroundColor: Colors.red,
-                                  content: Text('请填写巡检内容!'),
-                                );
-                                Scaffold.of(context).showSnackBar(snackBar);
-                              } else {
-                                for (var element in _imageList) {
-                                  _uploadImage(element);
+                                  HttpManager().post(
+                                      addOperationLog,
+                                      args: {
+                                        'orderId': widget.id,
+                                        'operationTime': formattedDate,
+                                        'operationName': '填写回单',
+                                        'description': '【我】已经完成服务任务'
+                                      }
+                                  ).then((value){
+                                    /// 提示用户抢单成功
+                                    // Fluttertoast.showToast(
+                                    //     msg: "抢单成功",
+                                    //     toastLength: Toast.LENGTH_SHORT,
+                                    //     gravity: ToastGravity.CENTER,
+                                    //     backgroundColor: Colors.green,
+                                    //     textColor: Colors.white,
+                                    //     fontSize: 16.0
+                                    // );
+                                    eventBus.fire(RefreshOrderDetailEvent());
+                                    eventBus.fire(InitOrderListEvent());
+                                    /// 返回上一个界面
+                                    Navigator.of(context).pop();
+                                  });
                                 }
-//2022-03-14 17:00:00
-                                HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '待评价'});
-                                String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
-
-                                DateTime datetime1 = DateTime(
-                                  selectedDate1.year,
-                                  selectedDate1.month,
-                                  selectedDate1.day,
-                                  selectedTime1.hour,
-                                  selectedTime1.minute,
-                                  0
-                                );
-                                DateTime datetime2 = DateTime(
-                                    selectedDate2.year,
-                                    selectedDate2.month,
-                                    selectedDate2.day,
-                                    selectedTime2.hour,
-                                    selectedTime2.minute,
-                                    0
-                                );
-                                String realDate1 = formatDate(datetime1,  [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
-                                String realDate2 = formatDate(datetime2,  [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
-
-
-                                HttpManager().post(
-                                    addPatrolOrderWorkerEdit,
-                                    args: {
-                                      'orderId': widget.id,
-                                      'siteName': _inspectSite.text,
-                                      'inspectionCategory': _inspectCategory.text,
-                                      'inspectionContent': _inspectContent.text,
-                                      'inspectionResult': _inspectExeption.text,
-                                      'beginTime': realDate1,
-                                      'endTime': realDate2,
-                                      'photo1': _imageString[0],
-                                      'photo2': _imageString[1],
-                                    }
-                                );
-                                HttpManager().post(
-                                    addOperationLog,
-                                    args: {
-                                      'orderId': widget.id,
-                                      'operationTime': formattedDate,
-                                      'operationName': '填写回单',
-                                      'description': '【' + Provider.of<UserInfo>(context, listen: false).realName! + '】已经完成服务任务'
-                                    }
-                                ).then((value){
-                                  eventBus.fire(RefreshOrderDetailEvent());
-                                  eventBus.fire(InitOrderListEvent());
-                                  /// 返回上一个界面
-                                  Navigator.of(context).pop();
-                                });
-                              }
-                            },
-                            child: Container(
-                              color: Colors.cyanAccent.shade700,
-                              child: const Center(
-                                child: Text('提交', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 18)
+                              },
+                              child: Container(
+                                color: Colors.cyanAccent.shade700,
+                                child: const Center(
+                                  child: Text('提交', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 18)
+                                  ),
                                 ),
                               ),
                             ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
                 ],
               );
           },

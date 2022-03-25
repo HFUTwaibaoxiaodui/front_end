@@ -407,7 +407,7 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                           'orderId': _order!.id
                         }
                     );
-                    String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                    String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
                     HttpManager().post(
                         addOperationLog,
                         args: {
@@ -525,7 +525,8 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                                   'workerId': Provider.of<UserInfo>(context, listen: false).accountId
                                 }
                               );
-                              String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                              String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                              print(formattedDate);
                               HttpManager().post(
                                   addOperationLog,
                                   args: {

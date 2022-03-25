@@ -310,7 +310,7 @@ class ExceptionHandleState extends State<ExceptionHandle> {
                                         'orderId': widget.orderId
                                       }
                                   );
-                                  String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                                  String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
                                   HttpManager().post(
                                       addOperationLog,
                                       args: {
@@ -337,7 +337,7 @@ class ExceptionHandleState extends State<ExceptionHandle> {
                                   break;
                                 case "驳回请求":
                                   HttpManager().put(updateOrderState, args: {'orderId': widget.orderId, 'orderState': _lastOrderState});
-                                  String formattedDate = formatDate(DateTime.now(), [yyyy, '-', MM, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                                  String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
                                   HttpManager().post(
                                       sendMessage,
                                       args: {

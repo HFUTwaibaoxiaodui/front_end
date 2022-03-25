@@ -264,16 +264,15 @@ class _PersoninfoState extends State<Personinfo> {
     _dio.post(uploadImage, data: formData).then((value){
       setState(() {
         _imageString ="http://121.40.130.17:7777/images/${value}";
-        Provider.of<UserInfo>(context, listen: false).imagePath = _imageString;
-        HttpManager().put(
-            updateInformation,
-            args: {
+        Http.put(
+            Uri.parse(updateInformation),
+            headers: {"content-type" : "application/json"},
+            body: json.encode({
               'accountId': Provider.of<UserInfo>(context, listen: false).accountId,
               'imagePath': _imageString
-            });
-        setState(() {
-          getPersonInfo();
-        });
+            })
+        );
+        Provider.of<UserInfo>(context, listen: false).imagePath = _imageString;
       });
     });
   }
