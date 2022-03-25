@@ -1,4 +1,4 @@
-const String serverIp = '121.40.130.17';
+const String serverIp = '192.168.43.31';
 const String serverPort = '9090';
 final String getAllOrders = generateURL('/PatrolOrder/selectAll');
 final String getOrderById = generateURL('/PatrolOrder/findByOrderId');
