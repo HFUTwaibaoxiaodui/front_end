@@ -187,7 +187,7 @@ packages:
       name: flutter_datetime_picker
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.6"
+    version: "1.5.1"
   flutter_lints:
     dependency: "direct dev"
     description:

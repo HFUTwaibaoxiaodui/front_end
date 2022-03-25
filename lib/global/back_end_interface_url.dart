@@ -23,7 +23,6 @@ final String updateWorker = generateURL('/PatrolOrder/updateWorker');
 
 final String addPatrolOrderWorkerEdit = generateURL('/PatrolOrderWorkerEdit/insert');
 final String addPatrolOrder = generateURL('/PatrolOrder/insert');
-final String uploadImage = generateURL('/api/img/uploadImage');
 final String findByOrderId = generateURL('/PatrolOrderWorkerEdit/findByOrderId');
 
 final String sortOrder = generateURL('/PatrolOrder/sortOrder');

@@ -672,7 +672,8 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Padding(
               padding: const EdgeInsets.all(5),
-              child: GestureDetector(
+              child: Provider.of<UserInfo>(context, listen: false).accountType == 'USER' ?
+                GestureDetector(
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context){
                     return ExceptionHandle(
@@ -686,6 +687,13 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
                   child: const Center(
                     child: Text('处理异常', style: TextStyle(color: Colors.white)
                     ),
+                  ),
+                ),
+              ) :
+                Container(
+                color: Colors.grey.shade700,
+                child: const Center(
+                  child: Text('等待管理员处理异常中', style: TextStyle(color: Colors.white)
                   ),
                 ),
               )

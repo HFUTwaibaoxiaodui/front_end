@@ -159,9 +159,9 @@
     },
     {
       "name": "flutter_datetime_picker",
-      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/flutter_datetime_picker-1.2.6",
+      "rootUri": "file:///C:/Users/86139/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/flutter_datetime_picker-1.5.1",
       "packageUri": "lib/",
-      "languageVersion": "2.0"
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_lints",
@@ -668,7 +668,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-25T10:27:57.093967Z",
+  "generated": "2022-03-25T11:34:43.230280Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }
