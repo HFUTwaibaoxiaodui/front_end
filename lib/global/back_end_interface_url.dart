@@ -1,4 +1,4 @@
-const String serverIp = '192.168.43.31';
+const String serverIp = '121.40.130.17';
 const String serverPort = '9090';
 final String getAllOrders = generateURL('/PatrolOrder/selectAll');
 final String getOrderById = generateURL('/PatrolOrder/findByOrderId');
@@ -13,6 +13,7 @@ final String selectAccountById = generateURL('/account/selectInformationbyid');
 final String addPatrolOrderWorkerEdit = generateURL('/PatrolOrderWorkerEdit/insert');
 final String addPatrolOrder = generateURL('/PatrolOrder/insert');
 final String uploadImage = generateURL('/api/img/uploadImage');
+final String findByOrderId = generateURL('/PatrolOrderWorkerEdit/findByOrderId');
 
 String generateURL(String path) {
   return 'http://' + serverIp + ':' + serverPort + path;
