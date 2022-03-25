@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:date_format/date_format.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,6 +10,7 @@ import 'dart:async';
 import 'package:image_picker/image_picker.dart';
 import '../global/back_end_interface_url.dart';
 import '../global/my_event_bus.dart';
+import '../util/debug_print.dart';
 import '../util/net/network_util.dart';
 
 
@@ -23,11 +25,17 @@ class EditOrder extends StatefulWidget {
 
 class EditOrderState extends State<EditOrder> {
 
-  late TextEditingController _inspectSite;
-  late TextEditingController _inspectCategory;
-  late TextEditingController _inspectContent;
-  late TextEditingController _inspectExeption;
+  late TextEditingController _inspectSite; //站点名称
+  late TextEditingController _inspectCategory; //巡检类别
+  late TextEditingController _inspectContent;  //巡检内容
+  late TextEditingController _inspectExeption; //巡检结果
+  DateTime selectedDate1 = DateTime.now(); //开始时间
+  TimeOfDay selectedTime1 = TimeOfDay.now();
+  DateTime selectedDate2 = DateTime.now();//结束时间
+  TimeOfDay selectedTime2 = TimeOfDay.now();
+
   String _selecting = "";
+  List _imageString = [];
 
 
   final ImagePicker picker = new ImagePicker();
@@ -105,14 +113,6 @@ class EditOrderState extends State<EditOrder> {
     super.dispose();
   }
 
-
-  DateTime selectedDate1 = DateTime.now();
-  // TimeOfDay selectedTime = TimeOfDay(hour: 9, minute: 30);
-  TimeOfDay selectedTime1 = TimeOfDay.now();
-
-  DateTime selectedDate2 = DateTime.now();
-  TimeOfDay selectedTime2 = TimeOfDay.now();
-
   Future<void> _selectDate1() async {
     final DateTime? date = await showDatePicker(
       context: context,
@@ -125,6 +125,7 @@ class EditOrderState extends State<EditOrder> {
 
     setState(() {
       selectedDate1 = date;
+
     });
   }
 
@@ -340,7 +341,7 @@ class EditOrderState extends State<EditOrder> {
                                   spacing: 5.0,
                                   children: _getImageList(),
                                 )
-                                    : Text("暂无内容", style: TextStyle( fontSize: 15))
+                                    : Text("上传两张照片，包括巡检前、后照片", style: TextStyle( fontSize: 15))
                               ]
                           ),  //上传照片
                           Divider(thickness: 0.5, color: Colors.grey.shade400),
@@ -427,9 +428,47 @@ class EditOrderState extends State<EditOrder> {
                                 );
                                 Scaffold.of(context).showSnackBar(snackBar);
                               } else {
-
+                                for (var element in _imageList) {
+                                  _uploadImage(element);
+                                }
+//2022-03-14 17:00:00
                                 HttpManager().put(updateOrderState, args: {'orderId': widget.id, 'orderState': '待评价'});
-                                String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss]);
+                                String formattedDate = formatDate(DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
+
+                                DateTime datetime1 = DateTime(
+                                  selectedDate1.year,
+                                  selectedDate1.month,
+                                  selectedDate1.day,
+                                  selectedTime1.hour,
+                                  selectedTime1.minute,
+                                  0
+                                );
+                                DateTime datetime2 = DateTime(
+                                    selectedDate2.year,
+                                    selectedDate2.month,
+                                    selectedDate2.day,
+                                    selectedTime2.hour,
+                                    selectedTime2.minute,
+                                    0
+                                );
+                                String realDate1 = formatDate(datetime1,  [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
+                                String realDate2 = formatDate(datetime2,  [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
+
+
+                                HttpManager().post(
+                                    addPatrolOrderWorkerEdit,
+                                    args: {
+                                      'orderId': widget.id,
+                                      'siteName': _inspectSite.text,
+                                      'inspectionCategory': _inspectCategory.text,
+                                      'inspectionContent': _inspectContent.text,
+                                      'inspectionResult': _inspectExeption.text,
+                                      'beginTime': realDate1,
+                                      'endTime': realDate2,
+                                      'photo1': _imageString[0],
+                                      'photo2': _imageString[1],
+                                    }
+                                );
                                 HttpManager().post(
                                     addOperationLog,
                                     args: {
@@ -473,6 +512,19 @@ class EditOrderState extends State<EditOrder> {
           },
         )
     );
+  }
+  Dio _dio = Dio();
+
+  //上传图片到服务器
+  _uploadImage(XFile _image) async {
+    FormData formData = FormData.fromMap({
+      "pic": await MultipartFile.fromFile(_image.path, filename:"imageName.png"),
+    });
+    var response = await _dio.post(uploadImage, data: formData);
+
+    _imageString.add("http://121.40.130.17:7777/images/${response}");
+    print(_imageString);
+
   }
 
   //图片列表的刻画

@@ -4,6 +4,8 @@ import 'package:frontend/pages/homepage/Home_Page.dart';
 import 'package:frontend/pages/homepage/Page.dart';
 import 'package:frontend/pages/login/loginPage.dart';
 import 'package:frontend/pages/login/welcomePage.dart';
+import 'package:frontend/views/create_work_order.dart';
+import 'package:frontend/views/edit_work_order.dart';
 import 'package:provider/provider.dart';
 import 'global/routers.dart';
 
@@ -27,7 +29,9 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: generateRoute,
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
-      home:LoginPage(),
+      // home:LoginPage(),
+      home: CreateOrder(),
+      // home:EditOrder(id: 1,),
     );
   }
 }
