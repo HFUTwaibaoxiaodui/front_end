@@ -24,6 +24,8 @@ final String updateWorker = generateURL('/PatrolOrder/updateWorker');
 final String addPatrolOrderWorkerEdit = generateURL('/PatrolOrderWorkerEdit/insert');
 final String addPatrolOrder = generateURL('/PatrolOrder/insert');
 
+final String sortOrder = generateURL('/PatrolOrder/sortOrder');
+
 final String getmonthlyData =generateURL('/PatrolOrder/calculateMonthOrderData');
 final String giveothers = generateURL('/PatrolOrder/giveOthers');
 final String notification = generateURL('/NoticeDetail/findByReceiverId');

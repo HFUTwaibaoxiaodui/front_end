@@ -6,6 +6,7 @@ import 'package:frontend/global/user_info.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:provider/provider.dart';
 import 'Mine.dart';
+import 'SortPage.dart';
 import 'Work_Order.dart';
 import 'Apply.dart';
 import 'Home_Page.dart';
@@ -28,6 +29,7 @@ class _IndexState extends State<IndexPage> {
   late final BottomNavigationBarItem _orders;
   late final BottomNavigationBarItem _application;
   late final BottomNavigationBarItem _mine;
+  late final BottomNavigationBarItem _sort;
 
   late final List<BottomNavigationBarItem> _bottomItems;
 
@@ -137,12 +139,18 @@ class _IndexState extends State<IndexPage> {
       label: "我的",
     );
 
+    _sort = const BottomNavigationBarItem(
+      // backgroundColor: Colors.red,
+      icon: Icon(Icons.person),
+      label: "快捷询单",
+    );
+
     if (Provider.of<UserInfo>(context, listen: false).accountType == 'ADMIN') {
       _bottomItems = [_home, _orders, _application, _mine];
       _pages = [HomePage(), WorkOrderPage(),ApplyPage(),MinePage()];
     } else {
-      _bottomItems = [_home,  _mine];
-      _pages = [HomePage(), MinePage()];
+      _bottomItems = [_home, _sort, _mine];
+      _pages = [HomePage(), SortPageWidget() ,MinePage()];
     }
   }
 

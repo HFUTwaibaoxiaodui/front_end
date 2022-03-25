@@ -90,7 +90,7 @@ class _SelectPeoplesPageState extends State<SelectPeoplePage> {
       name: _listDatas[index].name!,
       groupTitle: _listDatas[index].indexLetter!,
       peopleid:_listDatas[index].peopleid!,
-      orderid: widget.orderid!,
+      orderid: widget.orderid,
     );
 
   }
@@ -100,7 +100,7 @@ class _SelectPeoplesPageState extends State<SelectPeoplePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.cyan,
-        title: Text('人员选择',style: TextStyle(fontSize: 14),),
+        title: Text('人员选择',style: TextStyle(fontSize: 14)),
       ),
       body: Stack(
         children: <Widget>[
