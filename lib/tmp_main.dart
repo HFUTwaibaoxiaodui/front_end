@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/global/user_info.dart';
-import 'package:frontend/pages/PersonManager/People.dart';
-import 'package:frontend/pages/homepage/Home_Page.dart';
-import 'package:frontend/pages/homepage/Page.dart';
 import 'package:frontend/pages/login/loginPage.dart';
-import 'package:frontend/pages/map/init_map.dart';
+import 'package:frontend/pages/login/welcomePage.dart';
 import 'package:provider/provider.dart';
 import 'global/routers.dart';
 
@@ -28,7 +25,8 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: generateRoute,
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
-      home:LoginPage(),
+      home:WelcomePage(),
+      // home: ApplyPage(),
     );
   }
 }

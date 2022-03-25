@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,9 @@ import 'package:date_format/date_format.dart';
 import 'package:frontend/global/user_info.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../global/back_end_interface_url.dart';
+import '../util/net/network_util.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({Key? key}) : super(key: key);
@@ -17,11 +21,22 @@ class _Messagepage extends State<MessagePage>{
   @override
   void initState() {
     super.initState();
-    initPlatFormState();
+    // initPlatFormState();
+    HttpManager().get(
+        notification,
+        args: {
+          'receiverId':Provider.of<UserInfo>(context,listen: false).accountId
+        }
+    ).then((value) {
+        for (var element in value) {
+      setState(() {
+        listview.add(_singleMessage(element['receiverName'], element['noticeDetail'],element['noticeTime']));
+      });
+    }
+    });
   }
   String customMessage='' ;
 
-  late Map<dynamic,dynamic> notification;
 
   JPush jPush = JPush();
 
@@ -38,9 +53,6 @@ class _Messagepage extends State<MessagePage>{
           onReceiveNotification: (Map<String, dynamic> message) async {
             print("接收到的通知是:$message");
             setState(() {
-              notification = message;
-              print(json.decode(notification['extras']['cn.jpush.android.EXTRA'])['orderId']);
-              listview.add(_singleMessage(notification['title'], notification['alert'],json.decode(notification['extras']['cn.jpush.android.EXTRA'])['time']));
             });
           },
           onOpenNotification: (Map<String, dynamic> message) async {

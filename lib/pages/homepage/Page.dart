@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/global/user_info.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:provider/provider.dart';
 import 'Mine.dart';
 import 'Work_Order.dart';
@@ -28,8 +32,61 @@ class _IndexState extends State<IndexPage> {
   late final List<BottomNavigationBarItem> _bottomItems;
 
   int currentIndex = 0;
+  late Map<dynamic,dynamic> notification;
+
+  JPush jPush = JPush();
+  String idLabel = "";
+  Future<void> initPlatFormState() async {
+
+    String platform = '';
+
+    try {
+      jPush.addEventHandler(
+          onReceiveNotification: (Map<String, dynamic> message) async {
+            print("接收到的通知是:$message");
+            setState(() {
+              notification = message;
+              print(json.decode(notification['extras']['cn.jpush.android.EXTRA'])['orderId']);
+            });
+          },
+          onOpenNotification: (Map<String, dynamic> message) async {
+            print("通过点击推送进入app：$message");
+          },
+          onReceiveMessage: (Map<String, dynamic> message) async {
+            print("接收到自定义消息：$message");
+            setState(() {
+            });
+          },
+          onReceiveNotificationAuthorization:
+              (Map<String, dynamic> message) async {
+            print("通知权限发生变更：$message");
+          });
+    } on PlatformException {
+      platform = "平台版本获取失败";
+    }
+
+    jPush.setup(
+        appKey: "8a44ad1f8ca8a48a829f31f5",
+        channel: "theChannel",
+        production: false,
+        debug: true
+    );
+
+    jPush.setAlias(Provider.of<UserInfo>(context, listen: false).accountId.toString());
+
+    jPush.applyPushAuthority(
+        new NotificationSettingsIOS(sound: true, alert: true, badge: true));
+
+    jPush.getRegistrationID().then((rid) {
+      print("获得的注册id为：" + rid);
+      setState(() {
+        idLabel = "当前注册id为：$rid";
+      });
+    });
+  }
   @override
   void initState() {
+    initPlatFormState();
     super.initState();
     currentIndex = 0;
 

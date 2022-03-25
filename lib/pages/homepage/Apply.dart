@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/homepage/Person_Manage.dart';
+import 'package:frontend/pages/statistics.dart';
 import '../../global/theme.dart';
 import '../../util/net/network_util.dart';
 import '../order_detail.dart';
@@ -76,7 +77,20 @@ class ApplyPage extends StatelessWidget {
             },),
         ),
         Container(
-          color: Colors.grey,
+          decoration: BoxDecoration(
+            //背景
+            color: mainColor,
+            //设置四周圆角 角度
+            borderRadius: BorderRadius.all(Radius.circular(7.0)),
+            //设置四周边框
+            border: Border.all(width: 1, color: Colors.grey),
+          ),
+          child:GestureDetector(child: Icon(Icons.update,color: Colors.white, ),
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return StatisticsPage();
+              }));
+            },),
         ),
         Container(
           color: Colors.green,

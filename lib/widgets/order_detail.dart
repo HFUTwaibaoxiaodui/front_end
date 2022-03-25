@@ -6,6 +6,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:frontend/global/user_info.dart';
+import 'package:frontend/pages/SelectPeople.dart';
 import 'package:frontend/pages/exception_handle.dart';
 import 'package:frontend/util/android_activity_visitor.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ import '../pages/exception_report.dart';
 import '../util/net/network_util.dart';
 import '../models/order.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/global/my_event_bus.dart';
 import 'package:frontend/util/qrcode_util.dart';
 
 class OrderDetail extends StatefulWidget {
@@ -82,6 +84,9 @@ class OrderDetailState extends State<OrderDetail> with SingleTickerProviderState
       child: GestureDetector(
         onTap: () {
           printWithDebug('转派工单');
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => SelectPeoplePage(orderid: _order!.id)),
+                  );
         },
         child: const Text('转派工单'),
       ),
