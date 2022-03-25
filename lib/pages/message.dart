@@ -22,6 +22,11 @@ class _Messagepage extends State<MessagePage>{
   void initState() {
     super.initState();
     // initPlatFormState();
+    load_data();
+  }
+
+  void load_data() {
+    listview=[];
     HttpManager().get(
         notification,
         args: {
@@ -30,7 +35,7 @@ class _Messagepage extends State<MessagePage>{
     ).then((value) {
         for (var element in value) {
       setState(() {
-        listview.add(_singleMessage(element['receiverName'], element['noticeDetail'],element['noticeTime']));
+        listview.add(_singleMessage(element['senderName'], element['noticeDetail'],element['noticeTime'],element['orderId']));
       });
     }
     });
@@ -93,11 +98,12 @@ class _Messagepage extends State<MessagePage>{
   }
 
 
-  Widget _singleMessage(title,content,time){
+  Widget _singleMessage(title,content,time,orderid){
       return Container(
         margin: const EdgeInsets.only(right: 20, left: 10),
         child: InkWell(
           onTap: (){
+            Navigator.of(context).pushNamed('/order_detail',arguments: orderid);
           },
           child: Column(
             children: [SizedBox(height: 20),
@@ -120,7 +126,8 @@ class _Messagepage extends State<MessagePage>{
                             ),
                             SizedBox(height: 20),
                             LimitedBox(
-                                child: Text('[HFUT]$content，点击查看详情>>>>',maxLines: 2,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500))
+                              maxWidth: 200,
+                                child: Text('[HFUT]$content，点击查看详情>>>>',maxLines: 5,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500))
                             ),
                           ],
                         )
