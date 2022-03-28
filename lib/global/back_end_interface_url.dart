@@ -1,4 +1,4 @@
-const String serverIp = '192.168.43.31';
+const String serverIp = '121.40.130.17';
 const String serverPort = '9090';
 const String defaultImagePath = 'http://121.40.130.17:7777/images/cat.jpeg';
 
@@ -30,6 +30,7 @@ final String sortOrder = generateURL('/PatrolOrder/sortOrder');
 final String getmonthlyData =generateURL('/PatrolOrder/calculateMonthOrderData');
 final String giveothers = generateURL('/PatrolOrder/giveOthers');
 final String notification = generateURL('/NoticeDetail/findByReceiverId');
+
 String generateURL(String path) {
   return 'http://' + serverIp + ':' + serverPort + path;
 }
