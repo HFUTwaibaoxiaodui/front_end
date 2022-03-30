@@ -141,9 +141,11 @@ class _SettingState extends State<Setting> {
                             FlatButton(
                               child: const Text('确定',style: TextStyle(fontSize: 13),),
                               onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                                  return const LoginPage();
-                                }));
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(builder: (_) => LoginPage()),
+                                        (Route<dynamic> route) {
+                                      return route.isFirst;
+                                    });
                               },
                             ),
                             FlatButton(
